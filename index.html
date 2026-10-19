@@ -13,8 +13,8 @@
   --g1:#e3b83d;--g2:#2fc4a0;--g3:#ff7a59;--g4:#9b8cff;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto,sans-serif}
-body{background:linear-gradient(rgba(4,24,15,.88),rgba(4,24,15,.95)),url('https://picsum.photos/id/1015/1200/900') center/cover fixed;background-color:var(--bg);color:var(--text);padding-bottom:78px}
-header{background:linear-gradient(135deg,#0b3d28,#145b41 55%,#0e4a35);border-bottom:3px solid var(--gold);padding:14px 20px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+body{background:linear-gradient(rgba(4,24,15,.88),rgba(4,24,15,.95)),url('https://picsum.photos/id/1015/1200/900') center/cover fixed;background-color:var(--bg);color:var(--text);padding-bottom:96px}
+header{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0b3d28,#145b41 55%,#0e4a35);border-bottom:3px solid var(--gold);padding:10px 14px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 header h1{color:var(--gold2);font-size:1.4rem;letter-spacing:1.5px}
 header p{color:var(--muted);font-size:.8rem}
 .container{max-width:820px;margin:0 auto;padding:15px}
@@ -29,9 +29,6 @@ button:active{filter:brightness(.92)}
 button.btn-secondary{background:transparent;border:1px solid var(--teal);color:var(--teal)}
 button.btn-danger{background:var(--danger);color:#fff}
 button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
-nav{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#0b3d28,#0e4a35);border-top:3px solid var(--gold);display:flex;justify-content:space-around;padding:8px 0;z-index:1000}
-nav button{background:none;color:var(--muted);border:none;font-size:.75rem;padding:5px;margin:0;width:auto;flex:1;font-weight:600}
-nav button.active{color:var(--gold2);font-weight:bold}
 .photo-preview{width:100px;height:100px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;display:block;margin:10px auto;background:var(--field)}
 .tree-group{margin-bottom:22px}
 .tree-title{font-size:1rem;margin-bottom:10px;font-weight:bold;border-left:4px solid var(--c,var(--gold));padding-left:10px;color:var(--c,var(--gold))}
@@ -106,6 +103,49 @@ nav button.active{color:var(--gold2);font-weight:bold}
 .mosaic img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer}
 .mosaic img:first-child{grid-column:span 2;grid-row:span 2}
 .empty{color:var(--muted);font-size:.85rem}
+
+/* modern shell: header menu, drawer, floating button */
+.slot{width:46px;flex:none}
+.brand{flex:1;min-width:0}
+.menu-btn{width:46px;height:46px;margin:0;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:14px}
+.menu-btn span{display:block;width:20px;height:2px;border-radius:2px;background:var(--gold2)}
+#scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:1400;opacity:0;pointer-events:none;transition:opacity .25s}
+#scrim.open{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;bottom:0;left:0;width:min(82vw,320px);z-index:1500;display:flex;flex-direction:column;gap:6px;padding:18px 14px;background:linear-gradient(180deg,#0b3d28,#062317);border-right:3px solid var(--gold);transform:translateX(-105%);visibility:hidden;transition:transform .28s ease,visibility .28s;overflow-y:auto;box-shadow:8px 0 30px rgba(0,0,0,.5)}
+#drawer.open{transform:none;visibility:visible}
+.dr-head{display:flex;align-items:center;gap:12px;padding:6px 6px 16px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.dr-head img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);background:var(--field)}
+.dr-head b{display:block;overflow-wrap:anywhere}
+.dr-head small{color:var(--gold2)}
+.dr-list{display:flex;flex-direction:column;gap:4px;flex:1}
+.dr-list button{display:flex;align-items:center;gap:14px;width:100%;margin:0;padding:13px 14px;background:transparent;color:var(--text);font-weight:600;font-size:.98rem;text-align:left;border-radius:12px;border:1px solid transparent}
+.dr-list button span{font-size:1.25rem;width:26px;text-align:center}
+.dr-list button.active{background:linear-gradient(135deg,rgba(47,196,160,.25),rgba(227,184,61,.18));border-color:var(--teal);color:var(--gold2)}
+.fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));width:58px;height:58px;margin:0;padding:0;border-radius:50%;font-size:1.9rem;line-height:1;z-index:900;box-shadow:0 8px 22px rgba(0,0,0,.5);transition:transform .2s}
+.fab.on{transform:rotate(45deg)}
+.fab-menu{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(max(18px,env(safe-area-inset-bottom,0px)) + 70px);z-index:900;display:none;flex-direction:column;gap:8px;align-items:flex-end}
+.fab-menu.open{display:flex}
+.fab-menu button{width:auto;margin:0;padding:10px 16px;border-radius:999px;background:var(--card2);color:var(--text);border:1px solid var(--teal);font-size:.9rem;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.card{backdrop-filter:blur(6px)}
+.tab-content:not(.hidden){animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.tab-content:not(.hidden){animation:none}#drawer,#scrim,.fab{transition:none}}
+.stat{cursor:pointer}
+.gsearch input{font-size:1rem;padding:13px 14px;border-radius:14px}
+.gsearch .chips{margin-top:10px}
+.act{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--border);font-size:.85rem;overflow-wrap:anywhere}
+.act:last-child{border-bottom:none}
+.act .ic{flex:none;font-size:1.2rem}
+.act small{display:block;color:var(--muted);font-size:.72rem}
+.act[data-open],.act[data-photo]{cursor:pointer}
+.ucard{background:var(--field);border:1px solid var(--border);border-left:4px solid var(--c,var(--border));border-radius:12px;padding:12px;margin-bottom:10px}
+.ucard .row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.ucard b{overflow-wrap:anywhere}
+.ucard .em{font-size:.78rem;color:var(--muted);overflow-wrap:anywhere}
+.ucard .btn-row button{margin-top:10px;padding:8px;font-size:.8rem}
+.pagehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pagehead h2{margin:0;border:none;padding:0}
+.pagehead button{width:auto;margin:0;padding:10px 16px}
 /* tree */
 .seg{display:flex;gap:8px;margin-top:12px}
 .seg button{margin:0;padding:8px;font-size:.85rem;background:transparent;border:1px solid var(--border);color:var(--muted)}
@@ -141,7 +181,11 @@ nav button.active{color:var(--gold2);font-weight:bold}
 </style>
 </head>
 <body>
-<header><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></header>
+<header>
+  <div class="slot"><button type="button" id="btn-menu" class="menu-btn hidden" aria-label="Open menu" aria-controls="drawer"><span></span><span></span><span></span></button></div>
+  <div class="brand"><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></div>
+  <div class="slot"></div>
+</header>
 
 <div class="container">
   <div id="auth-hero" class="hero"><h2>BASOGA'S LEGACY</h2><p>Sign in to see your family tree, photos and events</p></div>
@@ -165,8 +209,8 @@ nav button.active{color:var(--gold2);font-weight:bold}
   </div>
 
   <div id="section-pending" class="card hidden" style="text-align:center">
-    <h2>Account Pending Approval</h2>
-    <p style="color:var(--muted);margin:15px 0">Your registration has been submitted. An administrator must approve your account before you can access private family profiles and memories.</p>
+    <h2 id="pend-title">Account Pending Approval</h2>
+    <p id="pend-text" style="color:var(--muted);margin:15px 0">Your registration has been submitted. An administrator must approve your account before you can access private family profiles and memories.</p>
     <button class="btn-secondary" id="btn-logout-pending">Sign Out</button>
   </div>
 
@@ -182,6 +226,11 @@ nav button.active{color:var(--gold2);font-weight:bold}
         </div>
       </div>
 
+      <div class="card gsearch">
+        <input type="search" id="home-search" placeholder="🔍 Find a family member by name..." autocomplete="off">
+        <div id="home-search-res" class="chips"></div>
+      </div>
+
       <div class="quick">
         <button type="button" style="--c:var(--g2)" onclick="newMember()"><span>👪</span>Add member</button>
         <button type="button" style="--c:var(--sky)" onclick="showTab('gallery')"><span>📷</span>Add photo</button>
@@ -190,17 +239,19 @@ nav button.active{color:var(--gold2);font-weight:bold}
       </div>
 
       <div class="stats">
-        <div class="stat" style="--c:var(--g2)"><i>👪</i><div><b id="st-members">0</b><span>Members</span></div></div>
-        <div class="stat" style="--c:var(--g1)"><i>🌿</i><div><b id="st-gens">0</b><span>Generations</span></div></div>
-        <div class="stat" style="--c:var(--coral)"><i>📅</i><div><b id="st-events">0</b><span>Events</span></div></div>
-        <div class="stat" style="--c:var(--sky)"><i>🖼</i><div><b id="st-photos">0</b><span>Gallery</span></div></div>
-        <div class="stat hidden" id="st-pending-box" style="--c:var(--violet)"><i>⏳</i><div><b id="st-pending">0</b><span>Pending</span></div></div>
+        <div class="stat" style="--c:var(--g1)" onclick="showTab('tree')"><i>👪</i><div><b id="st-members">0</b><span>Members</span></div></div>
+        <div class="stat" style="--c:var(--g2)" onclick="showTab('children')"><i>🧒</i><div><b id="st-kids">0</b><span>Children</span></div></div>
+        <div class="stat" style="--c:var(--g3)" onclick="showTab('grandchildren')"><i>👶</i><div><b id="st-grand">0</b><span>Grandchildren</span></div></div>
+        <div class="stat" style="--c:var(--coral)" onclick="showTab('events')"><i>📅</i><div><b id="st-events">0</b><span>Events</span></div></div>
+        <div class="stat" style="--c:var(--sky)" onclick="showTab('gallery')"><i>🖼</i><div><b id="st-photos">0</b><span>Gallery</span></div></div>
+        <div class="stat hidden" id="st-pending-box" style="--c:var(--violet)" onclick="showTab('admin')"><i>⏳</i><div><b id="st-pending">0</b><span>Pending</span></div></div>
       </div>
 
       <div class="dash">
         <div class="card"><h2>Coming Up</h2><div id="home-next"></div></div>
         <div class="card"><h2>Birthdays</h2><div id="home-bdays"></div></div>
         <div class="card"><h2>Our Generations</h2><div id="home-gen"></div></div>
+        <div class="card"><h2>Recent Activity</h2><div id="home-activity"></div></div>
         <div class="card"><h2>Newest Members</h2><div id="home-newest" class="chips"></div></div>
       </div>
 
@@ -209,6 +260,24 @@ nav button.active{color:var(--gold2);font-weight:bold}
         <div id="home-recent" class="mosaic"></div>
         <button class="btn-secondary" onclick="showTab('gallery')">Open Gallery</button>
       </div>
+    </div>
+
+    <!-- CHILDREN -->
+    <div id="section-children" class="tab-content hidden">
+      <div class="card">
+        <div class="pagehead"><h2>🧒 Children <span id="count-children" class="pill" style="--c:var(--g2)">0</span></h2><button type="button" onclick="newMemberGen('2')">+ Add child</button></div>
+        <p style="color:var(--muted);font-size:.82rem;margin-top:8px">Tap anyone to open their profile, change their photo, or add their children.</p>
+      </div>
+      <div id="list-children"></div>
+    </div>
+
+    <!-- GRANDCHILDREN -->
+    <div id="section-grandchildren" class="tab-content hidden">
+      <div class="card">
+        <div class="pagehead"><h2>👶 Grandchildren <span id="count-grandchildren" class="pill" style="--c:var(--g3)">0</span></h2><button type="button" onclick="newMemberGen('3')">+ Add grandchild</button></div>
+        <p style="color:var(--muted);font-size:.82rem;margin-top:8px">Grouped by parent. When adding, choose the parent so the grandchild appears under the right child.</p>
+      </div>
+      <div id="list-grandchildren"></div>
     </div>
 
     <!-- TREE -->
@@ -348,7 +417,7 @@ nav button.active{color:var(--gold2);font-weight:bold}
         <h2>Administrator Control Center</h2>
         <button class="btn-secondary" id="btn-seed" style="margin-top:0;margin-bottom:15px">Add the 11 Basoga children to the Tree</button>
         <p id="seed-msg" style="color:var(--gold2);font-size:.8rem;margin-bottom:10px"></p>
-        <p style="color:var(--muted);font-size:.85rem;margin-bottom:15px">Review and approve new family registrations.</p>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:15px">Approve, block or remove registered family accounts. Only administrators can delete members and accounts.</p>
         <div id="admin-user-list"></div>
       </div>
     </div>
@@ -383,14 +452,27 @@ nav button.active{color:var(--gold2);font-weight:bold}
   </div>
 </div>
 
-<nav id="bottom-nav" class="hidden">
-  <button onclick="showTab('home')" id="nav-home" class="active">🏠 Home</button>
-  <button onclick="showTab('tree')" id="nav-tree">🌳 Tree</button>
-  <button onclick="showTab('gallery')" id="nav-gallery">🖼 Gallery</button>
-  <button onclick="showTab('events')" id="nav-events">📅 Events</button>
-  <button onclick="showTab('profile')" id="nav-profile">👤 Me</button>
-  <button onclick="showTab('admin')" id="nav-admin" class="hidden">⚙ Admin</button>
-</nav>
+<div id="scrim"></div>
+<aside id="drawer" aria-label="Menu">
+  <div class="dr-head"><img id="dr-avatar" alt=""><div><b id="dr-name">Family</b><small id="dr-role"></small></div></div>
+  <div class="dr-list">
+    <button type="button" data-tab="home"><span>🏠</span>Dashboard</button>
+    <button type="button" data-tab="tree"><span>🌳</span>Family Tree</button>
+    <button type="button" data-tab="children"><span>🧒</span>Children</button>
+    <button type="button" data-tab="grandchildren"><span>👶</span>Grandchildren</button>
+    <button type="button" data-tab="gallery"><span>🖼</span>Gallery</button>
+    <button type="button" data-tab="events"><span>📅</span>Events</button>
+    <button type="button" data-tab="profile"><span>👤</span>My Profile</button>
+    <button type="button" data-tab="admin" id="dr-admin" class="hidden"><span>⚙️</span>Admin</button>
+  </div>
+  <button type="button" class="btn-danger" id="dr-logout">Sign out</button>
+</aside>
+<div id="fab-menu" class="fab-menu">
+  <button type="button" data-fab="member">👪 Add member</button>
+  <button type="button" data-fab="photo">📷 Add photo</button>
+  <button type="button" data-fab="event">🎉 Add event</button>
+</div>
+<button type="button" id="fab" class="fab hidden" aria-label="Quick add">＋</button>
 
 <div id="lightbox" class="hidden">
   <img id="lb-img" alt="">
@@ -487,7 +569,7 @@ onAuthStateChanged(auth, async user => {
   const show = (id, on) => $(id).classList.toggle("hidden", !on);
   if (!user) {
     currentUserDoc = null;
-    show("section-auth", true); show("auth-hero", true); show("section-pending", false); show("app-content", false); show("bottom-nav", false);
+    show("section-auth", true); show("auth-hero", true); show("section-pending", false); show("app-content", false); show("btn-menu", false); show("fab", false);
     return;
   }
   show("section-auth", false); show("auth-hero", false);
@@ -505,8 +587,8 @@ onAuthStateChanged(auth, async user => {
   }
   currentUserDoc = snap.data();
   if (currentUserDoc.status === "approved") {
-    show("section-pending", false); show("app-content", true); show("bottom-nav", true);
-    show("nav-admin", isAdmin());
+    show("section-pending", false); show("app-content", true); show("btn-menu", true); show("fab", true);
+    show("dr-admin", isAdmin());
     if (isAdmin()) loadPendingUsers();
     $("user-info-display").innerText = `Logged in as: ${currentUserDoc.name} (${currentUserDoc.role.toUpperCase()})`;
     resetForm();
@@ -514,19 +596,36 @@ onAuthStateChanged(auth, async user => {
     await Promise.all([loadFamilyMembers(), loadEvents(), loadPhotos()]);
     fillProfile();
   } else {
-    show("section-pending", true); show("app-content", false); show("bottom-nav", false);
+    const blocked = currentUserDoc.status === "blocked";
+    $("pend-title").innerText = blocked ? "Access Removed" : "Account Pending Approval";
+    $("pend-text").innerText = blocked ? "An administrator has removed your access. Please contact the family administrator." : "Your registration has been submitted. An administrator must approve your account before you can access private family profiles and memories.";
+    show("section-pending", true); show("app-content", false); show("btn-menu", false); show("fab", false);
   }
 });
 
 // ---------- Tabs ----------
 const NAV_FOR = { "member": "tree", "add-member": "tree" };
+function closeDrawer() { $("drawer").classList.remove("open"); $("scrim").classList.remove("open"); }
+function closeFab() { $("fab-menu").classList.remove("open"); $("fab").classList.remove("on"); }
 window.showTab = function (tab) {
   document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
-  document.querySelectorAll("nav button").forEach(el => el.classList.remove("active"));
   $(`section-${tab}`).classList.remove("hidden");
-  const nb = $(`nav-${NAV_FOR[tab] || tab}`); if (nb) nb.classList.add("active");
+  document.querySelectorAll("#drawer [data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === (NAV_FOR[tab] || tab)));
+  closeDrawer(); closeFab();
   window.scrollTo(0, 0);
 };
+$("btn-menu").addEventListener("click", () => { $("drawer").classList.add("open"); $("scrim").classList.add("open"); });
+$("scrim").addEventListener("click", closeDrawer);
+$("drawer").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) showTab(b.dataset.tab); });
+$("dr-logout").addEventListener("click", () => { closeDrawer(); signOut(auth); });
+$("fab").addEventListener("click", e => { e.stopPropagation(); $("fab-menu").classList.toggle("open"); $("fab").classList.toggle("on"); });
+$("fab-menu").addEventListener("click", e => {
+  const b = e.target.closest("[data-fab]"); if (!b) return;
+  closeFab();
+  if (b.dataset.fab === "member") newMember(); else if (b.dataset.fab === "photo") showTab("gallery"); else showTab("events");
+});
+document.addEventListener("click", e => { if (!e.target.closest("#fab") && !e.target.closest("#fab-menu")) closeFab(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeDrawer(); closeFab(); } });
 
 // ---------- Image helpers ----------
 function compressImage(file, max = 500) {
@@ -776,7 +875,7 @@ function render() {
     members.filter(m => !seen.has(m.id)).forEach(m => { html += branchHTML(m, seen); });
     tree.innerHTML = html;
   }
-  fillMemberSelect(); fillTagSelect(); updateHome();
+  fillMemberSelect(); fillTagSelect(); renderPeople(); updateHome();
   if (viewingId && !$("section-member").classList.contains("hidden")) showProfile(viewingId);
 }
 $("tree-search").addEventListener("input", render);
@@ -787,6 +886,30 @@ $("tree-mode").addEventListener("click", e => {
   $("tree-mode").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
   render();
 });
+
+// ---------- Children & Grandchildren pages ----------
+function renderPeople() {
+  [["2", "list-children", "count-children", "No children added yet. Tap “+ Add child”."],
+   ["3", "list-grandchildren", "count-grandchildren", "No grandchildren added yet. Tap “+ Add grandchild” and choose the parent."]].forEach(([gen, boxId, countId, empty]) => {
+    const list = members.filter(m => genOf(m) === gen);
+    $(countId).innerText = list.length;
+    if (!list.length) { $(boxId).innerHTML = `<div class="card"><p class="empty">${empty}</p></div>`; return; }
+    const groups = new Map();
+    list.forEach(m => { const k = memberById(m.parentId) ? m.parentId : ""; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(m); });
+    const keys = [...groups.keys()].sort((a, b) => (a ? memberById(a).name : "~").localeCompare(b ? memberById(b).name : "~"));
+    $(boxId).innerHTML = keys.map(k => {
+      const p = memberById(k);
+      const title = p ? `${gen === "2" ? "Children" : "Grandchildren"} of ${esc(p.name)}` : (gen === "2" ? "Children (parent not set)" : "Grandchildren (parent not set)");
+      return `<div class="tree-group"><div class="tree-title" style="--c:${GEN_COLOR[gen]}">${title} (${groups.get(k).length})</div><div class="member-grid">${groups.get(k).sort(byName).map(m => cardHTML(m, false)).join("")}</div></div>`;
+    }).join("");
+  });
+}
+window.newMemberGen = g => {
+  newMember();
+  $("member-generation").value = g;
+  $("member-relationship").value = REL_TITLE[g] || "";
+  $("member-form-title").innerText = g === "2" ? "Add a child" : "Add a grandchild";
+};
 
 // ---------- Member profile page ----------
 function chipHTML(m) {
@@ -875,28 +998,40 @@ document.addEventListener("click", e => {
 
 // ---------- Admin: approvals ----------
 async function loadPendingUsers() {
+  if (!isAdmin()) return;
   const list = $("admin-user-list");
-  list.innerHTML = "";
   const snap = await getDocs(collection(db, "users"));
-  snap.forEach(d => {
-    const u = d.data();
-    if (u.status !== "pending") return;
-    const el = document.createElement("div");
-    el.className = "member-card";
-    el.style.cssText = "text-align:left;margin-bottom:10px;cursor:default";
-    el.innerHTML = `<div class="name">${esc(u.name || "Unnamed")} (${esc(u.email)})</div>
-      <div class="rel">Status: Pending Approval</div>
-      <button data-approve="${esc(u.uid)}" style="margin-top:8px;padding:6px">Approve Account</button>`;
-    list.appendChild(el);
-  });
-  pendingCount = list.querySelectorAll("[data-approve]").length; updateHome();
-  if (!list.innerHTML) list.innerHTML = `<p style="color:var(--muted)">No pending registration requests.</p>`;
+  const users = [];
+  snap.forEach(d => users.push(d.data()));
+  const order = { pending: 0, approved: 1, blocked: 2 };
+  users.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3) || (a.name || "").localeCompare(b.name || ""));
+  pendingCount = users.filter(u => u.status === "pending").length;
+  const COL = { pending: "var(--violet)", approved: "var(--teal)", blocked: "var(--danger)" };
+  list.innerHTML = users.length ? users.map(u => {
+    const self = currentUser && u.uid === currentUser.uid;
+    const btns = self ? `<p class="em" style="margin-top:8px">This is you.</p>` : `<div class="btn-row">
+      ${u.status !== "approved" ? `<button type="button" data-uact="approve" data-uid="${esc(u.uid)}">Approve</button>` : `<button type="button" class="btn-secondary" data-uact="block" data-uid="${esc(u.uid)}">Block</button>`}
+      ${u.status === "approved" ? `<button type="button" class="btn-secondary" data-uact="${u.role === "admin" ? "member" : "admin"}" data-uid="${esc(u.uid)}">${u.role === "admin" ? "Make member" : "Make admin"}</button>` : ""}
+      <button type="button" class="btn-danger" data-uact="remove" data-uid="${esc(u.uid)}">Remove</button></div>`;
+    return `<div class="ucard" style="--c:${COL[u.status] || "var(--border)"}">
+      <div class="row"><div><b>${esc(u.name || "Unnamed")}</b><div class="em">${esc(u.email)}</div></div>
+      <span class="pill" style="--c:${COL[u.status] || "var(--border)"}">${esc((u.status || "").toUpperCase())}${u.role === "admin" ? " • ADMIN" : ""}</span></div>${btns}</div>`;
+  }).join("") : `<p style="color:var(--muted)">No registered accounts yet.</p>`;
+  updateHome();
 }
 $("admin-user-list").addEventListener("click", async e => {
-  const uid = e.target.dataset.approve;
-  if (!uid || !isAdmin()) return;
-  await updateDoc(doc(db, "users", uid), { status: "approved" });
-  loadPendingUsers();
+  const b = e.target.closest("[data-uact]");
+  if (!b || !isAdmin()) return;
+  const uid = b.dataset.uid, act = b.dataset.uact;
+  if (!uid || uid === currentUser.uid) return;
+  try {
+    if (act === "approve") await updateDoc(doc(db, "users", uid), { status: "approved" });
+    else if (act === "block") { if (!confirm("Block this person? They will lose access until you approve them again.")) return; await updateDoc(doc(db, "users", uid), { status: "blocked" }); }
+    else if (act === "admin") { if (!confirm("Make this person an administrator? Admins can delete members and manage accounts.")) return; await updateDoc(doc(db, "users", uid), { role: "admin" }); }
+    else if (act === "member") await updateDoc(doc(db, "users", uid), { role: "member" });
+    else if (act === "remove") { if (!confirm("Remove this registered account permanently? Use Block instead if you may want them back.")) return; await deleteDoc(doc(db, "users", uid)); }
+    loadPendingUsers();
+  } catch (err) { alert("Could not do that: " + err.message); }
 });
 
 // ---------- Seed the 11 children (admin, safe to press repeatedly) ----------
@@ -963,18 +1098,25 @@ function nextBirthdays() {
     return { m, days: Math.round((next - t) / 864e5), age: next.getFullYear() - y, mo, d };
   }).sort((a, b) => a.days - b.days).slice(0, 5);
 }
+const ago = s => { const d = Math.floor((Date.now() / 1000 - s) / 86400); return d <= 0 ? "today" : d === 1 ? "yesterday" : d < 30 ? d + " days ago" : Math.floor(d / 30) + " mo ago"; };
+$("home-search").addEventListener("input", () => {
+  const q = $("home-search").value.trim().toLowerCase(), box = $("home-search-res");
+  if (!q) { box.innerHTML = ""; return; }
+  const hits = members.filter(m => (m.name || "").toLowerCase().includes(q)).sort(byName).slice(0, 8);
+  box.innerHTML = hits.length ? hits.map(chipHTML).join("") : `<p class="empty">No one matches “${esc(q)}”.</p>`;
+});
 function updateHome() {
   if (!currentUserDoc) return;
   $("st-members").innerText = members.length;
+  $("st-kids").innerText = members.filter(m => genOf(m) === "2").length;
+  $("st-grand").innerText = members.filter(m => genOf(m) === "3").length;
   $("st-events").innerText = events.length;
   $("st-photos").innerText = photos.length;
-  $("st-gens").innerText = new Set(members.map(genOf)).size;
   $("st-pending-box").classList.toggle("hidden", !isAdmin());
   $("st-pending").innerText = pendingCount;
   const hr = new Date().getHours();
   $("home-greet").innerText = (hr < 12 ? "Good morning" : hr < 17 ? "Good afternoon" : "Good evening") + (isAdmin() ? " • Admin" : "");
 
-  // next event with countdown
   const t = new Date(); t.setHours(0, 0, 0, 0);
   const upcoming = events.map(e => ({ e, days: Math.round((new Date((e.date || "") + "T00:00:00") - t) / 864e5) }))
     .filter(x => !isNaN(x.days) && x.days >= 0).sort((a, b) => a.days - b.days)[0];
@@ -983,7 +1125,6 @@ function updateHome() {
       <div class="info"><b>${esc(upcoming.e.title)}</b><div>📅 ${esc(upcoming.e.date)}</div>${upcoming.e.place ? `<div>📍 ${esc(upcoming.e.place)}</div>` : ""}</div>
     </div>` : `<p class="empty">No upcoming events yet. Tap “Add event” to plan the next family gathering.</p>`;
 
-  // birthdays
   const bds = nextBirthdays();
   $("home-bdays").innerHTML = bds.length ? bds.map(x => `
     <div class="bd" data-open="${esc(x.m.id)}" style="--c:${colorOf(x.m)}">
@@ -992,7 +1133,6 @@ function updateHome() {
       <span class="when">${x.days === 0 ? "Today 🎉" : x.days === 1 ? "Tomorrow" : "in " + x.days + " d"}</span>
     </div>`).join("") : `<p class="empty">Add dates of birth on member profiles and birthdays will show here.</p>`;
 
-  // generations chart
   const counts = ["1", "2", "3", "4"].map(g => members.filter(m => genOf(m) === g).length);
   const max = Math.max(1, ...counts);
   $("home-gen").innerHTML = members.length ? ["1", "2", "3", "4"].map((g, i) => `
@@ -1000,11 +1140,17 @@ function updateHome() {
     <span class="track"><i style="width:${counts[i] ? Math.max(6, counts[i] / max * 100) : 0}%"></i></span><span class="n">${counts[i]}</span></div>`).join("")
     : `<p class="empty">Your family tree is empty. Add the first member.</p>`;
 
-  // newest members
+  const acts = [];
+  members.forEach(m => m.createdAt?.seconds && acts.push({ t: m.createdAt.seconds, icon: "👪", open: m.id, text: m.createdByName ? `${esc(m.createdByName)} added <b>${esc(m.name)}</b> to the tree` : `<b>${esc(m.name)}</b> joined the tree` }));
+  photos.forEach(p => p.createdAt?.seconds && acts.push({ t: p.createdAt.seconds, icon: p.card ? "✨" : "📷", photo: p.id, text: `${esc(p.byName || "Someone")} ${p.card ? "made a card" : "shared a photo"}` }));
+  events.forEach(e => e.createdAt?.seconds && acts.push({ t: e.createdAt.seconds, icon: "📅", text: `${esc(e.byName || "Someone")} planned <b>${esc(e.title)}</b>` }));
+  acts.sort((a, b) => b.t - a.t);
+  $("home-activity").innerHTML = acts.length ? acts.slice(0, 6).map(a => `<div class="act"${a.open ? ` data-open="${esc(a.open)}"` : a.photo ? ` data-photo="${esc(a.photo)}"` : ""}><span class="ic">${a.icon}</span><div>${a.text}<small>${ago(a.t)}</small></div></div>`).join("")
+    : `<p class="empty">Nothing yet. Activity from the whole family shows here.</p>`;
+
   const newest = [...members].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).slice(0, 6);
   $("home-newest").innerHTML = newest.length ? newest.map(chipHTML).join("") : `<p class="empty">No members yet.</p>`;
 
-  // recent memories
   $("home-recent").innerHTML = photos.length
     ? photos.slice(0, 7).map(p => `<img src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("")
     : `<p class="empty" style="grid-column:1/-1">No photos yet. Add the first family memory.</p>`;
@@ -1181,6 +1327,7 @@ function fillProfile() {
   $("pf-preview").src = u.photo || AVATAR; pfPhoto = null;
   $("pf-member").value = u.memberId || "";
   $("home-name").innerText = u.name || "Family"; $("home-avatar").src = u.photo || AVATAR;
+  $("dr-name").innerText = u.name || "Family"; $("dr-avatar").src = u.photo || AVATAR; $("dr-role").innerText = (u.role || "member").toUpperCase();
   $("user-info-display").innerText = `${u.email} • ${(u.role || "member").toUpperCase()}`;
 }
 function fillMemberSelect() {
