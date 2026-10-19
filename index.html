@@ -61,6 +61,51 @@ nav button.active{color:var(--gold2);font-weight:bold}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap}.btn-row button{margin-top:8px;font-size:.85rem;flex:1 1 140px}
 .ev{background:var(--field);border:1px solid var(--border);border-left:4px solid var(--coral);border-radius:10px;padding:12px;margin-bottom:10px}.ev .t{font-weight:bold;color:var(--gold2)}.ev .d{font-size:.8rem;color:var(--muted);margin:3px 0}.ev button{width:auto;padding:5px 12px;margin-top:8px;font-size:.75rem}
 
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:1px solid #dadce0;font-weight:600}
+.btn-google:active{filter:brightness(.93)}
+.btn-google svg{width:20px;height:20px;flex:none}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.8rem;margin:16px 0 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* dashboard */
+.hero2{position:relative;overflow:hidden;border-radius:18px;padding:22px 18px;margin-bottom:14px;border:1px solid var(--gold);
+  background:linear-gradient(135deg,rgba(11,61,40,.92),rgba(20,110,84,.78) 55%,rgba(227,184,61,.35)),url('https://picsum.photos/id/1015/1200/700') center/cover;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 10px 24px rgba(0,0,0,.4)}
+.hero2 .photo-preview{margin:0;width:84px;height:84px;flex:none}
+.hero2 .hi{min-width:0;flex:1 1 180px}
+.hero2 small{color:var(--gold2);font-weight:600;letter-spacing:.5px;font-size:.8rem}
+.hero2 h2{border:none;padding:0;margin:2px 0 6px;color:#fff;font-size:1.5rem;overflow-wrap:anywhere}
+.hero2 p{color:#d4ebdd;font-size:.85rem}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.quick button{margin:0;padding:12px 8px;font-size:.85rem;display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:14px;background:var(--card);border:1px solid var(--c);color:var(--text)}
+.quick button span{font-size:1.4rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.stat{display:flex;align-items:center;gap:10px;text-align:left;border-radius:14px;border-left:4px solid var(--c)}
+.stat i{font-style:normal;font-size:1.5rem}
+.stat b{font-size:1.5rem;color:var(--c)!important}
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.dash .card{margin:0;min-width:0}
+.next{display:flex;align-items:center;gap:14px}
+.next .days{flex:none;min-width:84px;text-align:center;background:linear-gradient(135deg,var(--coral),#ff4f7b);color:#fff;border-radius:14px;padding:12px 8px}
+.next .days b{display:block;font-size:2rem;line-height:1}
+.next .days span{font-size:.7rem;letter-spacing:.5px;text-transform:uppercase}
+.next .info{min-width:0}.next .info b{color:var(--gold2);overflow-wrap:anywhere}
+.next .info div{font-size:.82rem;color:var(--muted);margin-top:3px}
+.bar{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:.8rem}
+.bar .lbl{flex:0 0 108px;color:var(--muted)}
+.bar .track{flex:1;height:12px;background:var(--field);border-radius:99px;overflow:hidden}
+.bar .track i{display:block;height:100%;border-radius:99px;background:var(--c)}
+.bar .n{flex:0 0 24px;text-align:right;font-weight:bold;color:var(--c)}
+.bd{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);cursor:pointer}
+.bd:last-child{border-bottom:none}
+.bd img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--c)}
+.bd .t{flex:1;min-width:0;font-size:.88rem;font-weight:600;overflow-wrap:anywhere}
+.bd .t small{display:block;color:var(--muted);font-weight:400;font-size:.74rem}
+.bd .when{flex:none;font-size:.72rem;font-weight:bold;padding:3px 9px;border-radius:99px;background:var(--c);color:#10140f}
+.mosaic{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mosaic img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer}
+.mosaic img:first-child{grid-column:span 2;grid-row:span 2}
+.empty{color:var(--muted);font-size:.85rem}
 /* tree */
 .seg{display:flex;gap:8px;margin-top:12px}
 .seg button{margin:0;padding:8px;font-size:.85rem;background:transparent;border:1px solid var(--border);color:var(--muted)}
@@ -114,6 +159,8 @@ nav button.active{color:var(--gold2);font-weight:bold}
       </div>
       <button type="submit" id="btn-auth-submit">Sign In</button>
     </form>
+    <div class="or">or</div>
+    <button type="button" class="btn-google" id="btn-google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></button>
     <button type="button" class="btn-secondary" id="btn-toggle-auth" style="margin-top:10px">Need an account? Register here</button>
   </div>
 
@@ -126,25 +173,41 @@ nav button.active{color:var(--gold2);font-weight:bold}
   <div id="app-content" class="hidden">
     <!-- HOME -->
     <div id="section-home" class="tab-content">
-      <div class="hero">
+      <div class="hero2">
         <img id="home-avatar" class="photo-preview" alt="">
-        <h2>Welcome, <span id="home-name"></span></h2>
-        <p>Honoring Tradition • Uniting Generations</p>
+        <div class="hi">
+          <small id="home-greet">Welcome</small>
+          <h2><span id="home-name"></span></h2>
+          <p>Honoring Tradition • Uniting Generations</p>
+        </div>
       </div>
+
+      <div class="quick">
+        <button type="button" style="--c:var(--g2)" onclick="newMember()"><span>👪</span>Add member</button>
+        <button type="button" style="--c:var(--sky)" onclick="showTab('gallery')"><span>📷</span>Add photo</button>
+        <button type="button" style="--c:var(--coral)" onclick="showTab('events')"><span>🎉</span>Add event</button>
+        <button type="button" style="--c:var(--violet)" onclick="showTab('tree')"><span>🌳</span>Family tree</button>
+      </div>
+
       <div class="stats">
-        <div class="stat"><b id="st-members">0</b><span>Members</span></div>
-        <div class="stat"><b id="st-events">0</b><span>Events</span></div>
-        <div class="stat"><b id="st-photos">0</b><span>Gallery</span></div>
-        <div class="stat hidden" id="st-pending-box"><b id="st-pending">0</b><span>Pending</span></div>
+        <div class="stat" style="--c:var(--g2)"><i>👪</i><div><b id="st-members">0</b><span>Members</span></div></div>
+        <div class="stat" style="--c:var(--g1)"><i>🌿</i><div><b id="st-gens">0</b><span>Generations</span></div></div>
+        <div class="stat" style="--c:var(--coral)"><i>📅</i><div><b id="st-events">0</b><span>Events</span></div></div>
+        <div class="stat" style="--c:var(--sky)"><i>🖼</i><div><b id="st-photos">0</b><span>Gallery</span></div></div>
+        <div class="stat hidden" id="st-pending-box" style="--c:var(--violet)"><i>⏳</i><div><b id="st-pending">0</b><span>Pending</span></div></div>
       </div>
-      <div class="card"><h2>Coming Up</h2><p id="home-next"></p></div>
+
+      <div class="dash">
+        <div class="card"><h2>Coming Up</h2><div id="home-next"></div></div>
+        <div class="card"><h2>Birthdays</h2><div id="home-bdays"></div></div>
+        <div class="card"><h2>Our Generations</h2><div id="home-gen"></div></div>
+        <div class="card"><h2>Newest Members</h2><div id="home-newest" class="chips"></div></div>
+      </div>
+
       <div class="card">
         <h2>Recent Memories</h2>
-        <div id="home-recent" class="recent"></div>
-        <div class="btn-row">
-          <button class="btn-secondary" onclick="showTab('gallery')">Open Gallery</button>
-          <button class="btn-secondary" onclick="newMember()">+ Add Member</button>
-        </div>
+        <div id="home-recent" class="mosaic"></div>
+        <button class="btn-secondary" onclick="showTab('gallery')">Open Gallery</button>
       </div>
     </div>
 
@@ -221,16 +284,13 @@ nav button.active{color:var(--gold2);font-weight:bold}
         <label for="gal-tag">Who is in it? (optional)</label>
         <select id="gal-tag"><option value="">— Nobody in particular —</option></select>
         <div class="btn-row">
-          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-file').click()">📁 Photos / videos from device</button>
+          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-file').click()">📁 Photos from device</button>
           <button type="button" class="btn-secondary" onclick="document.getElementById('gal-cam').click()">📷 Take photo</button>
-          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-vid').click()">🎥 Record video</button>
           <button type="button" class="btn-secondary" id="btn-open-cm">✨ Create a card</button>
         </div>
-        <input type="file" id="gal-file" accept="image/*,video/*" multiple class="hidden">
+        <input type="file" id="gal-file" accept="image/*" multiple class="hidden">
         <input type="file" id="gal-cam" accept="image/*" capture="environment" class="hidden">
-        <input type="file" id="gal-vid" accept="video/*" capture="environment" class="hidden">
-        <div class="progress hidden" id="gal-progress"><i id="gal-bar"></i></div>
-        <p style="color:var(--muted);font-size:.8rem;margin-top:10px">Pick several at once. Videos can be up to 80 MB. Tap any item to view it.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:10px">Pick several at once. Tap any photo to view it.</p>
       </div>
 
       <div class="card hidden" id="card-maker">
@@ -259,11 +319,6 @@ nav button.active{color:var(--gold2);font-weight:bold}
         </div>
       </div>
 
-      <div class="filters" id="gal-filter">
-        <button type="button" data-f="all" class="on">All</button>
-        <button type="button" data-f="image">Photos</button>
-        <button type="button" data-f="video">Videos</button>
-      </div>
       <div id="photo-grid" class="member-grid"></div>
     </div>
 
@@ -349,9 +404,8 @@ nav button.active{color:var(--gold2);font-weight:bold}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJoxAeEX_XXSeMq8MPSa5UorjUKxAvncE",
@@ -364,7 +418,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
 const AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23e3b83d'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
 const VIDPH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='110' viewBox='0 0 160 110'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23145b41'/%3E%3Cstop offset='1' stop-color='%239b8cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='110' fill='url(%23g)'/%3E%3Cpath d='M64 34l40 21-40 21z' fill='white'/%3E%3C/svg%3E";
@@ -409,6 +462,23 @@ $("form-auth").addEventListener("submit", async e => {
   } catch (err) { $("auth-msg").innerText = err.message; $("auth-msg").style.display = "block"; }
 });
 
+const showAuthErr = err => { $("auth-msg").innerText = err.message; $("auth-msg").style.display = "block"; };
+$("btn-google").addEventListener("click", async () => {
+  $("auth-msg").style.display = "none";
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    if (err.code === "auth/popup-blocked" || err.code === "auth/operation-not-supported-in-this-environment") {
+      try { await signInWithRedirect(auth, provider); } catch (e2) { showAuthErr(e2); }
+    } else if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
+      showAuthErr(err);
+    }
+  }
+});
+getRedirectResult(auth).catch(showAuthErr);
+
 $("btn-logout").addEventListener("click", () => signOut(auth));
 $("btn-logout-pending").addEventListener("click", () => signOut(auth));
 
@@ -421,8 +491,18 @@ onAuthStateChanged(auth, async user => {
     return;
   }
   show("section-auth", false); show("auth-hero", false);
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (!snap.exists()) return;
+  let snap = await getDoc(doc(db, "users", user.uid));
+  if (!snap.exists()) {
+    const viaGoogle = user.providerData.some(p => p.providerId === "google.com");
+    if (!viaGoogle) return; // email registration creates its own record
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid, name: user.displayName || "", email: user.email || "",
+        role: "member", status: "pending", createdAt: serverTimestamp()
+      });
+      snap = await getDoc(doc(db, "users", user.uid));
+    } catch (err) { showAuthErr(err); show("section-auth", true); show("auth-hero", true); return; }
+  }
   currentUserDoc = snap.data();
   if (currentUserDoc.status === "approved") {
     show("section-pending", false); show("app-content", true); show("bottom-nav", true);
@@ -873,16 +953,61 @@ $("event-list").addEventListener("click", async e => {
 
 // ---------- Home dashboard ----------
 let photos = [], pendingCount = 0;
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function nextBirthdays() {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  return members.filter(m => /^\d{4}-\d{2}-\d{2}$/.test(m.dob || "")).map(m => {
+    const [y, mo, d] = m.dob.split("-").map(Number);
+    let next = new Date(t.getFullYear(), mo - 1, d);
+    if (next < t) next = new Date(t.getFullYear() + 1, mo - 1, d);
+    return { m, days: Math.round((next - t) / 864e5), age: next.getFullYear() - y, mo, d };
+  }).sort((a, b) => a.days - b.days).slice(0, 5);
+}
 function updateHome() {
+  if (!currentUserDoc) return;
   $("st-members").innerText = members.length;
   $("st-events").innerText = events.length;
   $("st-photos").innerText = photos.length;
+  $("st-gens").innerText = new Set(members.map(genOf)).size;
   $("st-pending-box").classList.toggle("hidden", !isAdmin());
   $("st-pending").innerText = pendingCount;
-  const today = new Date().toISOString().slice(0, 10);
-  const next = events.filter(e => (e.date || "") >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
-  $("home-next").innerHTML = next ? `📅 <b>${esc(next.title)}</b> on ${esc(next.date)}${next.place ? " at " + esc(next.place) : ""}` : "No upcoming events yet.";
-  $("home-recent").innerHTML = photos.slice(0, 4).map(p => `<img src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("");
+  const hr = new Date().getHours();
+  $("home-greet").innerText = (hr < 12 ? "Good morning" : hr < 17 ? "Good afternoon" : "Good evening") + (isAdmin() ? " • Admin" : "");
+
+  // next event with countdown
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const upcoming = events.map(e => ({ e, days: Math.round((new Date((e.date || "") + "T00:00:00") - t) / 864e5) }))
+    .filter(x => !isNaN(x.days) && x.days >= 0).sort((a, b) => a.days - b.days)[0];
+  $("home-next").innerHTML = upcoming ? `<div class="next">
+      <div class="days"><b>${upcoming.days === 0 ? "Today" : upcoming.days}</b><span>${upcoming.days === 0 ? "" : upcoming.days === 1 ? "day to go" : "days to go"}</span></div>
+      <div class="info"><b>${esc(upcoming.e.title)}</b><div>📅 ${esc(upcoming.e.date)}</div>${upcoming.e.place ? `<div>📍 ${esc(upcoming.e.place)}</div>` : ""}</div>
+    </div>` : `<p class="empty">No upcoming events yet. Tap “Add event” to plan the next family gathering.</p>`;
+
+  // birthdays
+  const bds = nextBirthdays();
+  $("home-bdays").innerHTML = bds.length ? bds.map(x => `
+    <div class="bd" data-open="${esc(x.m.id)}" style="--c:${colorOf(x.m)}">
+      <img src="${esc(x.m.photo || AVATAR)}" alt="">
+      <div class="t">${esc(x.m.name)}<small>${x.d} ${MONTHS[x.mo - 1]} • turns ${x.age}</small></div>
+      <span class="when">${x.days === 0 ? "Today 🎉" : x.days === 1 ? "Tomorrow" : "in " + x.days + " d"}</span>
+    </div>`).join("") : `<p class="empty">Add dates of birth on member profiles and birthdays will show here.</p>`;
+
+  // generations chart
+  const counts = ["1", "2", "3", "4"].map(g => members.filter(m => genOf(m) === g).length);
+  const max = Math.max(1, ...counts);
+  $("home-gen").innerHTML = members.length ? ["1", "2", "3", "4"].map((g, i) => `
+    <div class="bar" style="--c:${GEN_COLOR[g]}"><span class="lbl">${esc(genTitles[g].split(": ")[1])}</span>
+    <span class="track"><i style="width:${counts[i] ? Math.max(6, counts[i] / max * 100) : 0}%"></i></span><span class="n">${counts[i]}</span></div>`).join("")
+    : `<p class="empty">Your family tree is empty. Add the first member.</p>`;
+
+  // newest members
+  const newest = [...members].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).slice(0, 6);
+  $("home-newest").innerHTML = newest.length ? newest.map(chipHTML).join("") : `<p class="empty">No members yet.</p>`;
+
+  // recent memories
+  $("home-recent").innerHTML = photos.length
+    ? photos.slice(0, 7).map(p => `<img src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("")
+    : `<p class="empty" style="grid-column:1/-1">No photos yet. Add the first family memory.</p>`;
 }
 
 // ---------- Gallery: photos & videos from device or camera ----------
@@ -916,40 +1041,6 @@ function renderGallery() {
     </div>`;
   }).join("") : `<p style="color:var(--muted)">Nothing here yet. Add the first one!</p>`;
 }
-$("gal-filter").addEventListener("click", e => {
-  const b = e.target.closest("[data-f]");
-  if (!b) return;
-  galFilter = b.dataset.f;
-  $("gal-filter").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
-  renderGallery();
-});
-
-const MAX_VIDEO = 80 * 1024 * 1024;
-function setProgress(p) {
-  $("gal-progress").classList.toggle("hidden", p == null);
-  if (p != null) $("gal-bar").style.width = p + "%";
-}
-
-function uploadVideo(file, meta, label) {
-  return new Promise(async (resolve, reject) => {
-    if (file.size > MAX_VIDEO) return reject(new Error("That video is over 80 MB. Please pick a shorter one."));
-    let poster = "";
-    try { poster = await videoPoster(file); } catch {}
-    const safe = file.name.replace(/[^\w.\-]+/g, "_").slice(-60) || "video.mp4";
-    const path = `family-videos/${currentUser.uid}/${Date.now()}-${safe}`;
-    const task = uploadBytesResumable(sRef(storage, path), file, { contentType: file.type || "video/mp4" });
-    task.on("state_changed",
-      s => { const pc = Math.round(100 * s.bytesTransferred / s.totalBytes); setProgress(pc); $("gal-msg").innerText = `${label} — ${pc}%`; },
-      err => reject(err),
-      async () => {
-        try {
-          const videoUrl = await getDownloadURL(task.snapshot.ref);
-          await addDoc(collection(db, "photos"), { ...meta, type: "video", photo: poster, videoUrl, storagePath: path });
-          resolve();
-        } catch (e) { reject(e); }
-      });
-  });
-}
 
 async function uploadMedia(files) {
   const m = $("gal-msg");
@@ -964,31 +1055,24 @@ async function uploadMedia(files) {
     const label = `Uploading ${n} of ${files.length}`;
     m.className = "msg msg-success"; m.innerText = label + "...";
     try {
-      if (f.type.startsWith("video/")) {
-        await uploadVideo(f, baseMeta(), label);
-      } else if (f.type.startsWith("image/")) {
+      if (f.type.startsWith("image/")) {
         const photo = await compressImage(f, 900);
         await addDoc(collection(db, "photos"), { ...baseMeta(), type: "image", photo });
       } else continue;
       ok++;
     } catch (err) {
-      const storageOff = err && /^storage\//.test(err.code || "");
       m.className = "msg msg-error";
-      m.innerText = storageOff
-        ? "Video upload was refused. In the Firebase console open Storage, press Get started, and set the rules to allow signed-in users."
-        : "Upload failed: " + (err.message || err);
-      setProgress(null);
+      m.innerText = "Upload failed: " + (err.message || err);
       if (ok) loadPhotos();
       return;
     }
   }
-  setProgress(null);
   m.className = "msg msg-success";
   m.innerText = `${ok} item(s) added!`;
   $("gal-caption").value = "";
   loadPhotos();
 }
-["gal-file", "gal-cam", "gal-vid"].forEach(id => $(id).addEventListener("change", e => {
+["gal-file", "gal-cam"].forEach(id => $(id).addEventListener("change", e => {
   const files = [...e.target.files];
   e.target.value = "";
   if (files.length) uploadMedia(files);
@@ -1020,7 +1104,6 @@ $("lb-del").addEventListener("click", async () => {
   const p = photos.find(x => x.id === $("lb-del").dataset.id);
   try {
     await deleteDoc(doc(db, "photos", $("lb-del").dataset.id));
-    if (p && p.storagePath) { try { await deleteObject(sRef(storage, p.storagePath)); } catch {} }
   } catch (err) { alert(err.message); return; }
   closeLightbox();
   await loadPhotos();
