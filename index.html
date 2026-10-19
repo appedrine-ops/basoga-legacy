@@ -4,49 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BASOGA'S LEGACY - Family Portal</title>
-<style>
-:root{--bg:#062317;--card:#0B3D28;--gold:#D4AF37;--gold2:#f3cf55;--text:#F4F6F0;--muted:#A3C1AD;--danger:#D9534F;--border:#1a5e40}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto,sans-serif}
-body{background:var(--bg);color:var(--text);padding-bottom:70px}
-header{background:var(--card);border-bottom:2px solid var(--gold);padding:15px 20px;text-align:center;position:sticky;top:0;z-index:100}
-header h1{color:var(--gold);font-size:1.4rem;letter-spacing:1px}
-header p{color:var(--muted);font-size:.8rem}
-.container{max-width:800px;margin:0 auto;padding:15px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px;box-shadow:0 4px 10px rgba(0,0,0,.3)}
-.card h2{color:var(--gold);font-size:1.2rem;margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:8px}
-label{display:block;color:var(--muted);font-size:.85rem;margin-top:10px;margin-bottom:4px}
-input,select,textarea{width:100%;padding:10px;border-radius:5px;border:1px solid var(--border);background:#041810;color:var(--text);font-size:.95rem}
-textarea{resize:vertical;min-height:80px}
-button{background:var(--gold);color:#000;font-weight:bold;border:none;padding:12px 18px;border-radius:5px;cursor:pointer;width:100%;margin-top:15px;font-size:1rem}
-button:active{background:var(--gold2)}
-button.btn-secondary{background:transparent;border:1px solid var(--gold);color:var(--gold)}
-button.btn-danger{background:var(--danger);color:#fff}
-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:2px solid var(--gold);display:flex;justify-content:space-around;padding:8px 0;z-index:1000}
-nav button{background:none;color:var(--muted);border:none;font-size:.75rem;padding:5px;margin:0;width:auto;flex:1}
-nav button.active{color:var(--gold);font-weight:bold}
-.photo-preview{width:100px;height:100px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;display:block;margin:10px auto;background:#041810}
-.tree-group{margin-bottom:20px}
-.tree-title{color:var(--gold);font-size:1rem;margin-bottom:8px;font-weight:bold;border-left:3px solid var(--gold);padding-left:8px}
-.member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
-.member-card{background:#041810;border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center;cursor:pointer}
-.member-card img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:1px solid var(--gold)}
-.member-card img.wide{width:100%;height:100px;border-radius:4px}
-.member-card .name{font-size:.85rem;font-weight:bold;margin-top:5px}
-.member-card .rel{font-size:.75rem;color:var(--muted)}
-.member-card .tap{font-size:.65rem;color:var(--gold);margin-top:4px}
-.member-card button{margin-top:8px;padding:5px;font-size:.75rem}
-.msg{padding:10px;border-radius:5px;margin-top:10px;font-size:.85rem;display:none}
-.msg-error{background:rgba(217,83,79,.2);border:1px solid var(--danger);color:#ff8885}
-.msg-success{background:rgba(212,175,55,.2);border:1px solid var(--gold);color:var(--gold)}
-.hidden{display:none!important}
-.btn-row{display:flex;gap:8px}.btn-row button{margin-top:8px;font-size:.85rem}
-.ev{background:#041810;border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:6px;padding:12px;margin-bottom:10px}.ev .t{font-weight:bold;color:var(--gold)}.ev .d{font-size:.8rem;color:var(--muted);margin:3px 0}.ev button{width:auto;padding:5px 12px;margin-top:8px;font-size:.75rem}
-</style>
+<link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
 <header><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></header>
 
 <div class="container">
+  <div id="auth-hero" class="hero"><h2>BASOGA'S LEGACY</h2><p>Sign in to see your family tree, photos and events</p></div>
   <div id="section-auth" class="card">
     <h2 id="auth-title">Family Login</h2>
     <div id="auth-msg" class="msg msg-error"></div>
@@ -71,11 +35,35 @@ nav button.active{color:var(--gold);font-weight:bold}
   </div>
 
   <div id="app-content" class="hidden">
-    <div id="section-tree" class="tab-content">
+    <div id="section-home" class="tab-content">
+      <div class="hero">
+        <img id="home-avatar" class="photo-preview" alt="">
+        <h2>Welcome, <span id="home-name"></span></h2>
+        <p>Honoring Tradition • Uniting Generations</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="st-members">0</b><span>Members</span></div>
+        <div class="stat"><b id="st-events">0</b><span>Events</span></div>
+        <div class="stat"><b id="st-photos">0</b><span>Photos</span></div>
+        <div class="stat hidden" id="st-pending-box"><b id="st-pending">0</b><span>Pending</span></div>
+      </div>
+      <div class="card"><h2>Coming Up</h2><p id="home-next"></p></div>
+      <div class="card">
+        <h2>Recent Memories</h2>
+        <div id="home-recent" class="recent"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="showTab('gallery')">Open Gallery</button>
+          <button class="btn-secondary" onclick="newMember()">+ Add Member</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-tree" class="tab-content hidden">
       <div class="card">
         <h2>Family Lineage & Tree</h2>
         <input type="text" id="tree-search" placeholder="🔍 Search family member by name...">
         <p style="color:var(--muted);font-size:.8rem;margin-top:8px">Tap any member to change their photo or update their details.</p>
+        <button onclick="newMember()">+ Add Family Member</button>
       </div>
       <div id="tree-container"></div>
     </div>
@@ -118,10 +106,19 @@ nav button.active{color:var(--gold);font-weight:bold}
 
     <div id="section-gallery" class="tab-content hidden">
       <div class="card">
-        <h2>Family Photo Gallery</h2>
-        <p style="color:var(--muted);font-size:.85rem">Tap a photo to change it.</p>
+        <h2>Family Gallery</h2>
+        <div id="gal-msg" class="msg"></div>
+        <label for="gal-caption">Caption (optional)</label>
+        <input type="text" id="gal-caption" placeholder="e.g. Christmas 2025">
+        <div class="btn-row">
+          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-file').click()">📁 Pick from device</button>
+          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-cam').click()">📷 Take photo</button>
+        </div>
+        <input type="file" id="gal-file" accept="image/*" multiple class="hidden">
+        <input type="file" id="gal-cam" accept="image/*" capture="environment" class="hidden">
+        <p style="color:var(--muted);font-size:.8rem;margin-top:10px">You can pick several photos at once. Tap any photo to view it.</p>
       </div>
-      <div id="gallery-grid" class="member-grid"></div>
+      <div id="photo-grid" class="member-grid"></div>
     </div>
 
     <div id="section-events" class="tab-content hidden">
@@ -143,6 +140,19 @@ nav button.active{color:var(--gold);font-weight:bold}
       <div id="event-list"></div>
     </div>
 
+    <div id="section-chat" class="tab-content hidden">
+      <div class="card">
+        <h2>💬 Family Team Chat</h2>
+        <div id="chat-box"></div>
+        <form id="form-chat" class="chat-in">
+          <button type="button" class="btn-secondary" onclick="document.getElementById('chat-file').click()">📎</button>
+          <input type="file" id="chat-file" accept="image/*" class="hidden">
+          <input type="text" id="chat-text" placeholder="Write a message to the family..." autocomplete="off">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
     <div id="section-admin" class="tab-content hidden">
       <div class="card">
         <h2>Administrator Control Center</h2>
@@ -153,10 +163,29 @@ nav button.active{color:var(--gold);font-weight:bold}
       </div>
     </div>
 
-    <div id="section-settings" class="tab-content hidden">
+    <div id="section-profile" class="tab-content hidden">
       <div class="card">
-        <h2>Account Options</h2>
-        <p id="user-info-display" style="color:var(--muted);margin-bottom:15px"></p>
+        <h2>My Profile</h2>
+        <p id="user-info-display" style="color:var(--muted);font-size:.85rem"></p>
+        <div id="pf-msg" class="msg"></div>
+        <form id="form-profile">
+          <img id="pf-preview" class="photo-preview" alt="">
+          <div class="btn-row">
+            <button type="button" class="btn-secondary" onclick="document.getElementById('pf-file').click()">📁 Choose from device</button>
+            <button type="button" class="btn-secondary" onclick="document.getElementById('pf-cam').click()">📷 Take live photo</button>
+          </div>
+          <input type="file" id="pf-file" accept="image/*" class="hidden">
+          <input type="file" id="pf-cam" accept="image/*" capture="user" class="hidden">
+          <label for="pf-name">Full Name</label>
+          <input type="text" id="pf-name" required>
+          <label for="pf-phone">Phone</label>
+          <input type="tel" id="pf-phone" placeholder="+256...">
+          <label for="pf-bio">About Me</label>
+          <textarea id="pf-bio" placeholder="A few words about you..."></textarea>
+          <label for="pf-member">Which family member are you? (updates your card in the Tree)</label>
+          <select id="pf-member"><option value="">— Not linked —</option></select>
+          <button type="submit">Save My Profile</button>
+        </form>
         <button class="btn-danger" id="btn-logout">Sign Out</button>
       </div>
     </div>
@@ -164,345 +193,28 @@ nav button.active{color:var(--gold);font-weight:bold}
 </div>
 
 <nav id="bottom-nav" class="hidden">
-  <button onclick="showTab('tree')" id="nav-tree" class="active">Tree</button>
-  <button onclick="showTab('add-member')" id="nav-add-member">+ Member</button>
-  <button onclick="showTab('gallery')" id="nav-gallery">Gallery</button>
-  <button onclick="showTab('events')" id="nav-events">Events</button>
-  <button onclick="showTab('admin')" id="nav-admin" class="hidden">Admin</button>
-  <button onclick="showTab('settings')" id="nav-settings">Settings</button>
+  <button onclick="showTab('home')" id="nav-home" class="active">🏠 Home</button>
+  <button onclick="showTab('tree')" id="nav-tree">🌳 Tree</button>
+  <button onclick="showTab('gallery')" id="nav-gallery">🖼 Gallery</button>
+  <button onclick="showTab('events')" id="nav-events">📅 Events</button>
+  <button onclick="showTab('chat')" id="nav-chat">💬 Chat</button>
+  <button onclick="showTab('profile')" id="nav-profile">👤 Me</button>
+  <button onclick="showTab('admin')" id="nav-admin" class="hidden">⚙ Admin</button>
 </nav>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<div id="lightbox" class="hidden">
+  <img id="lb-img" alt="">
+  <p id="lb-cap"></p>
+  <div class="btn-row" style="width:100%;max-width:400px">
+    <button class="btn-secondary" id="lb-close">Close</button>
+    <button class="btn-danger hidden" id="lb-del">Delete</button>
+  </div>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDJoxAeEX_XXSeMq8MPSa5UorjUKxAvncE",
-  authDomain: "basogas-legacy.firebaseapp.com",
-  projectId: "basogas-legacy",
-  storageBucket: "basogas-legacy.firebasestorage.app",
-  messagingSenderId: "876153529403",
-  appId: "1:876153529403:web:52ef61f9b0249ebc5ce81e"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23D4AF37'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const genTitles = {"1":"Generation 1: Parents","2":"Generation 2: Children","3":"Generation 3: Grandchildren","4":"Generation 4+: Descendants"};
-
-let currentUser = null, currentUserDoc = null, isRegisterMode = false;
-let members = [], newPhoto = null; // newPhoto = compressed data URL chosen in this form session
-const isAdmin = () => currentUserDoc && currentUserDoc.role === "admin";
-
-// ---------- Auth ----------
-$("btn-toggle-auth").addEventListener("click", () => {
-  isRegisterMode = !isRegisterMode;
-  $("register-fields").classList.toggle("hidden", !isRegisterMode);
-  $("auth-title").innerText = isRegisterMode ? "Register Family Account" : "Family Login";
-  $("btn-auth-submit").innerText = isRegisterMode ? "Register" : "Sign In";
-  $("btn-toggle-auth").innerText = isRegisterMode ? "Already registered? Log in" : "Need an account? Register here";
-});
-
-$("form-auth").addEventListener("submit", async e => {
-  e.preventDefault();
-  $("auth-msg").style.display = "none";
-  const email = $("auth-email").value, password = $("auth-password").value;
-  try {
-    if (isRegisterMode) {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await setDoc(doc(db, "users", cred.user.uid), {
-        uid: cred.user.uid, name: $("auth-name").value, email,
-        role: "member", status: "pending", createdAt: serverTimestamp()
-      });
-    } else {
-      await signInWithEmailAndPassword(auth, email, password);
-    }
-  } catch (err) { $("auth-msg").innerText = err.message; $("auth-msg").style.display = "block"; }
-});
-
-$("btn-logout").addEventListener("click", () => signOut(auth));
-$("btn-logout-pending").addEventListener("click", () => signOut(auth));
-
-onAuthStateChanged(auth, async user => {
-  currentUser = user;
-  const show = (id, on) => $(id).classList.toggle("hidden", !on);
-  if (!user) {
-    currentUserDoc = null;
-    show("section-auth", true); show("section-pending", false); show("app-content", false); show("bottom-nav", false);
-    return;
-  }
-  show("section-auth", false);
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (!snap.exists()) return;
-  currentUserDoc = snap.data();
-  if (currentUserDoc.status === "approved") {
-    show("section-pending", false); show("app-content", true); show("bottom-nav", true);
-    show("nav-admin", isAdmin());
-    if (isAdmin()) loadPendingUsers();
-    $("user-info-display").innerText = `Logged in as: ${currentUserDoc.name} (${currentUserDoc.role.toUpperCase()})`;
-    resetForm();
-    loadFamilyMembers();
-    loadEvents();
-  } else {
-    show("section-pending", true); show("app-content", false); show("bottom-nav", false);
-  }
-});
-
-// ---------- Tabs ----------
-window.showTab = function (tab) {
-  document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
-  document.querySelectorAll("nav button").forEach(el => el.classList.remove("active"));
-  $(`section-${tab}`).classList.remove("hidden");
-  $(`nav-${tab}`).classList.add("active");
-};
-
-// ---------- Photo handling (resize so it fits Firestore's 1MB limit) ----------
-function compressImage(file, max = 500) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = reject;
-      img.onload = () => {
-        const scale = Math.min(1, max / Math.max(img.width, img.height));
-        const c = document.createElement("canvas");
-        c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
-        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-        resolve(c.toDataURL("image/jpeg", 0.8));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-const onPhoto = async e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  try {
-    newPhoto = await compressImage(file);
-    $("member-photo-preview").src = newPhoto;
-  } catch { flash("Could not read that photo. Try another.", false); }
-  e.target.value = "";
-};
-["member-photo-input", "member-photo-camera"].forEach(id => $(id).addEventListener("change", onPhoto));
-
-function flash(text, ok = true) {
-  const m = $("member-msg");
-  m.className = "msg " + (ok ? "msg-success" : "msg-error");
-  m.innerText = text; m.style.display = "block";
-}
-
-// ---------- Add / Edit / Delete members ----------
-function resetForm() {
-  $("form-member").reset();
-  $("member-id").value = "";
-  newPhoto = null;
-  $("member-photo-preview").src = AVATAR;
-  $("member-form-title").innerText = "Add Family Member";
-  $("btn-save-member").innerText = "Save Family Member";
-  $("btn-delete-member").classList.add("hidden");
-  $("btn-cancel-edit").classList.add("hidden");
-}
-
-function editMember(id) {
-  const m = members.find(x => x.id === id);
-  if (!m) return;
-  resetForm();
-  $("member-msg").style.display = "none";
-  $("member-id").value = id;
-  $("member-name").value = m.name || "";
-  $("member-generation").value = m.generation || "1";
-  $("member-relationship").value = m.relationship || "";
-  $("member-dob").value = m.dob || "";
-  $("member-bio").value = m.bio || "";
-  $("member-photo-preview").src = m.photo || AVATAR;
-  $("member-form-title").innerText = "Edit Profile / Change Photo";
-  $("btn-save-member").innerText = "Save Changes";
-  $("btn-cancel-edit").classList.remove("hidden");
-  $("btn-delete-member").classList.toggle("hidden", !isAdmin());
-  showTab("add-member");
-  window.scrollTo(0, 0);
-}
-
-$("btn-cancel-edit").addEventListener("click", () => { resetForm(); $("member-msg").style.display = "none"; });
-
-$("form-member").addEventListener("submit", async e => {
-  e.preventDefault();
-  const id = $("member-id").value;
-  const data = {
-    name: $("member-name").value.trim(),
-    generation: $("member-generation").value,
-    relationship: $("member-relationship").value.trim(),
-    dob: $("member-dob").value,
-    bio: $("member-bio").value.trim()
-  };
-  try {
-    if (id) {
-      if (newPhoto) data.photo = newPhoto;
-      data.updatedBy = currentUser.uid;
-      data.updatedAt = serverTimestamp();
-      await updateDoc(doc(db, "members", id), data);
-      flash("Profile updated!");
-    } else {
-      await addDoc(collection(db, "members"), {
-        ...data, photo: newPhoto || "",
-        createdBy: currentUser.uid, createdByName: currentUserDoc.name || "",
-        createdAt: serverTimestamp()
-      });
-      flash("Family member added!");
-    }
-    resetForm();
-    await loadFamilyMembers();
-  } catch (err) { flash("Error saving profile: " + err.message, false); }
-});
-
-async function deleteMember(id) {
-  if (!isAdmin()) return;
-  const m = members.find(x => x.id === id);
-  if (!confirm(`Permanently delete ${m ? m.name : "this member"}? This cannot be undone.`)) return;
-  try {
-    await deleteDoc(doc(db, "members", id));
-    resetForm();
-    await loadFamilyMembers();
-    showTab("tree");
-  } catch (err) { flash("Could not delete: " + err.message, false); }
-}
-$("btn-delete-member").addEventListener("click", () => deleteMember($("member-id").value));
-
-// ---------- Render ----------
-async function loadFamilyMembers() {
-  const snap = await getDocs(collection(db, "members"));
-  members = [];
-  snap.forEach(d => members.push({ id: d.id, ...d.data() }));
-  render();
-}
-
-function render() {
-  const tree = $("tree-container"), gallery = $("gallery-grid");
-  tree.innerHTML = ""; gallery.innerHTML = "";
-  ["1", "2", "3", "4"].forEach(gen => {
-    const group = members.filter(m => m.generation === gen);
-    if (!group.length) return;
-    const div = document.createElement("div");
-    div.className = "tree-group";
-    div.innerHTML = `<div class="tree-title">${genTitles[gen]} (${group.length})</div><div class="member-grid">` +
-      group.map(m => `
-        <div class="member-card" data-id="${esc(m.id)}">
-          <img src="${m.photo || AVATAR}" alt="">
-          <div class="name">${esc(m.name)}</div>
-          <div class="rel">${esc(m.relationship)}</div>
-          <div class="tap">Tap to edit</div>
-          ${isAdmin() ? `<button class="btn-danger" data-del="${esc(m.id)}">Delete</button>` : ""}
-        </div>`).join("") + `</div>`;
-    tree.appendChild(div);
-  });
-  members.filter(m => m.photo).forEach(m => {
-    gallery.insertAdjacentHTML("beforeend", `
-      <div class="member-card" data-id="${esc(m.id)}">
-        <img class="wide" src="${m.photo}" alt="">
-        <div class="name">${esc(m.name)}</div>
-      </div>`);
-  });
-  filterTree();
-}
-
-// One click handler for cards and admin delete buttons
-document.addEventListener("click", e => {
-  const del = e.target.closest("[data-del]");
-  if (del) { e.stopPropagation(); deleteMember(del.dataset.del); return; }
-  const card = e.target.closest(".member-card[data-id]");
-  if (card) editMember(card.dataset.id);
-});
-
-function filterTree() {
-  const term = $("tree-search").value.toLowerCase();
-  document.querySelectorAll("#tree-container .member-card").forEach(card => {
-    card.style.display = card.querySelector(".name").innerText.toLowerCase().includes(term) ? "block" : "none";
-  });
-}
-$("tree-search").addEventListener("input", filterTree);
-
-// ---------- Admin: approvals ----------
-async function loadPendingUsers() {
-  const list = $("admin-user-list");
-  list.innerHTML = "";
-  const snap = await getDocs(collection(db, "users"));
-  snap.forEach(d => {
-    const u = d.data();
-    if (u.status !== "pending") return;
-    const el = document.createElement("div");
-    el.className = "member-card";
-    el.style.cssText = "text-align:left;margin-bottom:10px;cursor:default";
-    el.innerHTML = `<div class="name">${esc(u.name || "Unnamed")} (${esc(u.email)})</div>
-      <div class="rel">Status: Pending Approval</div>
-      <button data-approve="${esc(u.uid)}" style="margin-top:8px;padding:6px">Approve Account</button>`;
-    list.appendChild(el);
-  });
-  if (!list.innerHTML) list.innerHTML = `<p style="color:var(--muted)">No pending registration requests.</p>`;
-}
-$("admin-user-list").addEventListener("click", async e => {
-  const uid = e.target.dataset.approve;
-  if (!uid || !isAdmin()) return;
-  await updateDoc(doc(db, "users", uid), { status: "approved" });
-  loadPendingUsers();
-});
-
-// ---------- Seed the 11 children (admin, safe to press repeatedly) ----------
-const CHILDREN = ["Kisira Habert","Namuhanga Juliet","Walusansa Susan","Namaganda Lydia","Namatende Hellen","Wambuzi Benard","Naisamula Miria","Nakisige Brenda","Basoga Andrew","Mugonyi Edrine Dickson","Namuyonjo Abel Nelson"];
-$("btn-seed").addEventListener("click", async () => {
-  if (!isAdmin()) return;
-  let added = 0;
-  for (const name of CHILDREN) {
-    const id = "child-" + name.toLowerCase().replace(/\s+/g, "-");
-    const ref = doc(db, "members", id);
-    if ((await getDoc(ref)).exists()) continue;
-    await setDoc(ref, { name, generation: "2", relationship: "Child", dob: "", bio: "", photo: "", createdBy: currentUser.uid, createdAt: serverTimestamp() });
-    added++;
-  }
-  $("seed-msg").innerText = added ? `${added} members added.` : "All 11 are already in the Tree.";
-  loadFamilyMembers();
-});
-
-// ---------- Events ----------
-let events = [];
-async function loadEvents() {
-  const snap = await getDocs(collection(db, "events"));
-  events = [];
-  snap.forEach(d => events.push({ id: d.id, ...d.data() }));
-  events.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-  $("event-list").innerHTML = events.length ? events.map(ev => `
-    <div class="ev">
-      <div class="t">${esc(ev.title)}</div>
-      <div class="d">📅 ${esc(ev.date)}${ev.place ? " • 📍 " + esc(ev.place) : ""}${ev.byName ? " • added by " + esc(ev.byName) : ""}</div>
-      <div>${esc(ev.details)}</div>
-      ${isAdmin() ? `<button class="btn-danger" data-delev="${esc(ev.id)}">Delete</button>` : ""}
-    </div>`).join("") : `<p style="color:var(--muted)">No events yet. Add the first one above.</p>`;
-}
-$("form-event").addEventListener("submit", async e => {
-  e.preventDefault();
-  const m = $("event-msg");
-  try {
-    await addDoc(collection(db, "events"), {
-      title: $("ev-title").value.trim(), date: $("ev-date").value, place: $("ev-place").value.trim(),
-      details: $("ev-details").value.trim(), by: currentUser.uid, byName: currentUserDoc.name || "", createdAt: serverTimestamp()
-    });
-    $("form-event").reset();
-    m.className = "msg msg-success"; m.innerText = "Event added!"; m.style.display = "block";
-    loadEvents();
-  } catch (err) { m.className = "msg msg-error"; m.innerText = err.message; m.style.display = "block"; }
-});
-$("event-list").addEventListener("click", async e => {
-  const id = e.target.dataset.delev;
-  if (!id || !isAdmin() || !confirm("Delete this event?")) return;
-  await deleteDoc(doc(db, "events", id));
-  loadEvents();
-});
-</script>
+<script type="module" src="core.js?v=1"></script>
+<script type="module" src="members.js?v=1"></script>
+<script type="module" src="gallery.js?v=1"></script>
+<script type="module" src="profile.js?v=1"></script>
+<script type="module" src="boot.js?v=1"></script>
 </body>
-</html>
+            </html>
