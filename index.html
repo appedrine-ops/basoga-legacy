@@ -327,10 +327,18 @@ button.call-btn.green{background:#2fc4a0;border:none}
 button.call-btn .ico{width:26px;height:26px;margin:0}
 button.call-btn.red .ico{transform:rotate(135deg)}
 #call-overlay[data-mode="in"] #call-mute,#call-overlay[data-mode="in"] #call-cam,#call-overlay:not([data-mode="in"]) #call-accept,#call-overlay[data-type="audio"] #call-cam{display:none}
+
+/* chat + calls switch, unread badge */
+.seg{display:flex;background:rgba(255,255,255,.08);border-radius:99px;padding:4px;margin:0 0 12px}
+.seg button{flex:1;margin:0;width:auto;background:none;color:var(--muted);border:none;border-radius:99px;padding:9px 0;font-weight:700;font-size:.95rem}
+.seg button.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1b1500}
+#bottom-nav button{position:relative}
+.badge{position:absolute;top:0;left:calc(50% + 6px);min-width:18px;height:18px;border-radius:99px;background:#e0564f;color:#fff;font-size:.66rem;font-style:normal;font-weight:700;display:grid;place-items:center;padding:0 5px}
+.badge.hidden{display:none}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
 <header>
   <div class="slot"><button type="button" id="btn-menu" class="menu-btn hidden" aria-label="Open menu" aria-controls="drawer"><span></span><span></span><span></span></button></div>
   <div class="brand"><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></div>
@@ -372,9 +380,8 @@ button.call-btn.red .ico{transform:rotate(135deg)}
     <nav id="bottom-nav" aria-label="Main">
       <button type="button" data-nav="home" onclick="showTab('home')"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg><span>Home</span></button>
       <button type="button" data-nav="tree" onclick="showTab('tree')"><svg class="ico" aria-hidden="true"><use href="#i-tree"/></svg><span>Tree</span></button>
-      <button type="button" data-nav="chat" onclick="showTab('chat')"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg><span>Chat</span></button>
-      <button type="button" data-nav="calls" onclick="showTab('calls')"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Calls</span></button>
-      <button type="button" data-nav="menu" onclick="document.getElementById('btn-menu').click()"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg><span>Menu</span></button>
+      <button type="button" data-nav="gallery" onclick="showTab('gallery')"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg><span>Gallery</span></button>
+      <button type="button" data-nav="chat" onclick="showTab('chat')"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg><span>Chat</span><i class="badge hidden" id="chat-badge"></i></button>
     </nav>
     <!-- HOME -->
     <div id="section-home" class="tab-content">
@@ -414,9 +421,15 @@ button.call-btn.red .ico{transform:rotate(135deg)}
         <div class="install-actions"><button type="button" id="install-btn">Install</button><button type="button" class="btn-secondary" id="install-later">Not now</button></div>
       </div>
 
+      <div class="card hidden" id="notif-card">
+        <h2><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg> Get alerts</h2>
+        <p style="color:var(--muted)">Be told when a family member sends a message or calls you.</p>
+        <div class="install-actions"><button type="button" id="notif-btn">Turn on alerts</button><button type="button" class="btn-secondary" id="notif-later">Not now</button></div>
+      </div>
+
       <div class="tiles">
         <button type="button" class="tile" onclick="showTab('checkin')"><i><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg></i><span>Check in / out<small id="tile-ci"></small></span></button>
-        <button type="button" class="tile" onclick="showTab('chat')"><i><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg></i><span>Team chat<small>Talk with the family</small></span></button>
+        <button type="button" class="tile" onclick="showTab('chat')"><i><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg></i><span>Team chat<small>Messages and calls</small></span></button>
       </div>
 
       <div class="card share-card">
@@ -651,6 +664,7 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 
     <!-- TEAM CHAT -->
     <div id="section-chat" class="tab-content hidden">
+      <div class="seg"><button type="button" class="on" onclick="showTab('chat')">Messages</button><button type="button" onclick="showTab('calls')">Calls</button></div>
       <div class="card">
         <h2><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg> Team chat</h2>
         <div id="chat-list" class="chat-list" aria-live="polite"></div>
@@ -668,6 +682,7 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 
     <!-- FAMILY CALLS -->
     <div id="section-calls" class="tab-content hidden">
+      <div class="seg"><button type="button" onclick="showTab('chat')">Messages</button><button type="button" class="on" onclick="showTab('calls')">Calls</button></div>
       <div class="card">
         <h2><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> Family calls</h2>
         <p style="color:var(--muted);margin-bottom:8px">Tap the phone for a voice call or the camera for a video call. The other person must have the app open to hear it ring.</p>
@@ -742,7 +757,6 @@ button.call-btn.red .ico{transform:rotate(135deg)}
     <button type="button" data-tab="events"><span><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg> </span>Events</button>
     <button type="button" data-tab="chat"><span><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg> </span>Team chat</button>
     <button type="button" data-tab="checkin"><span><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> </span>Check in / out</button>
-    <button type="button" data-tab="calls"><span><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> </span>Family calls</button>
     <button type="button" id="dr-share"><span><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg> </span>Share app</button>
     <button type="button" data-tab="profile"><span><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg> </span>My Profile</button>
     <button type="button" data-tab="admin" id="dr-admin" class="hidden"><span><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg> </span>Admin</button>
@@ -1158,7 +1172,7 @@ $("vn-cancel").addEventListener("click", () => vnStop(false));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && vn) vnStop(false); });
 window.addEventListener("popstate", () => { if (vn) vnStop(false); });
 
-function stopLive() { stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
+function stopLive() { if (unsubNote) unsubNote(); unsubNote = null; setUnread(0); stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
 function startChat() {
   if (unsubChat) return;
   chatFirst = true;
@@ -1170,6 +1184,7 @@ function startChat() {
 function startLive() {
   stopLive();
   startPresence();
+  startNotifier(); showNotifCard();
   unsubCi = onSnapshot(query(collection(db, "checkins"), orderBy("at", "desc"), limit(80)),
     snap => { ciDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderCheckins(); },
     err => { liveErr($("ci-now"), err); $("tile-ci").textContent = ""; });
@@ -1188,7 +1203,7 @@ $("ci-btn").addEventListener("click", async () => {
 });
 
 // ---------- Tabs ----------
-const NAV_FOR = { "member": "tree", "add-member": "tree", "add-grandchild": "grandchildren" };
+const NAV_FOR = { "member": "tree", "add-member": "tree", "add-grandchild": "grandchildren", "calls": "chat" };
 function closeDrawer() { $("drawer").classList.remove("open"); $("scrim").classList.remove("open"); }
 function closeFab() { $("fab-menu").classList.remove("open"); $("fab").classList.remove("on"); }
 function renderTab(tab) {
@@ -1208,7 +1223,7 @@ window.goBack = function () { if (navDepth > 0) history.back(); else showTab("ho
 window.showTab = function (tab) {
   renderTab(tab);
   markNav(tab);
-  if (tab === "chat") startChat();
+  if (tab === "chat") { startChat(); setUnread(0); }
   if (tab === "calls") openCallsTab();
   if (tab === "chat") setTimeout(() => { const b = $("chat-list"); b.scrollTop = b.scrollHeight; }, 0);
   if (!navPopping) {
@@ -2177,7 +2192,7 @@ async function startCall(uid, name, type) {
   }
 }
 function closeIncoming(msg) {
-  const inc = incoming; incoming = null; stopRing();
+  const inc = incoming; incoming = null; stopRing(); clearNotice("call");
   if (!inc) return;
   clearTimeout(inc.timer); if (inc.unsub) inc.unsub();
   if (msg) { $("call-state").textContent = msg; setTimeout(hideCallUI, 1200); } else hideCallUI();
@@ -2189,7 +2204,7 @@ function declineIncoming(status) {
 }
 async function acceptIncoming() {
   const inc = incoming; if (!inc || call) return;
-  clearTimeout(inc.timer); stopRing();
+  clearTimeout(inc.timer); stopRing(); clearNotice("call");
   if (!callSupported()) { declineIncoming("declined"); return; }
   let stream;
   try { stream = await getMedia(inc.d.type); } catch (e) { declineIncoming("declined"); micError(e); return; }
@@ -2217,6 +2232,7 @@ function startCallListener() {
       const inc = incoming = { ref: ch.doc.ref, d, accepted: false };
       callUI(d.fromName, d.type, d.type === "video" ? "Incoming video call" : "Incoming voice call", "in");
       ringTone("in");
+      if (document.hidden) notify("Incoming " + (d.type === "video" ? "video" : "voice") + " call", (d.fromName || "A family member") + " is calling you", "call", { requireInteraction: true, vibrate: [500, 200, 500, 200, 500] });
       inc.timer = setTimeout(() => { if (incoming === inc) declineIncoming("missed"); }, 50000);
       inc.unsub = onSnapshot(inc.ref, s => { const x = s.data(); if (incoming === inc && (!x || x.status !== "ringing")) closeIncoming("Call ended"); });
     });
@@ -2291,6 +2307,51 @@ $("call-cam").addEventListener("click", () => {
   $("call-cam").firstElementChild.firstElementChild.setAttribute("href", t.enabled ? "#i-video" : "#i-videooff");
 });
 
+// ---------- Alerts (messages and calls) ----------
+// These appear while the app is open or recently in the background. Alerts when the app is fully closed need a paid server (Firebase Cloud Functions).
+let unsubNote = null, noteReady = false, unread = 0;
+const canNotify = () => "Notification" in window && "serviceWorker" in navigator;
+async function notify(title, body, tag, extra) {
+  if (!canNotify() || Notification.permission !== "granted") return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    await reg.showNotification(title, Object.assign({ body, tag, icon: "icon-192.png", badge: "icon-192.png", vibrate: [200, 100, 200], renotify: true }, extra || {}));
+  } catch (e) { /* alerts are a bonus */ }
+}
+async function clearNotice(tag) {
+  if (!canNotify() || Notification.permission !== "granted") return;
+  try { const reg = await navigator.serviceWorker.ready; (await reg.getNotifications({ tag })).forEach(n => n.close()); } catch (e) {}
+}
+function setUnread(n) {
+  unread = n; const b = $("chat-badge");
+  b.textContent = n > 9 ? "9+" : String(n); b.classList.toggle("hidden", !n);
+}
+function startNotifier() {
+  if (unsubNote) return;
+  noteReady = false;
+  unsubNote = onSnapshot(query(collection(db, "messages"), orderBy("at", "desc"), limit(1)), snap => {
+    if (!noteReady) { noteReady = true; return; } // the first answer is only the latest old message
+    snap.docChanges().forEach(ch => {
+      if (ch.type !== "added") return;
+      const m = ch.doc.data({ serverTimestamps: "estimate" });
+      if (m.uid === myUid()) return;
+      const inChat = curTab === "chat" && !document.hidden;
+      if (!inChat) setUnread(unread + 1);
+      if (document.hidden || !inChat) notify(m.name || "Family", m.text ? String(m.text).slice(0, 120) : (m.audio ? "Sent a voice note" : "Sent a photo"), "chat");
+    });
+  }, () => {});
+}
+function showNotifCard() {
+  if (!canNotify() || Notification.permission !== "default") return;
+  try { if (Date.now() - Number(localStorage.getItem("notifLater") || 0) < 7 * 86400000) return; } catch (e) {}
+  $("notif-card").classList.remove("hidden");
+}
+$("notif-btn").addEventListener("click", async () => {
+  try { if ((await Notification.requestPermission()) === "granted") notify("Alerts are on", "You will be told about new messages and calls.", "welcome"); } catch (e) {}
+  $("notif-card").classList.add("hidden");
+});
+$("notif-later").addEventListener("click", () => { try { localStorage.setItem("notifLater", String(Date.now())); } catch (e) {} $("notif-card").classList.add("hidden"); });
+
 // ---------- Share ----------
 const SHARE_TEXT = "Join our family portal, Basoga's Legacy. Open the link, register with your email, and welcome home.";
 const shareUrl = () => location.origin + location.pathname.replace(/index\.html$/, "");
@@ -2327,8 +2388,8 @@ $("install-btn").addEventListener("click", async () => {
 $("install-later").addEventListener("click", () => { try { localStorage.setItem("installLater", String(Date.now())); } catch (e) {} $("install-card").classList.add("hidden"); });
 window.addEventListener("appinstalled", () => $("install-card").classList.add("hidden"));
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-const NAV_KEY = { home: "home", tree: "tree", children: "tree", grandchildren: "tree", member: "tree", "add-member": "tree", "add-grandchild": "tree", chat: "chat", calls: "calls" };
-function markNav(tab) { document.querySelectorAll("#bottom-nav [data-nav]").forEach(b => b.classList.toggle("on", b.dataset.nav === (NAV_KEY[tab] || "menu"))); }
+const NAV_KEY = { home: "home", tree: "tree", children: "tree", grandchildren: "tree", member: "tree", "add-member": "tree", "add-grandchild": "tree", gallery: "gallery", chat: "chat", calls: "chat" };
+function markNav(tab) { document.querySelectorAll("#bottom-nav [data-nav]").forEach(b => b.classList.toggle("on", b.dataset.nav === NAV_KEY[tab])); }
 document.addEventListener("focusin", e => { if (e.target.matches("input,textarea,select")) document.body.classList.add("kbd"); });
 document.addEventListener("focusout", () => document.body.classList.remove("kbd"));
 
