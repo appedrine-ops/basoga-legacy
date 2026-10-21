@@ -2,7 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b3d28">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basoga">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="icon" href="icon-192.png">
+<script>window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__bip=e;document.dispatchEvent(new Event("bip"));});</script>
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js">
 <title>BASOGA'S LEGACY - Family Portal</title>
 <style>
 :root{
@@ -13,7 +26,7 @@
   --g1:#e3b83d;--g2:#2fc4a0;--g3:#ff7a59;--g4:#9b8cff;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto,sans-serif}
-body{background:linear-gradient(rgba(4,24,15,.88),rgba(4,24,15,.95)),url('https://picsum.photos/id/1015/1200/900') center/cover fixed;background-color:var(--bg);color:var(--text);padding-bottom:96px}
+body{background-color:var(--bg);color:var(--text);padding-bottom:96px}
 header{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0b3d28,#145b41 55%,#0e4a35);border-bottom:3px solid var(--gold);padding:10px 14px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 header h1{color:var(--gold2);font-size:1.4rem;letter-spacing:1.5px}
 header p{color:var(--muted);font-size:.8rem}
@@ -46,7 +59,7 @@ button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
 .msg-error{background:rgba(224,86,79,.2);border:1px solid var(--danger);color:#ff9a95}
 .msg-success{background:rgba(47,196,160,.18);border:1px solid var(--teal);color:#8ff0d6}
 .hidden{display:none!important}
-.hero{background:linear-gradient(rgba(0,0,0,.45),rgba(6,35,23,.85)),url('https://picsum.photos/id/1015/1200/700') center/cover;border:1px solid var(--gold);border-radius:14px;padding:28px 15px;text-align:center;margin-bottom:15px}
+.hero{background:linear-gradient(135deg,#0b3d28,#145b41 60%,#0e4a35);border:1px solid var(--gold);border-radius:14px;padding:28px 15px;text-align:center;margin-bottom:15px}
 .hero h2{color:var(--gold2);font-size:1.5rem;border:none;margin:0}.hero p{color:var(--muted);font-size:.9rem}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;margin-bottom:15px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
@@ -66,7 +79,7 @@ button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
 
 /* dashboard */
 .hero2{position:relative;overflow:hidden;border-radius:18px;padding:22px 18px;margin-bottom:14px;border:1px solid var(--gold);
-  background:linear-gradient(135deg,rgba(11,61,40,.92),rgba(20,110,84,.78) 55%,rgba(227,184,61,.35)),url('https://picsum.photos/id/1015/1200/700') center/cover;
+  background:linear-gradient(135deg,#0b3d28,#146e54 55%,#5c6a2c);
   display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 10px 24px rgba(0,0,0,.4)}
 .hero2 .photo-preview{margin:0;width:84px;height:84px;flex:none}
 .hero2 .hi{min-width:0;flex:1 1 180px}
@@ -267,10 +280,57 @@ button.vn-cancel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,
 button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
 @keyframes vnspin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.vn-ringline,.vn-glow{animation:none}}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 60% at 50% 0%,#0f4a33 0%,rgba(15,74,51,0) 65%),linear-gradient(rgba(4,24,15,.88),rgba(4,24,15,.95)),var(--bgimg,none) center/cover}
+
+/* app feel */
+html{-webkit-tap-highlight-color:transparent}
+body{overscroll-behavior-y:contain;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+button,a,.tile{touch-action:manipulation}
+header{padding-top:calc(10px + env(safe-area-inset-top,0px))}
+#bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:800;display:flex;background:linear-gradient(180deg,rgba(11,61,40,.97),rgba(6,35,23,.99));border-top:1px solid rgba(255,255,255,.12);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+#bottom-nav button{flex:1;min-width:0;margin:0;width:auto;background:none;color:var(--muted);border:none;border-radius:12px;padding:6px 2px;font-size:.68rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:none}
+#bottom-nav button .ico{width:24px;height:24px;margin:0}
+#bottom-nav button.on{color:var(--gold2)}
+#bottom-nav button.on .ico{stroke-width:2.2}
+body.kbd #bottom-nav{display:none}
+.fab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.fab-menu{bottom:calc(154px + env(safe-area-inset-bottom,0px))}
+#vn-overlay{z-index:2000}
+.install-actions,.share-row{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.install-actions button,.share-row button{flex:1;min-width:96px;margin-top:6px}
+@media (display-mode:standalone){#install-card{display:none!important}}
+/* family calls */
+.ct-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ct-row:last-child{border:0}
+.ct-av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:rgba(255,255,255,.1);color:var(--gold2);position:relative;flex:none}
+.ct-av.on::after{content:"";position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:#2fc4a0;border:2px solid #0b2a1c}
+.ct-info{flex:1;min-width:0}.ct-info b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ct-info span{color:var(--muted);font-size:.8rem}
+button.ct-btn{width:44px;height:44px;margin:0;padding:0;border-radius:50%;display:grid;place-items:center;background:transparent;border:1px solid var(--teal);color:var(--teal);flex:none}
+button.ct-btn .ico{margin:0;width:20px;height:20px}
+#call-overlay{position:fixed;inset:0;z-index:2100;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:radial-gradient(circle at 50% 30%,#2a1a6e 0%,#1a0f4d 45%,#0d0833 100%);color:#fff;padding:calc(48px + env(safe-area-inset-top,0px)) 20px calc(36px + env(safe-area-inset-bottom,0px))}
+#call-overlay.hidden{display:none}
+#call-remote{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none;background:#000}
+#call-overlay[data-type="video"][data-mode="active"] #call-remote{opacity:1}
+.call-top{position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.call-ring{position:relative;width:min(50vw,200px);aspect-ratio:1;display:grid;place-items:center;margin-bottom:12px}
+#call-overlay[data-type="video"][data-mode="active"] .call-ring{display:none}
+.call-avatar{position:relative;width:62%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:2.8rem;font-weight:700}
+.call-top h2{border:none;margin:0;padding:0;font-size:1.6rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+#call-state{color:rgba(255,255,255,.85);text-shadow:0 2px 8px rgba(0,0,0,.5)}
+#call-local{position:absolute;right:16px;top:calc(16px + env(safe-area-inset-top,0px));width:96px;height:128px;object-fit:cover;border-radius:14px;border:2px solid rgba(255,255,255,.4);z-index:2;background:#000;transform:scaleX(-1);display:none}
+#call-overlay[data-type="video"]:not([data-mode="in"]) #call-local.on{display:block}
+.call-actions{position:relative;z-index:2;display:flex;gap:18px;align-items:center;justify-content:center}
+button.call-btn{width:64px;height:64px;border-radius:50%;margin:0;padding:0;display:grid;place-items:center;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);color:#fff}
+button.call-btn.off{background:#fff;color:#1a0f4d}
+button.call-btn.red{background:#e0564f;border:none}
+button.call-btn.green{background:#2fc4a0;border:none}
+button.call-btn .ico{width:26px;height:26px;margin:0}
+button.call-btn.red .ico{transform:rotate(135deg)}
+#call-overlay[data-mode="in"] #call-mute,#call-overlay[data-mode="in"] #call-cam,#call-overlay:not([data-mode="in"]) #call-accept,#call-overlay[data-type="audio"] #call-cam{display:none}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
 <header>
   <div class="slot"><button type="button" id="btn-menu" class="menu-btn hidden" aria-label="Open menu" aria-controls="drawer"><span></span><span></span><span></span></button></div>
   <div class="brand"><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></div>
@@ -302,11 +362,20 @@ button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
   <div id="section-pending" class="card hidden" style="text-align:center">
     <h2 id="pend-title">Account Pending Approval</h2>
     <p id="pend-text" style="color:var(--muted);margin:15px 0">Your registration has been submitted. An administrator must approve your account before you can access private family profiles and memories.</p>
+    <button type="button" id="btn-pend-check">Check again</button>
+    <button type="button" class="btn-secondary hidden" id="btn-pend-resend">Resend verification email</button>
     <button class="btn-secondary" id="btn-logout-pending">Sign Out</button>
   </div>
 
   <div id="app-content" class="hidden">
     <div id="back-bar" class="hidden"><button type="button" id="btn-back" class="btn-secondary" onclick="goBack()"><svg class="ico" aria-hidden="true"><use href="#i-back"/></svg> Back</button></div>
+    <nav id="bottom-nav" aria-label="Main">
+      <button type="button" data-nav="home" onclick="showTab('home')"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg><span>Home</span></button>
+      <button type="button" data-nav="tree" onclick="showTab('tree')"><svg class="ico" aria-hidden="true"><use href="#i-tree"/></svg><span>Tree</span></button>
+      <button type="button" data-nav="chat" onclick="showTab('chat')"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg><span>Chat</span></button>
+      <button type="button" data-nav="calls" onclick="showTab('calls')"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Calls</span></button>
+      <button type="button" data-nav="menu" onclick="document.getElementById('btn-menu').click()"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg><span>Menu</span></button>
+    </nav>
     <!-- HOME -->
     <div id="section-home" class="tab-content">
       <div class="hero2">
@@ -339,9 +408,26 @@ button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
         <div class="g hidden" id="st-pending-box" style="--c:var(--violet)" onclick="showTab('admin')"><b id="st-pending">0</b><span>Pending</span></div>
       </div>
 
+      <div class="card install-card hidden" id="install-card">
+        <h2><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> Install the app</h2>
+        <p id="install-text" style="color:var(--muted)">Add Basoga's Legacy to your home screen. It opens full screen, like a normal app.</p>
+        <div class="install-actions"><button type="button" id="install-btn">Install</button><button type="button" class="btn-secondary" id="install-later">Not now</button></div>
+      </div>
+
       <div class="tiles">
         <button type="button" class="tile" onclick="showTab('checkin')"><i><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg></i><span>Check in / out<small id="tile-ci"></small></span></button>
         <button type="button" class="tile" onclick="showTab('chat')"><i><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg></i><span>Team chat<small>Talk with the family</small></span></button>
+      </div>
+
+      <div class="card share-card">
+        <h2><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg> Invite the family</h2>
+        <p style="color:var(--muted)">Send the link so your relatives can register. Emails on your family list are let in automatically.</p>
+        <div class="share-row">
+          <button type="button" id="share-native">Share link</button>
+          <button type="button" class="btn-secondary" id="share-wa">WhatsApp</button>
+          <button type="button" class="btn-secondary" id="share-copy">Copy link</button>
+        </div>
+        <div id="share-msg" class="msg"></div>
       </div>
 
       <div class="dash">
@@ -580,6 +666,16 @@ button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
       </div>
     </div>
 
+    <!-- FAMILY CALLS -->
+    <div id="section-calls" class="tab-content hidden">
+      <div class="card">
+        <h2><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> Family calls</h2>
+        <p style="color:var(--muted);margin-bottom:8px">Tap the phone for a voice call or the camera for a video call. The other person must have the app open to hear it ring.</p>
+        <div id="call-contacts"><p class="chat-empty">Loading family…</p></div>
+      </div>
+      <div class="card"><h2>Recent calls</h2><div id="call-log"></div></div>
+    </div>
+
     <!-- ADMIN -->
     <div id="section-admin" class="tab-content hidden">
       <div class="card">
@@ -588,6 +684,19 @@ button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
         <p id="seed-msg" style="color:var(--gold2);font-size:.8rem;margin-bottom:10px"></p>
         <p style="color:var(--muted);font-size:.85rem;margin-bottom:15px">Approve, block or remove registered family accounts. Only administrators can delete members and accounts.</p>
         <div id="admin-user-list"></div>
+      </div>
+      <div class="card">
+        <h2>Family email list</h2>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:10px">Anyone whose email is on this list is let in automatically (Google sign-in, or email once they verify it). Everyone else waits for your approval.</p>
+        <form id="form-invite">
+          <label for="inv-email">Family member's email</label>
+          <input type="email" id="inv-email" placeholder="relative@gmail.com" required>
+          <label for="inv-label">Name (optional)</label>
+          <input type="text" id="inv-label" placeholder="e.g. Aunt Rose" maxlength="60">
+          <button type="submit">Add to family list</button>
+        </form>
+        <div id="invite-msg" class="msg"></div>
+        <div id="invite-list" style="margin-top:12px"></div>
       </div>
     </div>
 
@@ -633,6 +742,8 @@ button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
     <button type="button" data-tab="events"><span><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg> </span>Events</button>
     <button type="button" data-tab="chat"><span><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg> </span>Team chat</button>
     <button type="button" data-tab="checkin"><span><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> </span>Check in / out</button>
+    <button type="button" data-tab="calls"><span><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> </span>Family calls</button>
+    <button type="button" id="dr-share"><span><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg> </span>Share app</button>
     <button type="button" data-tab="profile"><span><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg> </span>My Profile</button>
     <button type="button" data-tab="admin" id="dr-admin" class="hidden"><span><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg> </span>Admin</button>
   </div>
@@ -672,10 +783,25 @@ button.vn-ok{background:linear-gradient(135deg,#22d3ee,#a855f7);border:none}
     </div>
   </div>
 </div>
+<div id="call-overlay" class="hidden" role="dialog" aria-modal="true" aria-label="Call" data-mode="out" data-type="audio">
+  <video id="call-remote" autoplay playsinline></video>
+  <video id="call-local" autoplay muted playsinline></video>
+  <div class="call-top">
+    <div class="call-ring"><div class="vn-glow"></div><div class="vn-ringline"></div><div class="call-avatar" id="call-avatar">?</div></div>
+    <h2 id="call-name">Family</h2>
+    <p id="call-state">Calling…</p>
+  </div>
+  <div class="call-actions">
+    <button type="button" class="call-btn" id="call-mute" aria-label="Mute"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg></button>
+    <button type="button" class="call-btn" id="call-cam" aria-label="Camera"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button>
+    <button type="button" class="call-btn red" id="call-end" aria-label="Hang up"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button>
+    <button type="button" class="call-btn green" id="call-accept" aria-label="Accept"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button>
+  </div>
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, sendPasswordResetEmail, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, sendPasswordResetEmail, sendEmailVerification, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot, where, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJoxAeEX_XXSeMq8MPSa5UorjUKxAvncE",
@@ -727,6 +853,8 @@ $("form-auth").addEventListener("submit", async e => {
         uid: cred.user.uid, name: $("auth-name").value, email,
         role: "member", status: "pending", createdAt: serverTimestamp()
       });
+      try { await sendEmailVerification(cred.user); } catch (e) { /* the person can ask for another one */ }
+      await onUser(cred.user);
     } else {
       await signInWithEmailAndPassword(auth, email, password);
     }
@@ -772,7 +900,22 @@ getRedirectResult(auth).catch(showAuthErr);
 $("btn-logout").addEventListener("click", () => signOut(auth));
 $("btn-logout-pending").addEventListener("click", () => signOut(auth));
 
-onAuthStateChanged(auth, async user => {
+// People whose email is on the family list are let in without waiting for the administrator.
+async function inviteFor(email) {
+  try { return (await getDoc(doc(db, "invites", String(email).toLowerCase()))).exists(); } catch (e) { return false; }
+}
+async function tryAutoApprove(user) {
+  try {
+    if (!user.email) return false;
+    await user.reload();
+    if (!user.emailVerified) return false;
+    await user.getIdToken(true);
+    if (!(await inviteFor(user.email))) return false;
+    await updateDoc(doc(db, "users", user.uid), { status: "approved" });
+    return true;
+  } catch (e) { return false; }
+}
+async function onUser(user) {
   currentUser = user;
   const show = (id, on) => $(id).classList.toggle("hidden", !on);
   if (!user) {
@@ -794,23 +937,42 @@ onAuthStateChanged(auth, async user => {
     } catch (err) { showAuthErr(err); show("section-auth", true); show("auth-hero", true); return; }
   }
   currentUserDoc = snap.data();
+  if (currentUserDoc.status === "pending" && await tryAutoApprove(user)) {
+    snap = await getDoc(doc(db, "users", user.uid)); currentUserDoc = snap.data();
+  }
   if (currentUserDoc.status === "approved") {
     show("section-pending", false); show("app-content", true); show("btn-menu", true); show("fab", true);
     show("dr-admin", isAdmin());
-    if (isAdmin()) loadPendingUsers();
+    if (isAdmin()) { loadPendingUsers(); loadInvites(); }
     $("user-info-display").innerText = `Logged in as: ${currentUserDoc.name} (${currentUserDoc.role.toUpperCase()})`;
     resetForm();
     resetNav();
     startLive();
     showTab("home");
-    await Promise.all([loadFamilyMembers(), loadEvents(), loadPhotos()]);
+    await Promise.all([loadFamilyMembers(), loadEvents()]);
     fillProfile();
+    loadPhotos().catch(() => {}); // photos are heavy, so they load after the first screen is ready
   } else {
     const blocked = currentUserDoc.status === "blocked";
     $("pend-title").innerText = blocked ? "Access Removed" : "Account Pending Approval";
     $("pend-text").innerText = blocked ? "An administrator has removed your access. Please contact the family administrator." : "Your registration has been submitted. An administrator must approve your account before you can access private family profiles and memories.";
     show("section-pending", true); show("app-content", false); show("btn-menu", false); show("fab", false);
+    show("btn-pend-resend", false);
+    if (!blocked && user.email && !user.emailVerified && await inviteFor(user.email)) {
+      $("pend-title").innerText = "Almost there";
+      $("pend-text").innerText = "Your email is on the family list. We sent a verification link to " + user.email + ". Open it, then tap Check again.";
+      show("btn-pend-resend", true);
+    }
   }
+}
+onAuthStateChanged(auth, onUser);
+$("btn-pend-check").addEventListener("click", async () => {
+  const b = $("btn-pend-check"); b.disabled = true;
+  try { await onUser(auth.currentUser); } finally { b.disabled = false; }
+});
+$("btn-pend-resend").addEventListener("click", async () => {
+  try { await sendEmailVerification(auth.currentUser); alert("Verification email sent. Check your inbox and your spam folder."); }
+  catch (e) { alert("Please wait a minute before asking again."); }
 });
 
 // ---------- Check in / out ----------
@@ -996,12 +1158,18 @@ $("vn-cancel").addEventListener("click", () => vnStop(false));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && vn) vnStop(false); });
 window.addEventListener("popstate", () => { if (vn) vnStop(false); });
 
-function stopLive() { if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
-function startLive() {
-  stopLive(); chatFirst = true;
-  unsubChat = onSnapshot(query(collection(db, "messages"), orderBy("at", "desc"), limit(150)),
+function stopLive() { stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
+function startChat() {
+  if (unsubChat) return;
+  chatFirst = true;
+  if (!chatRendered.length) $("chat-list").innerHTML = `<p class="chat-empty">Loading messages…</p>`;
+  unsubChat = onSnapshot(query(collection(db, "messages"), orderBy("at", "desc"), limit(60)),
     snap => { chatDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })).reverse(); renderChat(); },
     err => liveErr($("chat-list"), err));
+}
+function startLive() {
+  stopLive();
+  startPresence();
   unsubCi = onSnapshot(query(collection(db, "checkins"), orderBy("at", "desc"), limit(80)),
     snap => { ciDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderCheckins(); },
     err => { liveErr($("ci-now"), err); $("tile-ci").textContent = ""; });
@@ -1039,6 +1207,9 @@ window.resetNav = function () { navDepth = 0; history.replaceState({ tab: "home"
 window.goBack = function () { if (navDepth > 0) history.back(); else showTab("home"); };
 window.showTab = function (tab) {
   renderTab(tab);
+  markNav(tab);
+  if (tab === "chat") startChat();
+  if (tab === "calls") openCallsTab();
   if (tab === "chat") setTimeout(() => { const b = $("chat-list"); b.scrollTop = b.scrollHeight; }, 0);
   if (!navPopping) {
     const last = history.state;
@@ -1518,6 +1689,34 @@ $("admin-user-list").addEventListener("click", async e => {
   } catch (err) { alert("Could not do that: " + err.message); }
 });
 
+// ---------- Family email list (auto-approve) ----------
+async function loadInvites() {
+  if (!isAdmin()) return;
+  const box = $("invite-list");
+  try {
+    const snap = await getDocs(collection(db, "invites"));
+    const rows = []; snap.forEach(d => rows.push({ id: d.id, ...d.data() }));
+    rows.sort((a, b) => (a.email || a.id).localeCompare(b.email || b.id));
+    box.innerHTML = rows.length ? rows.map(r => `<div class="ci-row" style="flex-direction:row;align-items:center;justify-content:space-between;gap:10px"><div style="min-width:0"><b style="overflow-wrap:anywhere">${esc(r.email || r.id)}</b>${r.label ? `<span>${esc(r.label)}</span>` : ""}</div><button type="button" class="btn-secondary" style="width:auto;margin:0;padding:6px 12px" data-invdel="${esc(r.id)}">Remove</button></div>`).join("") : `<p style="color:var(--muted)">No family emails yet.</p>`;
+  } catch (err) { box.innerHTML = `<p style="color:#ff9a95">Could not load the list. Publish the updated database rules first.</p>`; }
+}
+$("form-invite").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!isAdmin()) return;
+  const email = $("inv-email").value.trim().toLowerCase();
+  if (!email) return;
+  try {
+    await setDoc(doc(db, "invites", email), { email, label: $("inv-label").value.trim(), addedBy: currentUser.uid, createdAt: serverTimestamp() });
+    $("form-invite").reset(); say("invite-msg", "Added. This person will be let in automatically.");
+    loadInvites();
+  } catch (err) { say("invite-msg", "Could not add. Publish the updated database rules first.", false); }
+});
+$("invite-list").addEventListener("click", async e => {
+  const b = e.target.closest("[data-invdel]");
+  if (!b || !isAdmin() || !confirm("Remove this email from the family list?")) return;
+  try { await deleteDoc(doc(db, "invites", b.dataset.invdel)); loadInvites(); } catch (err) { alert("Could not remove it."); }
+});
+
 // ---------- Seed the 11 children (admin, safe to press repeatedly) ----------
 const CHILDREN = ["Kisira Habert","Namuhanga Juliet","Walusansa Susan","Namaganda Lydia","Namatende Hellen","Wambuzi Benard","Naisamula Miria","Nakisige Brenda","Basoga Andrew","Mugonyi Edrine Dickson","Namuyonjo Abel Nelson"];
 $("btn-seed").addEventListener("click", async () => {
@@ -1546,7 +1745,7 @@ async function loadEvents() {
       <div class="t">${esc(ev.title)}</div>
       <div class="d">${IC("calendar")} ${esc(ev.date)}${ev.place ? " • " + IC("pin") + " " + esc(ev.place) : ""}${ev.byName ? " • added by " + esc(ev.byName) : ""}</div>
       <div>${esc(ev.details)}</div>
-      ${isAdmin() ? `<button class="btn-danger" data-delev="${esc(ev.id)}">Delete</button>` : ""}
+      ${(isAdmin() || ev.by === (currentUser && currentUser.uid)) ? `<button class="btn-danger" data-delev="${esc(ev.id)}">Delete</button>` : ""}
     </div>`).join("") : `<p style="color:var(--muted)">No events yet. Add the first one above.</p>`;
   updateHome();
 }
@@ -1565,7 +1764,8 @@ $("form-event").addEventListener("submit", async e => {
 });
 $("event-list").addEventListener("click", async e => {
   const id = e.target.dataset.delev;
-  if (!id || !isAdmin() || !confirm("Delete this event?")) return;
+  const evt = events.find(x => x.id === id);
+  if (!id || !(isAdmin() || (evt && evt.by === currentUser.uid)) || !confirm("Delete this event?")) return;
   await deleteDoc(doc(db, "events", id));
   loadEvents();
 });
@@ -1845,6 +2045,298 @@ $("form-profile").addEventListener("submit", async e => {
   } catch (err) { m.className = "msg msg-error"; m.innerText = err.message; }
   m.style.display = "block";
 });
+// ---------- Family calls (voice and video) ----------
+// Calls go straight between the two phones. The database is only used to say "who is calling whom".
+const ICE = { iceServers: [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }] };
+let call = null, incoming = null, unsubIncoming = null, unsubDir = null, dirDocs = [], beatTimer = null, ringCtx = null, ringTimer = null, dirTimer = null;
+const myName = () => (currentUserDoc && currentUserDoc.name) || "Family";
+const msOf = ts => (ts && ts.toMillis) ? ts.toMillis() : 0;
+const initialOf = n => (String(n || "?").trim()[0] || "?").toUpperCase();
+const callDone = () => ({ endedAt: serverTimestamp(), offer: deleteField(), answer: deleteField(), callerCandidates: deleteField(), calleeCandidates: deleteField() });
+
+function ringTone(kind) {
+  stopRing();
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) {
+      ringCtx = ringCtx || new AC(); if (ringCtx.resume) ringCtx.resume();
+      const beep = () => {
+        const t = ringCtx.currentTime, o = ringCtx.createOscillator(), g = ringCtx.createGain();
+        o.type = "sine"; o.frequency.value = kind === "in" ? 523 : 440;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+        o.connect(g); g.connect(ringCtx.destination); o.start(t); o.stop(t + 0.65);
+        if (kind === "in" && navigator.vibrate) navigator.vibrate([450, 150, 450]);
+      };
+      beep(); ringTimer = setInterval(beep, kind === "in" ? 1800 : 3000);
+    }
+  } catch (e) { /* no sound is fine */ }
+}
+function stopRing() { if (ringTimer) clearInterval(ringTimer); ringTimer = null; if (navigator.vibrate) navigator.vibrate(0); }
+
+function callUI(name, type, state, mode) {
+  const o = $("call-overlay");
+  o.dataset.type = type; o.dataset.mode = mode;
+  $("call-name").textContent = name || "Family"; $("call-avatar").textContent = initialOf(name); $("call-state").textContent = state;
+  $("call-mute").classList.remove("off"); $("call-cam").classList.remove("off");
+  $("call-mute").firstElementChild.firstElementChild.setAttribute("href", "#i-mic");
+  $("call-cam").firstElementChild.firstElementChild.setAttribute("href", "#i-video");
+  o.classList.remove("hidden"); document.body.style.overflow = "hidden";
+}
+function hideCallUI() { if (!call && !incoming) { $("call-overlay").classList.add("hidden"); document.body.style.overflow = ""; } }
+
+async function getMedia(type) {
+  const audio = { echoCancellation: true, noiseSuppression: true };
+  if (type === "video") {
+    try { return await navigator.mediaDevices.getUserMedia({ audio, video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } } }); }
+    catch (e) { if (e && e.name === "NotAllowedError") throw e; }
+  }
+  return navigator.mediaDevices.getUserMedia({ audio });
+}
+function callSupported() {
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.RTCPeerConnection) return true;
+  alert("Calls are not supported on this browser. Please use Chrome."); return false;
+}
+function micError(e) { alert(e && e.name === "NotAllowedError" ? "Allow the microphone (and camera for video) for this site in your browser settings, then try again." : "No microphone was found."); }
+
+function callPush(c, field, cand) {
+  if (c.ref) updateDoc(c.ref, { [field]: arrayUnion(cand) }).catch(() => {}); else c.queue.push([field, cand]);
+}
+function callWire(c) {
+  const pc = c.pc;
+  c.stream.getTracks().forEach(t => pc.addTrack(t, c.stream));
+  pc.ontrack = e => { const v = $("call-remote"); if (v.srcObject !== e.streams[0]) v.srcObject = e.streams[0]; const pl = v.play(); if (pl && pl.catch) pl.catch(() => {}); };
+  pc.onicecandidate = e => { if (e.candidate) callPush(c, c.myField, JSON.stringify(e.candidate.toJSON())); };
+  pc.onconnectionstatechange = () => {
+    if (call !== c) return;
+    if (pc.connectionState === "connected") callConnected(c);
+    else if (pc.connectionState === "failed") { $("call-state").textContent = "Connection failed"; setTimeout(() => { if (call === c) callEnd(c.t0 ? "ended" : "missed"); }, 1200); }
+  };
+  if (c.stream.getVideoTracks().length) { $("call-local").srcObject = c.stream; $("call-local").classList.add("on"); } else $("call-local").classList.remove("on");
+}
+function callConnected(c) {
+  if (c.t0) return;
+  c.t0 = Date.now(); stopRing(); clearTimeout(c.ringTimeout);
+  $("call-overlay").dataset.mode = "active";
+  const tick = () => { $("call-state").textContent = fmtDur((Date.now() - c.t0) / 1000); };
+  tick(); c.tick = setInterval(tick, 1000);
+}
+async function callApply(d) {
+  const c = call; if (!c) return;
+  if (c.role === "caller" && d.answer && !c.pc.currentRemoteDescription && !c.settingRemote) {
+    c.settingRemote = true;
+    try { await c.pc.setRemoteDescription(d.answer); } catch (e) { c.settingRemote = false; return; }
+  }
+  if (c.pc.remoteDescription) {
+    const list = d[c.theirField] || [];
+    while (c.added < list.length) { const str = list[c.added++]; try { await c.pc.addIceCandidate(JSON.parse(str)); } catch (e) { /* a stale candidate is harmless */ } }
+  }
+}
+function callSnap(snap) {
+  if (!call) return;
+  const d = snap.exists() ? snap.data({ serverTimestamps: "estimate" }) : null;
+  if (!d) { callTeardown(""); return; }
+  if (d.status === "ended" || d.status === "missed") { callTeardown(call.t0 ? "Call ended" : ""); return; }
+  if (d.status === "declined") { callTeardown("Call declined"); return; }
+  if (d.status === "active" && call.role === "caller" && !call.t0) $("call-state").textContent = "Connecting…";
+  callApply(d);
+}
+function callTeardown(msg) {
+  const c = call; call = null; stopRing();
+  if (!c) { hideCallUI(); return; }
+  clearTimeout(c.ringTimeout); clearInterval(c.tick); if (c.unsub) c.unsub();
+  try { c.pc.close(); } catch (e) {}
+  c.stream.getTracks().forEach(t => t.stop());
+  $("call-remote").srcObject = null; $("call-local").srcObject = null;
+  if (msg) { $("call-state").textContent = msg; setTimeout(hideCallUI, 1400); } else hideCallUI();
+  if (curTab === "calls") loadCallLog();
+}
+async function callEnd(status) {
+  const c = call; if (!c) return;
+  const dur = c.t0 ? Math.round((Date.now() - c.t0) / 1000) : 0;
+  if (c.ref) updateDoc(c.ref, { status, dur, ...callDone() }).catch(() => {});
+  callTeardown("");
+}
+async function startCall(uid, name, type) {
+  if (call || incoming || !callSupported()) return;
+  callUI(name, type, "Calling…", "out");
+  let stream;
+  try { stream = await getMedia(type); } catch (e) { hideCallUI(); micError(e); return; }
+  const real = stream.getVideoTracks().length ? "video" : "audio";
+  $("call-overlay").dataset.type = real;
+  const c = call = { role: "caller", type: real, pc: new RTCPeerConnection(ICE), stream, ref: null, queue: [], added: 0, myField: "callerCandidates", theirField: "calleeCandidates" };
+  callWire(c); ringTone("out");
+  try {
+    const offer = await c.pc.createOffer(); await c.pc.setLocalDescription(offer);
+    c.ref = await addDoc(collection(db, "calls"), { from: myUid(), fromName: myName(), to: uid, toName: name, type: real, status: "ringing", offer: { type: offer.type, sdp: offer.sdp }, createdAt: serverTimestamp() });
+    c.queue.forEach(([f, v]) => callPush(c, f, v)); c.queue = [];
+    c.unsub = onSnapshot(c.ref, callSnap);
+    c.ringTimeout = setTimeout(() => { if (call === c && !c.t0) { $("call-state").textContent = "No answer"; setTimeout(() => { if (call === c) callEnd("missed"); }, 900); } }, 45000);
+  } catch (err) {
+    callTeardown("Could not start the call");
+    alert(err && err.code === "permission-denied" ? "The database rules do not allow calls yet. Ask the administrator to publish the updated rules." : "Could not start the call. Check your internet and try again.");
+  }
+}
+function closeIncoming(msg) {
+  const inc = incoming; incoming = null; stopRing();
+  if (!inc) return;
+  clearTimeout(inc.timer); if (inc.unsub) inc.unsub();
+  if (msg) { $("call-state").textContent = msg; setTimeout(hideCallUI, 1200); } else hideCallUI();
+}
+function declineIncoming(status) {
+  const inc = incoming; if (!inc) return;
+  updateDoc(inc.ref, { status, ...callDone() }).catch(() => {});
+  closeIncoming("");
+}
+async function acceptIncoming() {
+  const inc = incoming; if (!inc || call) return;
+  clearTimeout(inc.timer); stopRing();
+  if (!callSupported()) { declineIncoming("declined"); return; }
+  let stream;
+  try { stream = await getMedia(inc.d.type); } catch (e) { declineIncoming("declined"); micError(e); return; }
+  if (inc.unsub) inc.unsub();
+  incoming = null;
+  const c = call = { role: "callee", type: inc.d.type, pc: new RTCPeerConnection(ICE), stream, ref: inc.ref, queue: [], added: 0, myField: "calleeCandidates", theirField: "callerCandidates" };
+  callUI(inc.d.fromName, inc.d.type, "Connecting…", "active");
+  callWire(c);
+  try {
+    await c.pc.setRemoteDescription(inc.d.offer);
+    const answer = await c.pc.createAnswer(); await c.pc.setLocalDescription(answer);
+    await updateDoc(inc.ref, { answer: { type: answer.type, sdp: answer.sdp }, status: "active" });
+    c.unsub = onSnapshot(inc.ref, callSnap);
+  } catch (e) { callEnd("ended"); }
+}
+function startCallListener() {
+  if (unsubIncoming) return;
+  unsubIncoming = onSnapshot(query(collection(db, "calls"), where("to", "==", myUid()), where("status", "==", "ringing")), snap => {
+    snap.docChanges().forEach(ch => {
+      if (ch.type !== "added") return;
+      const d = ch.doc.data({ serverTimestamps: "estimate" });
+      const age = Date.now() - (msOf(d.createdAt) || Date.now());
+      if (age > 60000) { updateDoc(ch.doc.ref, { status: "missed", ...callDone() }).catch(() => {}); return; }
+      if (call || incoming) { updateDoc(ch.doc.ref, { status: "declined", ...callDone() }).catch(() => {}); return; }
+      const inc = incoming = { ref: ch.doc.ref, d, accepted: false };
+      callUI(d.fromName, d.type, d.type === "video" ? "Incoming video call" : "Incoming voice call", "in");
+      ringTone("in");
+      inc.timer = setTimeout(() => { if (incoming === inc) declineIncoming("missed"); }, 50000);
+      inc.unsub = onSnapshot(inc.ref, s => { const x = s.data(); if (incoming === inc && (!x || x.status !== "ringing")) closeIncoming("Call ended"); });
+    });
+  }, () => {});
+}
+async function beat() {
+  if (!currentUserDoc || currentUserDoc.status !== "approved" || document.hidden) return;
+  try { await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), lastSeen: serverTimestamp() }, { merge: true }); } catch (e) {}
+}
+function startPresence() {
+  beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
+  startCallListener();
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) beat(); });
+window.addEventListener("focus", beat);
+function renderContacts() {
+  const me = myUid(), now = Date.now();
+  const rows = dirDocs.filter(r => r.uid && r.uid !== me).map(r => ({ ...r, ms: msOf(r.lastSeen) })).map(r => ({ ...r, online: r.ms && now - r.ms < 150000 }))
+    .sort((a, b) => (b.online - a.online) || (a.name || "").localeCompare(b.name || ""));
+  $("call-contacts").innerHTML = rows.length ? rows.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}">${esc(initialOf(r.name))}</div><div class="ct-info"><b>${esc(r.name || "Family")}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("")
+    : `<p class="chat-empty">Nobody else has opened the app yet. Family members appear here after they sign in.</p>`;
+}
+async function loadCallLog() {
+  const me = myUid(), box = $("call-log");
+  try {
+    const [a, b] = await Promise.all([getDocs(query(collection(db, "calls"), where("from", "==", me))), getDocs(query(collection(db, "calls"), where("to", "==", me)))]);
+    const all = new Map();
+    [a, b].forEach(sn => sn.forEach(d => all.set(d.id, { id: d.id, ...d.data({ serverTimestamps: "estimate" }) })));
+    const rows = [...all.values()].sort((x, y) => msOf(y.createdAt) - msOf(x.createdAt)).slice(0, 20);
+    box.innerHTML = rows.length ? rows.map(r => {
+      const out = r.from === me, other = out ? r.toName : r.fromName, missed = !out && r.status === "missed";
+      const bits = [r.type === "video" ? "Video" : "Voice", out ? "Outgoing" : (missed ? "Missed" : (r.status === "declined" ? "Declined" : "Incoming"))];
+      if (r.dur) bits.push(fmtDur(r.dur)); else if (out && r.status === "declined") bits.push("Declined"); else if (out && r.status === "missed") bits.push("No answer");
+      bits.push(esc(whenShort(msOf(r.createdAt) || Date.now())));
+      return `<div class="ci-row"><b${missed ? ' style="color:#ff9a95"' : ""}>${esc(other || "Family")}</b><span>${bits.join(" · ")}</span></div>`;
+    }).join("") : `<p class="chat-empty">No calls yet.</p>`;
+  } catch (err) { liveErr(box, err); }
+}
+function openCallsTab() {
+  if (!unsubDir) {
+    unsubDir = onSnapshot(collection(db, "directory"), snap => { dirDocs = snap.docs.map(d => d.data({ serverTimestamps: "estimate" })); renderContacts(); }, err => liveErr($("call-contacts"), err));
+  }
+  clearInterval(dirTimer); dirTimer = setInterval(() => { if (curTab === "calls") renderContacts(); }, 30000);
+  loadCallLog();
+}
+function stopCalls() {
+  if (call) callEnd(call.t0 ? "ended" : (call.role === "caller" ? "missed" : "declined"));
+  if (incoming) declineIncoming("declined");
+  if (unsubIncoming) unsubIncoming(); unsubIncoming = null;
+  if (unsubDir) unsubDir(); unsubDir = null; dirDocs = [];
+  clearInterval(beatTimer); clearInterval(dirTimer);
+}
+$("call-contacts").addEventListener("click", e => {
+  const b = e.target.closest("[data-call]"); if (!b) return;
+  startCall(b.dataset.uid, b.dataset.name, b.dataset.call);
+});
+$("call-end").addEventListener("click", () => {
+  if (incoming) declineIncoming("declined");
+  else if (call) callEnd(call.t0 ? "ended" : (call.role === "caller" ? "missed" : "declined"));
+});
+$("call-accept").addEventListener("click", acceptIncoming);
+$("call-mute").addEventListener("click", () => {
+  if (!call) return;
+  const t = call.stream.getAudioTracks()[0]; if (!t) return;
+  t.enabled = !t.enabled; $("call-mute").classList.toggle("off", !t.enabled);
+  $("call-mute").firstElementChild.firstElementChild.setAttribute("href", t.enabled ? "#i-mic" : "#i-micoff");
+});
+$("call-cam").addEventListener("click", () => {
+  if (!call) return;
+  const t = call.stream.getVideoTracks()[0]; if (!t) return;
+  t.enabled = !t.enabled; $("call-cam").classList.toggle("off", !t.enabled);
+  $("call-cam").firstElementChild.firstElementChild.setAttribute("href", t.enabled ? "#i-video" : "#i-videooff");
+});
+
+// ---------- Share ----------
+const SHARE_TEXT = "Join our family portal, Basoga's Legacy. Open the link, register with your email, and welcome home.";
+const shareUrl = () => location.origin + location.pathname.replace(/index\.html$/, "");
+async function shareCopy() {
+  const url = shareUrl();
+  try { await navigator.clipboard.writeText(url); say("share-msg", "Link copied. Paste it in WhatsApp, SMS or email."); }
+  catch (e) { prompt("Copy this link:", url); }
+}
+async function shareNative() {
+  try { if (navigator.share) await navigator.share({ title: "Basoga's Legacy", text: SHARE_TEXT, url: shareUrl() }); else await shareCopy(); } catch (e) { /* closed by the person */ }
+}
+$("share-native").addEventListener("click", shareNative);
+$("share-copy").addEventListener("click", shareCopy);
+$("share-wa").addEventListener("click", () => window.open("https://wa.me/?text=" + encodeURIComponent(SHARE_TEXT + "\n" + shareUrl()), "_blank", "noopener"));
+$("dr-share").addEventListener("click", () => { closeDrawer(); shareNative(); });
+
+// ---------- App feel: install, bottom menu, offline shell ----------
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const installDismissed = () => { try { return Date.now() - Number(localStorage.getItem("installLater") || 0) < 7 * 86400000; } catch (e) { return false; } };
+function showInstallCard() {
+  if (isStandalone() || installDismissed()) return;
+  if (window.__bip) $("install-card").classList.remove("hidden");
+  else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+    $("install-text").textContent = "On iPhone: tap the Share button in Safari, then “Add to Home Screen”.";
+    $("install-btn").classList.add("hidden"); $("install-card").classList.remove("hidden");
+  }
+}
+document.addEventListener("bip", showInstallCard); showInstallCard();
+$("install-btn").addEventListener("click", async () => {
+  const ev = window.__bip; if (!ev) return;
+  ev.prompt(); try { await ev.userChoice; } catch (e) {}
+  window.__bip = null; $("install-card").classList.add("hidden");
+});
+$("install-later").addEventListener("click", () => { try { localStorage.setItem("installLater", String(Date.now())); } catch (e) {} $("install-card").classList.add("hidden"); });
+window.addEventListener("appinstalled", () => $("install-card").classList.add("hidden"));
+if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+const NAV_KEY = { home: "home", tree: "tree", children: "tree", grandchildren: "tree", member: "tree", "add-member": "tree", "add-grandchild": "tree", chat: "chat", calls: "calls" };
+function markNav(tab) { document.querySelectorAll("#bottom-nav [data-nav]").forEach(b => b.classList.toggle("on", b.dataset.nav === (NAV_KEY[tab] || "menu"))); }
+document.addEventListener("focusin", e => { if (e.target.matches("input,textarea,select")) document.body.classList.add("kbd"); });
+document.addEventListener("focusout", () => document.body.classList.remove("kbd"));
+
+// the decorative background photo is fetched last so it never slows start-up
+window.addEventListener("load", () => setTimeout(() => {
+  const im = new Image();
+  im.onload = () => document.documentElement.style.setProperty("--bgimg", `url(${im.src})`);
+  im.src = "https://picsum.photos/id/1015/800/600.webp";
+}, 1500));
 </script>
-</body>
 </html>
