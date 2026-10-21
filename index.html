@@ -237,7 +237,7 @@ button.tile small{display:block;font-weight:400;color:var(--muted);font-size:.78
 .ci-row{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)}.ci-row:last-child{border:0}
 .ci-row span{color:var(--muted);font-size:.85rem}
 
-.chat-list{height:min(58vh,520px);overflow-y:auto;padding:6px 2px;display:flex;flex-direction:column;gap:6px}
+.chat-list{height:clamp(200px,calc(100vh - 430px),520px);height:clamp(200px,calc(100dvh - 430px),520px);overflow-y:auto;padding:6px 2px;display:flex;flex-direction:column;gap:6px}
 .chat-day{text-align:center;margin:8px 0 2px}.chat-day span{background:rgba(255,255,255,.08);color:var(--muted);font-size:.72rem;padding:3px 10px;border-radius:99px}
 .chat-row{display:flex}.chat-row.mine{justify-content:flex-end}
 .chat-bub{max-width:82%;padding:8px 11px;border-radius:14px 14px 14px 4px;background:var(--card2);border:1px solid var(--border)}
@@ -335,15 +335,52 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 #bottom-nav button{position:relative}
 .badge{position:absolute;top:0;left:calc(50% + 6px);min-width:18px;height:18px;border-radius:99px;background:#e0564f;color:#fff;font-size:.66rem;font-style:normal;font-weight:700;display:grid;place-items:center;padding:0 5px}
 .badge.hidden{display:none}
+
+/* splash, offline bar, notification bell, message ticks */
+#splash{position:fixed;inset:0;z-index:9000;background:#04180f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#f6d36b;font-weight:700;letter-spacing:.1em;transition:opacity .25s}
+#splash img{width:96px;height:96px;border-radius:22px;animation:splashpulse 1.4s ease-in-out infinite}
+#splash.out{opacity:0;pointer-events:none}
+@keyframes splashpulse{50%{transform:scale(1.07);opacity:.85}}
+#offline-bar{background:#7a5b00;color:#fff;text-align:center;font-size:.8rem;padding:7px 12px}
+#btn-bell{position:relative}
+#btn-bell .ico{width:24px;height:24px;margin:0;color:var(--gold2)}
+#btn-bell .badge{left:auto;right:-5px;top:-5px}
+#notif-panel{position:fixed;left:10px;right:10px;top:calc(76px + env(safe-area-inset-top,0px));max-height:68vh;overflow:auto;z-index:1200;background:#0b2f21;border:1px solid rgba(255,255,255,.18);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.55);padding:12px}
+.np-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);color:var(--gold2)}
+.np-head span{display:flex;gap:8px}
+.np-head button{width:auto;margin:0;padding:6px 12px;font-size:.85rem}
+.np-item{display:flex;gap:10px;padding:11px 4px;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer}
+.np-item:last-child{border:0}
+.np-item.unread{background:rgba(246,211,107,.1);border-radius:10px;padding-left:8px}
+.np-item b{display:block;color:var(--gold2)}
+.np-item small{color:var(--muted)}
+.ct-count{color:var(--muted);font-size:.85rem;margin:2px 0 6px}
+.tk{display:inline-flex;margin-left:5px;vertical-align:-3px}
+.tk .ico{width:17px;height:17px;stroke-width:2.2;margin:0}
+.tk-sent,.tk-delivered{color:rgba(27,21,0,.55)}
+.tk-read{color:#1769c8}
+
+/* tidy menu */
+.dr-sec{margin:14px 6px 4px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dr-sec:first-child{margin-top:4px}
+.dr-note{margin-left:auto;color:var(--gold2);font-weight:600;font-size:.78rem}
+.mapbox button{display:block;width:100%;height:120px;margin:0;border-radius:0}
+.stats .g,.g{cursor:default}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
+<div id="splash"><img src="icon-192.png" alt="" width="96" height="96"><p>BASOGA'S LEGACY</p></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-checks" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
 <header>
   <div class="slot"><button type="button" id="btn-menu" class="menu-btn hidden" aria-label="Open menu" aria-controls="drawer"><span></span><span></span><span></span></button></div>
   <div class="brand"><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></div>
-  <div class="slot"></div>
+  <div class="slot"><button type="button" id="btn-bell" class="menu-btn hidden" aria-label="Notifications"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg><i class="badge hidden" id="bell-badge"></i></button></div>
 </header>
+<div id="offline-bar" class="hidden">You are offline. Showing what is saved on your phone. Messages will send when you are back online.</div>
+<div id="notif-panel" class="hidden" role="dialog" aria-label="Notifications">
+  <div class="np-head"><b>Notifications</b><span><button type="button" id="np-clear" class="btn-secondary">Clear all</button><button type="button" id="np-close" class="btn-secondary" aria-label="Close">Close</button></span></div>
+  <div id="np-list"></div>
+</div>
 
 <div class="container">
   <div id="auth-hero" class="hero"><h2>BASOGA'S LEGACY</h2><p>Sign in to see your family tree, photos and events</p></div>
@@ -399,20 +436,13 @@ button.call-btn.red .ico{transform:rotate(135deg)}
         <div id="home-search-res" class="chips"></div>
       </div>
 
-      <div class="bubbles">
-        <button type="button" class="bubble" style="--c:var(--g2)" onclick="newMember()"><i><svg class="ico" aria-hidden="true"><use href="#i-users"/></svg> </i><span>Member</span></button>
-        <button type="button" class="bubble" style="--c:var(--g3)" onclick="newGrandchild()"><i><svg class="ico" aria-hidden="true"><use href="#i-baby"/></svg> </i><span>Grandchild</span></button>
-        <button type="button" class="bubble" style="--c:var(--sky)" onclick="showTab('gallery')"><i><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> </i><span>Photo</span></button>
-        <button type="button" class="bubble" style="--c:var(--g4)" onclick="showTab('events')"><i><svg class="ico" aria-hidden="true"><use href="#i-party"/></svg> </i><span>Event</span></button>
-      </div>
-
       <div class="glance">
-        <div class="g" style="--c:var(--g1)" onclick="showTab('tree')"><b id="st-members">0</b><span>Members</span></div>
-        <div class="g" style="--c:var(--g2)" onclick="showTab('children')"><b id="st-kids">0</b><span>Children</span></div>
-        <div class="g" style="--c:var(--g3)" onclick="showTab('grandchildren')"><b id="st-grand">0</b><span>Grandchildren</span></div>
-        <div class="g" style="--c:var(--coral)" onclick="showTab('events')"><b id="st-events">0</b><span>Events</span></div>
-        <div class="g" style="--c:var(--sky)" onclick="showTab('gallery')"><b id="st-photos">0</b><span>Gallery</span></div>
-        <div class="g hidden" id="st-pending-box" style="--c:var(--violet)" onclick="showTab('admin')"><b id="st-pending">0</b><span>Pending</span></div>
+        <div class="g" style="--c:var(--g1)"><b id="st-members">0</b><span>Members</span></div>
+        <div class="g" style="--c:var(--g2)"><b id="st-kids">0</b><span>Children</span></div>
+        <div class="g" style="--c:var(--g3)"><b id="st-grand">0</b><span>Grandchildren</span></div>
+        <div class="g" style="--c:var(--coral)"><b id="st-events">0</b><span>Events</span></div>
+        <div class="g" style="--c:var(--sky)"><b id="st-photos">0</b><span>Gallery</span></div>
+        <div class="g hidden" id="st-pending-box" style="--c:var(--violet)"><b id="st-pending">0</b><span>Pending</span></div>
       </div>
 
       <div class="card install-card hidden" id="install-card">
@@ -425,11 +455,6 @@ button.call-btn.red .ico{transform:rotate(135deg)}
         <h2><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg> Get alerts</h2>
         <p style="color:var(--muted)">Be told when a family member sends a message or calls you.</p>
         <div class="install-actions"><button type="button" id="notif-btn">Turn on alerts</button><button type="button" class="btn-secondary" id="notif-later">Not now</button></div>
-      </div>
-
-      <div class="tiles">
-        <button type="button" class="tile" onclick="showTab('checkin')"><i><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg></i><span>Check in / out<small id="tile-ci"></small></span></button>
-        <button type="button" class="tile" onclick="showTab('chat')"><i><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg></i><span>Team chat<small>Messages and calls</small></span></button>
       </div>
 
       <div class="card share-card">
@@ -454,13 +479,12 @@ button.call-btn.red .ico{transform:rotate(135deg)}
       <div class="card">
         <h2>Recent Memories</h2>
         <div id="home-recent" class="mosaic"></div>
-        <button class="btn-secondary" onclick="showTab('gallery')">Open Gallery</button>
       </div>
 
       <div class="card" id="home-map">
         <h2><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg> Find Us</h2>
         <p style="color:var(--muted);margin-bottom:10px">Basoga's Legacy, Kasokwe Kaliro, Main Street, Kaliro</p>
-        <div class="mapbox"><iframe title="Basoga's Legacy on Google Maps" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Basoga%27s+legacy,+Kasokwe+Kaliro,+main+street,+Kaliro&amp;output=embed"></iframe></div>
+        <div class="mapbox" id="map-box"><button type="button" class="btn-secondary" id="map-show">Show map</button></div>
         <a class="map-link" href="https://maps.app.goo.gl/1xMBLWiy5o61oxveA" target="_blank" rel="noopener">Open in Google Maps</a>
       </div>
     </div>
@@ -749,15 +773,13 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 <aside id="drawer" aria-label="Menu">
   <div class="dr-head"><img id="dr-avatar" alt=""><div><b id="dr-name">Family</b><small id="dr-role"></small></div></div>
   <div class="dr-list">
-    <button type="button" data-tab="home"><span><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg> </span>Dashboard</button>
-    <button type="button" data-tab="tree"><span><svg class="ico" aria-hidden="true"><use href="#i-tree"/></svg> </span>Family Tree</button>
+    <div class="dr-sec">Family</div>
+    <button type="button" data-tab="events"><span><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg> </span>Events</button>
     <button type="button" data-tab="children"><span><svg class="ico" aria-hidden="true"><use href="#i-child"/></svg> </span>Children</button>
     <button type="button" data-tab="grandchildren"><span><svg class="ico" aria-hidden="true"><use href="#i-baby"/></svg> </span>Grandchildren</button>
-    <button type="button" data-tab="gallery"><span><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg> </span>Gallery</button>
-    <button type="button" data-tab="events"><span><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg> </span>Events</button>
-    <button type="button" data-tab="chat"><span><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg> </span>Team chat</button>
-    <button type="button" data-tab="checkin"><span><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> </span>Check in / out</button>
-    <button type="button" id="dr-share"><span><svg class="ico" aria-hidden="true"><use href="#i-share"/></svg> </span>Share app</button>
+    <div class="dr-sec">Tools</div>
+    <button type="button" data-tab="checkin"><span><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> </span>Check in / out<small id="tile-ci" class="dr-note"></small></button>
+    <div class="dr-sec">Account</div>
     <button type="button" data-tab="profile"><span><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg> </span>My Profile</button>
     <button type="button" data-tab="admin" id="dr-admin" class="hidden"><span><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg> </span>Admin</button>
   </div>
@@ -815,7 +837,7 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, sendPasswordResetEmail, sendEmailVerification, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot, where, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getDocFromCache, getDocsFromCache, doc, setDoc, getDoc as fsGetDoc, collection, addDoc, getDocs as fsGetDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot, where, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJoxAeEX_XXSeMq8MPSa5UorjUKxAvncE",
@@ -827,11 +849,51 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+let db;
+try { db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager(), cacheSizeBytes: 150 * 1024 * 1024 }) }); }
+catch (e) { db = getFirestore(app); }
+
+// With no internet the copy saved on the phone is used, so photos and the family tree still open offline.
+const getDocs = q => (navigator.onLine === false ? getDocsFromCache(q).catch(() => fsGetDocs(q)) : fsGetDocs(q));
+const getDoc = r => (navigator.onLine === false ? getDocFromCache(r).catch(() => fsGetDoc(r)) : fsGetDoc(r));
+
+// Fast start: show the saved copy at once, then quietly refresh from the internet.
+let revalidating = false, reTimer = null;
+async function getDocsFast(q) {
+  if (navigator.onLine === false) return getDocsFromCache(q);
+  if (!revalidating) {
+    try { const c = await getDocsFromCache(q); if (!c.empty) { scheduleRevalidate(); return c; } } catch (e) { /* nothing saved yet */ }
+  }
+  return fsGetDocs(q);
+}
+function scheduleRevalidate() {
+  clearTimeout(reTimer);
+  reTimer = setTimeout(async () => {
+    revalidating = true;
+    try { await Promise.all([loadFamilyMembers(), loadEvents()]); await loadPhotos(); } catch (e) { /* the saved copy stays on screen */ }
+    finally { revalidating = false; }
+  }, 1200);
+}
+async function getUserSnap(uid) {
+  const ref = doc(db, "users", uid);
+  if (navigator.onLine === false) { try { return await getDocFromCache(ref); } catch (e) { return fsGetDoc(ref); } }
+  try {
+    const c = await getDocFromCache(ref);
+    if (c.exists()) {
+      fsGetDoc(ref).then(sv => { if (sv.exists() && (sv.data().status !== c.data().status || sv.data().role !== c.data().role)) onUser(auth.currentUser); }).catch(() => {});
+      return c;
+    }
+  } catch (e) { /* not saved yet */ }
+  return fsGetDoc(ref);
+}
+function hideSplash() { const sp = $("splash"); if (!sp) return; sp.classList.add("out"); setTimeout(() => sp.remove(), 300); }
+setTimeout(hideSplash, 6000);
+const syncOffline = () => $("offline-bar").classList.toggle("hidden", navigator.onLine !== false);
+window.addEventListener("online", syncOffline); window.addEventListener("offline", syncOffline); syncOffline();
 
 const AVATAR = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%23e3b83d'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
 const VIDPH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='110' viewBox='0 0 160 110'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23145b41'/%3E%3Cstop offset='1' stop-color='%239b8cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='160' height='110' fill='url(%23g)'/%3E%3Cpath d='M64 34l40 21-40 21z' fill='white'/%3E%3C/svg%3E";
-const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const genTitles = {"1":"Generation 1: Parents","2":"Generation 2: Children","3":"Generation 3: Grandchildren","4":"Generation 4+: Descendants"};
 const GEN_COLOR = {"1":"var(--g1)","2":"var(--g2)","3":"var(--g3)","4":"var(--g4)"};
@@ -929,16 +991,16 @@ async function tryAutoApprove(user) {
     return true;
   } catch (e) { return false; }
 }
-async function onUser(user) {
+async function onUserInner(user) {
   currentUser = user;
   const show = (id, on) => $(id).classList.toggle("hidden", !on);
   if (!user) {
     currentUserDoc = null;
-    stopLive(); show("section-auth", true); show("auth-hero", true); show("section-pending", false); show("app-content", false); show("btn-menu", false); show("fab", false);
+    stopLive(); show("section-auth", true); show("auth-hero", true); show("section-pending", false); show("app-content", false); show("btn-menu", false); show("btn-bell", false); show("fab", false);
     return;
   }
   show("section-auth", false); show("auth-hero", false);
-  let snap = await getDoc(doc(db, "users", user.uid));
+  let snap = await getUserSnap(user.uid);
   if (!snap.exists()) {
     const viaGoogle = user.providerData.some(p => p.providerId === "google.com");
     if (!viaGoogle) return; // email registration creates its own record
@@ -955,7 +1017,7 @@ async function onUser(user) {
     snap = await getDoc(doc(db, "users", user.uid)); currentUserDoc = snap.data();
   }
   if (currentUserDoc.status === "approved") {
-    show("section-pending", false); show("app-content", true); show("btn-menu", true); show("fab", true);
+    show("section-pending", false); show("app-content", true); show("btn-menu", true); show("btn-bell", true); show("fab", true);
     show("dr-admin", isAdmin());
     if (isAdmin()) { loadPendingUsers(); loadInvites(); }
     $("user-info-display").innerText = `Logged in as: ${currentUserDoc.name} (${currentUserDoc.role.toUpperCase()})`;
@@ -970,7 +1032,7 @@ async function onUser(user) {
     const blocked = currentUserDoc.status === "blocked";
     $("pend-title").innerText = blocked ? "Access Removed" : "Account Pending Approval";
     $("pend-text").innerText = blocked ? "An administrator has removed your access. Please contact the family administrator." : "Your registration has been submitted. An administrator must approve your account before you can access private family profiles and memories.";
-    show("section-pending", true); show("app-content", false); show("btn-menu", false); show("fab", false);
+    show("section-pending", true); show("app-content", false); show("btn-menu", false); show("btn-bell", false); show("fab", false);
     show("btn-pend-resend", false);
     if (!blocked && user.email && !user.emailVerified && await inviteFor(user.email)) {
       $("pend-title").innerText = "Almost there";
@@ -979,6 +1041,7 @@ async function onUser(user) {
     }
   }
 }
+async function onUser(user) { try { await onUserInner(user); } finally { hideSplash(); } }
 onAuthStateChanged(auth, onUser);
 $("btn-pend-check").addEventListener("click", async () => {
   const b = $("btn-pend-check"); b.disabled = true;
@@ -1030,14 +1093,43 @@ function renderCheckins() {
   $("tile-ci").textContent = here.length ? `${here.length} here now` : "Tap to check in";
 }
 let chatRendered = [], chatLastDay = "";
+function tickState(m) {
+  const me = myUid(), others = a => (a || []).filter(x => x !== me);
+  if (others(m.readBy).length) return "read";
+  if (others(m.deliveredTo).length || Date.now() - tmsOf(m) > 3 * DAY_MS) return "delivered";
+  return "sent";
+}
+const tickHTML = m => { const st = tickState(m); return `<svg class="ico tk-${st}" aria-label="${st}"><use href="#${st === "sent" ? "i-check" : "i-checks"}"/></svg>`; };
+function updateTicks() {
+  const by = new Map(chatDocs.map(m => [m.id, m]));
+  document.querySelectorAll("#chat-list [data-tk]").forEach(el => {
+    const m = by.get(el.dataset.tk); if (!m) return;
+    const st = tickState(m);
+    if (el.dataset.st !== st) { el.dataset.st = st; el.innerHTML = tickHTML(m); }
+  });
+}
+let receiptBusy = false;
+async function markReceipts() {
+  if (receiptBusy || !myUid()) return;
+  receiptBusy = true;
+  try {
+    const me = myUid(), reading = curTab === "chat" && !document.hidden;
+    const todo = chatDocs.filter(m => m.uid && m.uid !== me && Date.now() - tmsOf(m) < 7 * DAY_MS
+      && (m.readBy || []).indexOf(me) < 0 && (reading || (m.deliveredTo || []).indexOf(me) < 0)).slice(-25);
+    for (const m of todo) {
+      const patch = reading ? { readBy: arrayUnion(me), deliveredTo: arrayUnion(me) } : { deliveredTo: arrayUnion(me) };
+      await updateDoc(doc(db, "messages", m.id), patch).catch(() => {});
+    }
+  } finally { receiptBusy = false; }
+}
 function chatRowHTML(m, me) {
   const ms = tmsOf(m), day = dayLabel(ms), mine = m.uid === me;
   let html = "";
   if (day !== chatLastDay) { html += `<div class="chat-day"><span>${esc(day)}</span></div>`; chatLastDay = day; }
-  const photo = typeof m.photo === "string" && IMG_OK.test(m.photo) ? `<img src="${m.photo}" alt="Shared photo">` : "";
+  const photo = typeof m.photo === "string" && IMG_OK.test(m.photo) ? `<img loading="lazy" decoding="async" src="${m.photo}" alt="Shared photo">` : "";
   const voice = typeof m.audio === "string" && AUD_OK.test(m.audio) ? `<div class="vn-msg"><audio controls preload="none" src="${m.audio}"></audio><span>${fmtDur(m.dur || 0)}</span></div>` : "";
   const del = (mine || isAdmin()) ? ` · <a href="#" data-del="${esc(m.id)}">Delete</a>` : "";
-  html += `<div class="chat-row${mine ? " mine" : ""}"><div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${del}</small></div></div>`;
+  html += `<div class="chat-row${mine ? " mine" : ""}"><div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
   return html;
 }
 function renderChat() {
@@ -1053,11 +1145,12 @@ function renderChat() {
   for (let i = from; i < chatDocs.length; i++) html += chatRowHTML(chatDocs[i], me);
   if (append) { if (html) box.insertAdjacentHTML("beforeend", html); } else box.innerHTML = html;
   chatRendered = ids;
+  updateTicks();
   if (chatFirst || nearBottom) { box.scrollTop = box.scrollHeight; chatFirst = false; }
 }
 function showChatPrev() {
   const p = $("chat-prev");
-  p.innerHTML = chatPhoto ? `<img src="${chatPhoto}" alt=""><button type="button" id="chat-prev-x" aria-label="Remove photo">×</button>` : "";
+  p.innerHTML = chatPhoto ? `<img loading="lazy" decoding="async" src="${chatPhoto}" alt=""><button type="button" id="chat-prev-x" aria-label="Remove photo">×</button>` : "";
   p.classList.toggle("hidden", !chatPhoto);
   syncSendMic();
 }
@@ -1178,12 +1271,14 @@ function startChat() {
   chatFirst = true;
   if (!chatRendered.length) $("chat-list").innerHTML = `<p class="chat-empty">Loading messages…</p>`;
   unsubChat = onSnapshot(query(collection(db, "messages"), orderBy("at", "desc"), limit(60)),
-    snap => { chatDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })).reverse(); renderChat(); },
+    snap => { chatDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })).reverse(); renderChat(); markReceipts(); },
     err => liveErr($("chat-list"), err));
 }
 function startLive() {
   stopLive();
   startPresence();
+  try { sessionStartActive = Number(localStorage.getItem("active:" + myUid()) || 0); } catch (e) {}
+  touchActive(); renderNotes(); loadMissedCalls();
   startNotifier(); showNotifCard();
   unsubCi = onSnapshot(query(collection(db, "checkins"), orderBy("at", "desc"), limit(80)),
     snap => { ciDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderCheckins(); },
@@ -1223,7 +1318,7 @@ window.goBack = function () { if (navDepth > 0) history.back(); else showTab("ho
 window.showTab = function (tab) {
   renderTab(tab);
   markNav(tab);
-  if (tab === "chat") { startChat(); setUnread(0); }
+  if (tab === "chat") { startChat(); setUnread(0); markReceipts(); }
   if (tab === "calls") openCallsTab();
   if (tab === "chat") setTimeout(() => { const b = $("chat-list"); b.scrollTop = b.scrollHeight; }, 0);
   if (!navPopping) {
@@ -1455,7 +1550,7 @@ $("btn-delete-member").addEventListener("click", () => deleteMember($("member-id
 
 // ---------- Tree ----------
 async function loadFamilyMembers() {
-  const snap = await getDocs(collection(db, "members"));
+  const snap = await getDocsFast(collection(db, "members"));
   members = [];
   snap.forEach(d => members.push({ id: d.id, ...d.data() }));
   render();
@@ -1468,7 +1563,7 @@ function cardHTML(m, row) {
     ? `${esc(m.relationship || REL_TITLE[genOf(m)] || "")}${kids ? ` • ${kids} child${kids > 1 ? "ren" : ""}` : ""}`
     : esc(m.relationship || "");
   return `<div class="member-card${row ? " row" : ""}" data-id="${esc(m.id)}" style="--c:${colorOf(m)}">
-    <img src="${esc(m.photo || AVATAR)}" alt="">
+    <img loading="lazy" decoding="async" src="${esc(m.photo || AVATAR)}" alt="">
     <div><div class="name">${esc(m.name)}</div>
     <div class="rel">${sub}</div>
     ${!row && par ? `<div class="rel">child of ${esc(par.name)}</div>` : ""}
@@ -1582,7 +1677,7 @@ $("form-grandchild").addEventListener("submit", async e => {
 
 // ---------- Member profile page ----------
 function chipHTML(m) {
-  return `<button type="button" class="chip" data-open="${esc(m.id)}" style="--c:${colorOf(m)}"><img src="${esc(m.photo || AVATAR)}" alt=""><span>${esc(m.name)}</span></button>`;
+  return `<button type="button" class="chip" data-open="${esc(m.id)}" style="--c:${colorOf(m)}"><img loading="lazy" decoding="async" src="${esc(m.photo || AVATAR)}" alt=""><span>${esc(m.name)}</span></button>`;
 }
 function section(title, arr) {
   return arr.length ? `<div class="sect-t">${title} (${arr.length})</div><div class="chips">${arr.map(chipHTML).join("")}</div>` : "";
@@ -1630,7 +1725,7 @@ function showProfile(id) {
     ${section("Brothers &amp; sisters", sibs)}
     ${section("Children", kids)}
     ${section("Grandchildren", grand)}
-    ${tagged.length ? `<div class="sect-t">Photos &amp; videos with ${esc(m.name.split(" ")[0])}</div><div class="thumbs">${tagged.map(p => `<img src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("")}</div>` : ""}
+    ${tagged.length ? `<div class="sect-t">Photos &amp; videos with ${esc(m.name.split(" ")[0])}</div><div class="thumbs">${tagged.map(p => `<img loading="lazy" decoding="async" src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("")}</div>` : ""}
     <button type="button" class="btn-secondary" data-act="back" style="margin-top:20px">← Back to the Tree</button>
     ${isAdmin() ? `<button type="button" class="btn-danger" data-act="delete">Delete this member (Admin)</button>` : ""}`;
   showTab("member");
@@ -1667,6 +1762,12 @@ document.addEventListener("click", e => {
 });
 
 // ---------- Admin: approvals ----------
+function seedDirectory(users) {
+  const ok = users.filter(u => u.status === "approved" && u.uid), sig = ok.map(u => u.uid).sort().join(",");
+  try { if (localStorage.getItem("dirSig") === sig) return; } catch (e) {}
+  Promise.all(ok.map(u => setDoc(doc(db, "directory", u.uid), { uid: u.uid, name: u.name || "Family" }, { merge: true })))
+    .then(() => { try { localStorage.setItem("dirSig", sig); } catch (e) {} }).catch(() => {});
+}
 async function loadPendingUsers() {
   if (!isAdmin()) return;
   const list = $("admin-user-list");
@@ -1676,6 +1777,11 @@ async function loadPendingUsers() {
   const order = { pending: 0, approved: 1, blocked: 2 };
   users.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3) || (a.name || "").localeCompare(b.name || ""));
   pendingCount = users.filter(u => u.status === "pending").length;
+  seedDirectory(users);
+  const pend = users.filter(u => u.status === "pending");
+  ensureNotes(); notes = notes.filter(n => !n.id.startsWith("pending:") || pend.some(u => "pending:" + u.uid === n.id)); saveNotes();
+  pend.forEach(u => addNote({ id: "pending:" + u.uid, title: "Waiting for approval", body: (u.name || u.email || "Someone") + " has registered", tab: "admin", ts: Date.now() }));
+  renderNotes();
   const COL = { pending: "var(--violet)", approved: "var(--teal)", blocked: "var(--danger)" };
   list.innerHTML = users.length ? users.map(u => {
     const self = currentUser && u.uid === currentUser.uid;
@@ -1751,7 +1857,7 @@ $("btn-seed").addEventListener("click", async () => {
 // ---------- Events ----------
 let events = [];
 async function loadEvents() {
-  const snap = await getDocs(collection(db, "events"));
+  const snap = await getDocsFast(collection(db, "events"));
   events = [];
   snap.forEach(d => events.push({ id: d.id, ...d.data() }));
   events.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
@@ -1827,7 +1933,7 @@ function updateHome() {
   const bds = nextBirthdays();
   $("home-bdays").innerHTML = bds.length ? bds.map(x => `
     <div class="bd" data-open="${esc(x.m.id)}" style="--c:${colorOf(x.m)}">
-      <img src="${esc(x.m.photo || AVATAR)}" alt="">
+      <img loading="lazy" decoding="async" src="${esc(x.m.photo || AVATAR)}" alt="">
       <div class="t">${esc(x.m.name)}<small>${x.d} ${MONTHS[x.mo - 1]} • turns ${x.age}</small></div>
       <span class="when">${x.days === 0 ? "Today" : x.days === 1 ? "Tomorrow" : "in " + x.days + " d"}</span>
     </div>`).join("") : `<p class="empty">Add dates of birth on member profiles and birthdays will show here.</p>`;
@@ -1851,7 +1957,7 @@ function updateHome() {
   $("home-newest").innerHTML = newest.length ? newest.map(chipHTML).join("") : `<p class="empty">No members yet.</p>`;
 
   $("home-recent").innerHTML = photos.length
-    ? photos.slice(0, 7).map(p => `<img src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("")
+    ? photos.slice(0, 7).map(p => `<img loading="lazy" decoding="async" src="${esc(p.photo || VIDPH)}" data-photo="${esc(p.id)}" alt="">`).join("")
     : `<p class="empty" style="grid-column:1/-1">No photos yet. Add the first family memory.</p>`;
 }
 
@@ -1863,7 +1969,7 @@ function fillTagSelect() {
 }
 
 async function loadPhotos() {
-  const snap = await getDocs(collection(db, "photos"));
+  const snap = await getDocsFast(collection(db, "photos"));
   photos = [];
   snap.forEach(d => photos.push({ id: d.id, ...d.data() }));
   photos.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
@@ -2234,7 +2340,13 @@ function startCallListener() {
       ringTone("in");
       if (document.hidden) notify("Incoming " + (d.type === "video" ? "video" : "voice") + " call", (d.fromName || "A family member") + " is calling you", "call", { requireInteraction: true, vibrate: [500, 200, 500, 200, 500] });
       inc.timer = setTimeout(() => { if (incoming === inc) declineIncoming("missed"); }, 50000);
-      inc.unsub = onSnapshot(inc.ref, s => { const x = s.data(); if (incoming === inc && (!x || x.status !== "ringing")) closeIncoming("Call ended"); });
+      inc.unsub = onSnapshot(inc.ref, s => {
+        const x = s.data();
+        if (incoming === inc && (!x || x.status !== "ringing")) {
+          if (x && x.status === "missed") addNote({ id: "call:" + inc.ref.id, title: "Missed " + (d.type === "video" ? "video" : "voice") + " call", body: (d.fromName || "A family member") + " called you", tab: "calls", ts: Date.now() });
+          closeIncoming("Call ended");
+        }
+      });
     });
   }, () => {});
 }
@@ -2246,14 +2358,17 @@ function startPresence() {
   beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
   startCallListener();
 }
-document.addEventListener("visibilitychange", () => { if (!document.hidden) beat(); });
+document.addEventListener("visibilitychange", () => { if (document.hidden) touchActive(); else { beat(); markReceipts(); } });
+window.addEventListener("pagehide", touchActive);
 window.addEventListener("focus", beat);
 function renderContacts() {
   const me = myUid(), now = Date.now();
-  const rows = dirDocs.filter(r => r.uid && r.uid !== me).map(r => ({ ...r, ms: msOf(r.lastSeen) })).map(r => ({ ...r, online: r.ms && now - r.ms < 150000 }))
+  const others = dirDocs.filter(r => r.uid && r.uid !== me).map(r => ({ ...r, ms: msOf(r.lastSeen) })).map(r => ({ ...r, online: !!(r.ms && now - r.ms < 150000) }))
     .sort((a, b) => (b.online - a.online) || (a.name || "").localeCompare(b.name || ""));
-  $("call-contacts").innerHTML = rows.length ? rows.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}">${esc(initialOf(r.name))}</div><div class="ct-info"><b>${esc(r.name || "Family")}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("")
-    : `<p class="chat-empty">Nobody else has opened the app yet. Family members appear here after they sign in.</p>`;
+  const total = others.length + 1, online = others.filter(r => r.online).length + 1;
+  const meRow = `<div class="ct-row"><div class="ct-av on">${esc(initialOf(myName()))}</div><div class="ct-info"><b>${esc(myName())} (You)</b><span>Online now</span></div></div>`;
+  const rows = others.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}">${esc(initialOf(r.name))}</div><div class="ct-info"><b>${esc(r.name || "Family")}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("");
+  $("call-contacts").innerHTML = `<p class="ct-count">${total} ${total === 1 ? "person" : "people"} on the platform · ${online} online</p>` + meRow + (rows || `<p class="chat-empty">Nobody else has joined yet. Share the link to invite the family.</p>`);
 }
 async function loadCallLog() {
   const me = myUid(), box = $("call-log");
@@ -2326,18 +2441,70 @@ function setUnread(n) {
   unread = n; const b = $("chat-badge");
   b.textContent = n > 9 ? "9+" : String(n); b.classList.toggle("hidden", !n);
 }
+let notes = [], notesFor = "", sessionStartActive = 0;
+const noteKey = () => "notes:" + myUid();
+function ensureNotes() {
+  if (notesFor === myUid()) return;
+  notesFor = myUid();
+  try { notes = JSON.parse(localStorage.getItem(noteKey()) || "[]"); } catch (e) { notes = []; }
+}
+function saveNotes() { try { localStorage.setItem(noteKey(), JSON.stringify(notes.slice(0, 40))); } catch (e) {} }
+function renderNotes() {
+  ensureNotes();
+  const un = notes.filter(n => !n.read).length, b = $("bell-badge");
+  b.textContent = un > 9 ? "9+" : String(un); b.classList.toggle("hidden", !un);
+  $("np-list").innerHTML = notes.length
+    ? notes.map(n => `<div class="np-item${n.read ? "" : " unread"}" data-np="${esc(n.id)}"><div><b>${esc(n.title)}</b><div>${esc(n.body)}</div><small>${esc(whenShort(n.ts))}</small></div></div>`).join("")
+    : `<p class="chat-empty">No notifications yet.</p>`;
+}
+function addNote(n) {
+  ensureNotes();
+  if (notes.some(x => x.id === n.id)) return;
+  notes.unshift({ ...n, read: false }); notes = notes.slice(0, 40); saveNotes(); renderNotes();
+}
+$("btn-bell").addEventListener("click", () => {
+  const panel = $("notif-panel");
+  if (!panel.classList.contains("hidden")) { panel.classList.add("hidden"); return; }
+  renderNotes(); panel.classList.remove("hidden");
+  notes.forEach(n => { n.read = true; }); saveNotes(); $("bell-badge").classList.add("hidden");
+});
+$("np-close").addEventListener("click", () => $("notif-panel").classList.add("hidden"));
+$("np-clear").addEventListener("click", () => { notes = []; saveNotes(); renderNotes(); });
+$("np-list").addEventListener("click", e => {
+  const it = e.target.closest("[data-np]"); if (!it) return;
+  const n = notes.find(x => x.id === it.dataset.np);
+  $("notif-panel").classList.add("hidden");
+  if (n && n.tab) showTab(n.tab);
+});
+document.addEventListener("click", e => {
+  const panel = $("notif-panel");
+  if (!panel.classList.contains("hidden") && !e.target.closest("#notif-panel") && !e.target.closest("#btn-bell")) panel.classList.add("hidden");
+});
+function touchActive() { try { localStorage.setItem("active:" + myUid(), String(Date.now())); } catch (e) {} }
+async function loadMissedCalls() {
+  try {
+    const sn = await getDocs(query(collection(db, "calls"), where("to", "==", myUid())));
+    sn.forEach(d => {
+      const c = d.data({ serverTimestamps: "estimate" }), ms = msOf(c.createdAt);
+      if (c.status === "missed" && ms && Date.now() - ms < 3 * DAY_MS) addNote({ id: "call:" + d.id, title: "Missed " + (c.type === "video" ? "video" : "voice") + " call", body: (c.fromName || "A family member") + " called you", tab: "calls", ts: ms });
+    });
+  } catch (e) { /* the call list shows them anyway */ }
+}
 function startNotifier() {
   if (unsubNote) return;
   noteReady = false;
   unsubNote = onSnapshot(query(collection(db, "messages"), orderBy("at", "desc"), limit(1)), snap => {
-    if (!noteReady) { noteReady = true; return; } // the first answer is only the latest old message
+    const first = !noteReady; noteReady = true;
     snap.docChanges().forEach(ch => {
       if (ch.type !== "added") return;
-      const m = ch.doc.data({ serverTimestamps: "estimate" });
+      const m = { id: ch.doc.id, ...ch.doc.data({ serverTimestamps: "estimate" }) };
       if (m.uid === myUid()) return;
+      if ((m.deliveredTo || []).indexOf(myUid()) < 0) updateDoc(ch.doc.ref, { deliveredTo: arrayUnion(myUid()) }).catch(() => {});
+      const ms = tmsOf(m), what = m.text ? String(m.text).slice(0, 120) : (m.audio ? "Sent a voice note" : "Sent a photo");
+      if (first) { if (ms > sessionStartActive) addNote({ id: "msg:" + m.id, title: m.name || "Family", body: what, tab: "chat", ts: ms }); return; }
       const inChat = curTab === "chat" && !document.hidden;
-      if (!inChat) setUnread(unread + 1);
-      if (document.hidden || !inChat) notify(m.name || "Family", m.text ? String(m.text).slice(0, 120) : (m.audio ? "Sent a voice note" : "Sent a photo"), "chat");
+      if (!inChat) { setUnread(unread + 1); addNote({ id: "msg:" + m.id, title: m.name || "Family", body: what, tab: "chat", ts: ms }); }
+      if (document.hidden || !inChat) notify(m.name || "Family", what, "chat");
     });
   }, () => {});
 }
@@ -2351,6 +2518,10 @@ $("notif-btn").addEventListener("click", async () => {
   $("notif-card").classList.add("hidden");
 });
 $("notif-later").addEventListener("click", () => { try { localStorage.setItem("notifLater", String(Date.now())); } catch (e) {} $("notif-card").classList.add("hidden"); });
+
+$("map-show").addEventListener("click", () => {
+  $("map-box").innerHTML = '<iframe title="Basoga\'s Legacy on Google Maps" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Basoga%27s+legacy,+Kasokwe+Kaliro,+main+street,+Kaliro&output=embed"></iframe>';
+});
 
 // ---------- Share ----------
 const SHARE_TEXT = "Join our family portal, Basoga's Legacy. Open the link, register with your email, and welcome home.";
@@ -2366,7 +2537,6 @@ async function shareNative() {
 $("share-native").addEventListener("click", shareNative);
 $("share-copy").addEventListener("click", shareCopy);
 $("share-wa").addEventListener("click", () => window.open("https://wa.me/?text=" + encodeURIComponent(SHARE_TEXT + "\n" + shareUrl()), "_blank", "noopener"));
-$("dr-share").addEventListener("click", () => { closeDrawer(); shareNative(); });
 
 // ---------- App feel: install, bottom menu, offline shell ----------
 const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
@@ -2387,11 +2557,18 @@ $("install-btn").addEventListener("click", async () => {
 });
 $("install-later").addEventListener("click", () => { try { localStorage.setItem("installLater", String(Date.now())); } catch (e) {} $("install-card").classList.add("hidden"); });
 window.addEventListener("appinstalled", () => $("install-card").classList.add("hidden"));
-if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+if ("serviceWorker" in navigator) {
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (hadController && !call && !vn && !window.__reloaded) { window.__reloaded = true; location.reload(); } });
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").then(r => r.update()).catch(() => {}));
+}
 const NAV_KEY = { home: "home", tree: "tree", children: "tree", grandchildren: "tree", member: "tree", "add-member": "tree", "add-grandchild": "tree", gallery: "gallery", chat: "chat", calls: "chat" };
 function markNav(tab) { document.querySelectorAll("#bottom-nav [data-nav]").forEach(b => b.classList.toggle("on", b.dataset.nav === NAV_KEY[tab])); }
 document.addEventListener("focusin", e => { if (e.target.matches("input,textarea,select")) document.body.classList.add("kbd"); });
-document.addEventListener("focusout", () => document.body.classList.remove("kbd"));
+document.addEventListener("focusout", () => setTimeout(() => {
+  const a = document.activeElement;
+  if (!a || !a.matches || !a.matches("input,textarea,select")) document.body.classList.remove("kbd");
+}, 450)); // wait, so a tap on Send is never caught by the bottom bar popping back up
 
 // the decorative background photo is fetched last so it never slows start-up
 window.addEventListener("load", () => setTimeout(() => {
