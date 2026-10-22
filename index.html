@@ -366,6 +366,13 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 .dr-note{margin-left:auto;color:var(--gold2);font-weight:600;font-size:.78rem}
 .mapbox button{display:block;width:100%;height:120px;margin:0;border-radius:0}
 .stats .g,.g{cursor:default}
+
+/* profile pictures in chat and calls */
+.chat-row.other{align-items:flex-end;gap:8px}
+.chat-row.other .chat-bub{max-width:calc(82% - 42px)}
+.chat-av{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;background:rgba(255,255,255,.12);color:var(--gold2);display:grid;place-items:center;font-weight:700}
+.chat-av img,.ct-av img,.call-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.ct-av,.call-avatar{overflow:hidden}
 </style>
 </head>
 <body>
@@ -887,6 +894,17 @@ async function getUserSnap(uid) {
   } catch (e) { /* not saved yet */ }
   return fsGetDoc(ref);
 }
+// A message written offline is saved on the phone and sent when the internet returns, so the screen must not wait for the server.
+async function queued(p, onFail) {
+  p.catch(onFail || (() => {}));
+  await Promise.race([p.catch(() => {}), new Promise(r => setTimeout(r, 1200))]);
+}
+// Adding members, photos and events needs the internet; reading everything and chatting still work offline.
+document.addEventListener("submit", e => {
+  if (navigator.onLine !== false || e.target.id === "chat-form") return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  alert("You are offline. You can still read the tree, photos, events and chat, and send chat messages. Connect to the internet to save this.");
+}, true);
 function hideSplash() { const sp = $("splash"); if (!sp) return; sp.classList.add("out"); setTimeout(() => sp.remove(), 300); }
 setTimeout(hideSplash, 6000);
 const syncOffline = () => $("offline-bar").classList.toggle("hidden", navigator.onLine !== false);
@@ -1129,7 +1147,7 @@ function chatRowHTML(m, me) {
   const photo = typeof m.photo === "string" && IMG_OK.test(m.photo) ? `<img loading="lazy" decoding="async" src="${m.photo}" alt="Shared photo">` : "";
   const voice = typeof m.audio === "string" && AUD_OK.test(m.audio) ? `<div class="vn-msg"><audio controls preload="none" src="${m.audio}"></audio><span>${fmtDur(m.dur || 0)}</span></div>` : "";
   const del = (mine || isAdmin()) ? ` · <a href="#" data-del="${esc(m.id)}">Delete</a>` : "";
-  html += `<div class="chat-row${mine ? " mine" : ""}"><div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
+  html += `<div class="chat-row${mine ? " mine" : " other"}">${mine ? "" : `<div class="chat-av" data-av="${esc(m.uid || "")}" data-nm="${esc(m.name || "")}">${avatarHTML(m.uid, m.name)}</div>`}<div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
   return html;
 }
 function renderChat() {
@@ -1172,19 +1190,19 @@ $("chat-form").addEventListener("submit", async e => {
   const text = $("chat-input").value.trim();
   if (!text && !chatPhoto) return;
   const btn = $("chat-send"); btn.disabled = true; $("chat-msg").style.display = "none";
-  try {
-    await addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text, photo: chatPhoto, at: serverTimestamp() });
-    $("chat-input").value = ""; chatPhoto = ""; showChatPrev(); chatFirst = true;
-  } catch (err) {
+  let bad = false;
+  await queued(addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text, photo: chatPhoto, at: serverTimestamp() }), err => {
+    bad = true;
     say("chat-msg", err.code === "permission-denied" ? "The database rules do not allow chat yet. Ask the administrator to publish the updated rules." : "Message not sent. Try again.", false);
-  }
+  });
+  if (!bad) { $("chat-input").value = ""; chatPhoto = ""; showChatPrev(); chatFirst = true; }
   btn.disabled = false;
 });
 $("chat-list").addEventListener("click", async e => {
   const a = e.target.closest("[data-del]"); if (!a) return;
   e.preventDefault();
   if (!confirm("Delete this message?")) return;
-  try { await deleteDoc(doc(db, "messages", a.dataset.del)); } catch (err) { say("chat-msg", "Could not delete that message.", false); }
+  await queued(deleteDoc(doc(db, "messages", a.dataset.del)), () => say("chat-msg", "Could not delete that message.", false));
 });
 // ---------- Voice notes ----------
 const VN_MAX = 60;
@@ -1252,12 +1270,10 @@ async function vnFinish() {
   if (!AUD_OK.test(url)) { say("chat-msg", "This browser made a voice note the site cannot send. Try Chrome.", false); return; }
   if (url.length > 850000) { say("chat-msg", "That voice note is too long. Keep it under a minute.", false); return; }
   $("chat-msg").style.display = "none";
-  try {
-    await addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text: "", photo: "", audio: url, dur, at: serverTimestamp() });
-    chatFirst = true;
-  } catch (err) {
+  await queued(addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text: "", photo: "", audio: url, dur, at: serverTimestamp() }), err => {
     say("chat-msg", err.code === "permission-denied" ? "The database rules do not allow chat yet. Ask the administrator to publish the updated rules." : "Voice note not sent. Try again.", false);
-  }
+  });
+  chatFirst = true;
 }
 $("chat-mic").addEventListener("click", vnOpen);
 $("vn-send").addEventListener("click", () => vnStop(true));
@@ -1288,12 +1304,12 @@ $("ci-btn").addEventListener("click", async () => {
   const me = ciState().latest.get(myUid());
   const inNow = !!(me && me.type === "in" && Date.now() - tmsOf(me) < DAY_MS);
   const btn = $("ci-btn"); btn.disabled = true;
-  try {
-    await addDoc(collection(db, "checkins"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", type: inNow ? "out" : "in", note: inNow ? (me.note || "") : $("ci-note").value.trim().slice(0, 80), at: serverTimestamp() });
-    $("ci-note").value = ""; $("ci-msg").style.display = "none";
-  } catch (err) {
+  let bad = false;
+  await queued(addDoc(collection(db, "checkins"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", type: inNow ? "out" : "in", note: inNow ? (me.note || "") : $("ci-note").value.trim().slice(0, 80), at: serverTimestamp() }), err => {
+    bad = true;
     say("ci-msg", err.code === "permission-denied" ? "The database rules do not allow check-in yet. Ask the administrator to publish the updated rules." : "Could not save. Try again.", false);
-  }
+  });
+  if (!bad) { $("ci-note").value = ""; $("ci-msg").style.display = "none"; }
   btn.disabled = false;
 });
 
@@ -2161,7 +2177,7 @@ $("form-profile").addEventListener("submit", async e => {
       await updateDoc(doc(db, "members", data.memberId), md);
       loadFamilyMembers();
     }
-    fillProfile();
+    fillProfile(); syncDirectoryProfile(true);
     m.className = "msg msg-success"; m.innerText = "Profile saved!";
   } catch (err) { m.className = "msg msg-error"; m.innerText = err.message; }
   m.style.display = "block";
@@ -2171,6 +2187,38 @@ $("form-profile").addEventListener("submit", async e => {
 const ICE = { iceServers: [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }] };
 let call = null, incoming = null, unsubIncoming = null, unsubDir = null, dirDocs = [], beatTimer = null, ringCtx = null, ringTimer = null, dirTimer = null;
 const myName = () => (currentUserDoc && currentUserDoc.name) || "Family";
+let dirMap = new Map();
+const avatarHTML = (uid, name) => {
+  const d = dirMap.get(uid);
+  return d && typeof d.thumb === "string" && IMG_OK.test(d.thumb) ? `<img src="${d.thumb}" alt="">` : `<span>${esc(initialOf((d && d.name) || name))}</span>`;
+};
+function refreshAvatars() {
+  document.querySelectorAll("[data-av]").forEach(el => { el.innerHTML = avatarHTML(el.dataset.av, el.dataset.nm); });
+}
+function makeThumb(src, size = 96) {
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => {
+      const c = document.createElement("canvas"); c.width = c.height = size;
+      const m = Math.min(im.width, im.height);
+      c.getContext("2d").drawImage(im, (im.width - m) / 2, (im.height - m) / 2, m, m, 0, 0, size, size);
+      res(c.toDataURL("image/jpeg", 0.72));
+    };
+    im.onerror = () => res("");
+    im.src = src;
+  });
+}
+// Writes the person's name and a tiny round picture so other family members can see them in chat and calls.
+async function syncDirectoryProfile(force) {
+  if (!currentUserDoc || currentUserDoc.status !== "approved") return;
+  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length;
+  try { if (!force && localStorage.getItem("dirProfile:" + myUid()) === sig) return; } catch (e) {}
+  try {
+    const thumb = photo ? await makeThumb(photo, 96) : "";
+    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb }, { merge: true });
+    try { localStorage.setItem("dirProfile:" + myUid(), sig); } catch (e) {}
+  } catch (e) { /* tried again next time */ }
+}
 const msOf = ts => (ts && ts.toMillis) ? ts.toMillis() : 0;
 const initialOf = n => (String(n || "?").trim()[0] || "?").toUpperCase();
 const callDone = () => ({ endedAt: serverTimestamp(), offer: deleteField(), answer: deleteField(), callerCandidates: deleteField(), calleeCandidates: deleteField() });
@@ -2194,10 +2242,10 @@ function ringTone(kind) {
 }
 function stopRing() { if (ringTimer) clearInterval(ringTimer); ringTimer = null; if (navigator.vibrate) navigator.vibrate(0); }
 
-function callUI(name, type, state, mode) {
+function callUI(name, type, state, mode, uid) {
   const o = $("call-overlay");
   o.dataset.type = type; o.dataset.mode = mode;
-  $("call-name").textContent = name || "Family"; $("call-avatar").textContent = initialOf(name); $("call-state").textContent = state;
+  $("call-name").textContent = name || "Family"; $("call-avatar").innerHTML = avatarHTML(uid, name); $("call-state").textContent = state;
   $("call-mute").classList.remove("off"); $("call-cam").classList.remove("off");
   $("call-mute").firstElementChild.firstElementChild.setAttribute("href", "#i-mic");
   $("call-cam").firstElementChild.firstElementChild.setAttribute("href", "#i-video");
@@ -2279,7 +2327,8 @@ async function callEnd(status) {
 }
 async function startCall(uid, name, type) {
   if (call || incoming || !callSupported()) return;
-  callUI(name, type, "Calling…", "out");
+  if (navigator.onLine === false) { alert("Calls need the internet. Please connect and try again."); return; }
+  callUI(name, type, "Calling…", "out", uid);
   let stream;
   try { stream = await getMedia(type); } catch (e) { hideCallUI(); micError(e); return; }
   const real = stream.getVideoTracks().length ? "video" : "audio";
@@ -2317,7 +2366,7 @@ async function acceptIncoming() {
   if (inc.unsub) inc.unsub();
   incoming = null;
   const c = call = { role: "callee", type: inc.d.type, pc: new RTCPeerConnection(ICE), stream, ref: inc.ref, queue: [], added: 0, myField: "calleeCandidates", theirField: "callerCandidates" };
-  callUI(inc.d.fromName, inc.d.type, "Connecting…", "active");
+  callUI(inc.d.fromName, inc.d.type, "Connecting…", "active", inc.d.from);
   callWire(c);
   try {
     await c.pc.setRemoteDescription(inc.d.offer);
@@ -2336,7 +2385,7 @@ function startCallListener() {
       if (age > 60000) { updateDoc(ch.doc.ref, { status: "missed", ...callDone() }).catch(() => {}); return; }
       if (call || incoming) { updateDoc(ch.doc.ref, { status: "declined", ...callDone() }).catch(() => {}); return; }
       const inc = incoming = { ref: ch.doc.ref, d, accepted: false };
-      callUI(d.fromName, d.type, d.type === "video" ? "Incoming video call" : "Incoming voice call", "in");
+      callUI(d.fromName, d.type, d.type === "video" ? "Incoming video call" : "Incoming voice call", "in", d.from);
       ringTone("in");
       if (document.hidden) notify("Incoming " + (d.type === "video" ? "video" : "voice") + " call", (d.fromName || "A family member") + " is calling you", "call", { requireInteraction: true, vibrate: [500, 200, 500, 200, 500] });
       inc.timer = setTimeout(() => { if (incoming === inc) declineIncoming("missed"); }, 50000);
@@ -2356,6 +2405,7 @@ async function beat() {
 }
 function startPresence() {
   beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
+  startDirectory(); syncDirectoryProfile(false);
   startCallListener();
 }
 document.addEventListener("visibilitychange", () => { if (document.hidden) touchActive(); else { beat(); markReceipts(); } });
@@ -2366,8 +2416,8 @@ function renderContacts() {
   const others = dirDocs.filter(r => r.uid && r.uid !== me).map(r => ({ ...r, ms: msOf(r.lastSeen) })).map(r => ({ ...r, online: !!(r.ms && now - r.ms < 150000) }))
     .sort((a, b) => (b.online - a.online) || (a.name || "").localeCompare(b.name || ""));
   const total = others.length + 1, online = others.filter(r => r.online).length + 1;
-  const meRow = `<div class="ct-row"><div class="ct-av on">${esc(initialOf(myName()))}</div><div class="ct-info"><b>${esc(myName())} (You)</b><span>Online now</span></div></div>`;
-  const rows = others.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}">${esc(initialOf(r.name))}</div><div class="ct-info"><b>${esc(r.name || "Family")}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("");
+  const meRow = `<div class="ct-row"><div class="ct-av on" data-av="${esc(me)}" data-nm="${esc(myName())}">${avatarHTML(me, myName())}</div><div class="ct-info"><b>${esc(myName())} (You)</b><span>Online now</span></div></div>`;
+  const rows = others.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}" data-av="${esc(r.uid)}" data-nm="${esc(r.name || "")}">${avatarHTML(r.uid, r.name)}</div><div class="ct-info"><b>${esc(r.name || "Family")}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("");
   $("call-contacts").innerHTML = `<p class="ct-count">${total} ${total === 1 ? "person" : "people"} on the platform · ${online} online</p>` + meRow + (rows || `<p class="chat-empty">Nobody else has joined yet. Share the link to invite the family.</p>`);
 }
 async function loadCallLog() {
@@ -2386,10 +2436,16 @@ async function loadCallLog() {
     }).join("") : `<p class="chat-empty">No calls yet.</p>`;
   } catch (err) { liveErr(box, err); }
 }
+function startDirectory() {
+  if (unsubDir) return;
+  unsubDir = onSnapshot(collection(db, "directory"), snap => {
+    dirDocs = snap.docs.map(d => d.data({ serverTimestamps: "estimate" }));
+    dirMap = new Map(dirDocs.map(d => [d.uid, d]));
+    renderContacts(); refreshAvatars();
+  }, err => liveErr($("call-contacts"), err));
+}
 function openCallsTab() {
-  if (!unsubDir) {
-    unsubDir = onSnapshot(collection(db, "directory"), snap => { dirDocs = snap.docs.map(d => d.data({ serverTimestamps: "estimate" })); renderContacts(); }, err => liveErr($("call-contacts"), err));
-  }
+  startDirectory();
   clearInterval(dirTimer); dirTimer = setInterval(() => { if (curTab === "calls") renderContacts(); }, 30000);
   loadCallLog();
 }
@@ -2397,7 +2453,7 @@ function stopCalls() {
   if (call) callEnd(call.t0 ? "ended" : (call.role === "caller" ? "missed" : "declined"));
   if (incoming) declineIncoming("declined");
   if (unsubIncoming) unsubIncoming(); unsubIncoming = null;
-  if (unsubDir) unsubDir(); unsubDir = null; dirDocs = [];
+  if (unsubDir) unsubDir(); unsubDir = null; dirDocs = []; dirMap = new Map();
   clearInterval(beatTimer); clearInterval(dirTimer);
 }
 $("call-contacts").addEventListener("click", e => {
