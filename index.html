@@ -382,6 +382,10 @@ button.call-btn.red .ico{transform:rotate(135deg)}
 input.sw{appearance:none;-webkit-appearance:none;width:52px;height:30px;flex:none;border-radius:99px;background:rgba(255,255,255,.18);position:relative;cursor:pointer;margin:0;padding:0;border:none;transition:background .2s}
 input.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s}
 input.sw:checked{background:#2fc4a0}input.sw:checked::after{transform:translateX(22px)}
+
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:78px}
+button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:auto;margin:0;padding:8px 12px;background:transparent;color:var(--gold2);border:none;font-weight:700;font-size:.9rem}
 </style>
 </head>
 <body>
@@ -403,11 +407,12 @@ input.sw:checked{background:#2fc4a0}input.sw:checked::after{transform:translateX
   <div id="section-auth" class="card">
     <h2 id="auth-title">Family Login</h2>
     <div id="auth-msg" class="msg msg-error"></div>
+    <button type="button" class="btn-secondary hidden" id="btn-fix-pw">Email me a link to set a new password</button>
     <form id="form-auth">
       <label for="auth-email">Email Address</label>
-      <input type="email" id="auth-email" required placeholder="family@example.com">
+      <input type="email" id="auth-email" required placeholder="family@example.com" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email">
       <label for="auth-password">Password</label>
-      <input type="password" id="auth-password" required placeholder="••••••••">
+      <div class="pw-wrap"><input type="password" id="auth-password" required placeholder="••••••••" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false"><button type="button" id="btn-showpw" class="pw-toggle" aria-label="Show password">Show</button></div>
       <div id="register-fields" class="hidden">
         <label for="auth-name">Your Full Name</label>
         <input type="text" id="auth-name" placeholder="First & Last Name">
@@ -945,23 +950,31 @@ $("btn-toggle-auth").addEventListener("click", () => {
   $("auth-title").innerText = isRegisterMode ? "Register Family Account" : "Family Login";
   $("btn-auth-submit").innerText = isRegisterMode ? "Register" : "Sign In";
   $("btn-toggle-auth").innerText = isRegisterMode ? "Already registered? Log in" : "Need an account? Register here";
+  $("auth-password").autocomplete = isRegisterMode ? "new-password" : "current-password";
+  $("btn-fix-pw").classList.add("hidden");
 });
 
 $("form-auth").addEventListener("submit", async e => {
   e.preventDefault();
   $("auth-msg").style.display = "none";
-  const email = $("auth-email").value, password = $("auth-password").value;
+  $("btn-fix-pw").classList.add("hidden");
+  const email = $("auth-email").value.trim().toLowerCase(), raw = $("auth-password").value, password = raw.trim();
   try {
     if (isRegisterMode) {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", cred.user.uid), {
-        uid: cred.user.uid, name: $("auth-name").value, email,
+        uid: cred.user.uid, name: $("auth-name").value.trim(), email,
         role: "member", status: "pending", createdAt: serverTimestamp()
       });
       try { await sendEmailVerification(cred.user); } catch (e) { /* the person can ask for another one */ }
       await onUser(cred.user);
     } else {
-      await signInWithEmailAndPassword(auth, email, password);
+      try { await signInWithEmailAndPassword(auth, email, raw); }
+      catch (err) {
+        // Some phone keyboards add a space after the password. Try again without it.
+        const bad = err && (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password");
+        if (bad && raw !== password) await signInWithEmailAndPassword(auth, email, password); else throw err;
+      }
     }
   } catch (err) { showAuthErr(err); }
 });
@@ -969,7 +982,7 @@ $("form-auth").addEventListener("submit", async e => {
 const friendlyAuth = err => {
   const c = (err && err.code) || "";
   if (c === "auth/invalid-credential" || c === "auth/wrong-password" || c === "auth/user-not-found")
-    return "Wrong email or password. If you joined with Google, tap “Continue with Google”. Forgot your password? Tap “Forgot password?” below.";
+    return "Wrong email or password. Tap “Show” to check what you typed. If you joined with Google, use “Continue with Google”. Or get a new password with the button below.";
   if (c === "auth/email-already-in-use") return "That email is already registered. Sign in instead, or tap “Continue with Google” or “Forgot password?”.";
   if (c === "auth/weak-password") return "Please choose a password with at least 6 characters.";
   if (c === "auth/invalid-email") return "That email address does not look right.";
@@ -979,9 +992,18 @@ const friendlyAuth = err => {
   if (c === "auth/operation-not-allowed") return "This sign-in method is switched off in Firebase. The administrator must enable it under Authentication → Sign-in method.";
   return (err && err.message) || "Something went wrong. Please try again.";
 };
-const showAuthErr = (err, ok) => { const m = $("auth-msg"); m.className = "msg " + (ok ? "msg-success" : "msg-error"); m.innerText = ok ? err : friendlyAuth(err); m.style.display = "block"; };
+const showAuthErr = (err, ok) => {
+  const m = $("auth-msg"); m.className = "msg " + (ok ? "msg-success" : "msg-error"); m.innerText = ok ? err : friendlyAuth(err); m.style.display = "block";
+  const c = (!ok && err && err.code) || "";
+  $("btn-fix-pw").classList.toggle("hidden", !(c === "auth/invalid-credential" || c === "auth/wrong-password" || c === "auth/user-not-found"));
+};
+$("btn-showpw").addEventListener("click", () => {
+  const f = $("auth-password"), show = f.type === "password";
+  f.type = show ? "text" : "password"; $("btn-showpw").textContent = show ? "Hide" : "Show";
+});
+$("btn-fix-pw").addEventListener("click", () => $("btn-forgot").click());
 $("btn-forgot").addEventListener("click", async () => {
-  const email = $("auth-email").value.trim();
+  const email = $("auth-email").value.trim().toLowerCase();
   if (!email) { showAuthErr({ code: "auth/invalid-email" }); return; }
   try { await sendPasswordResetEmail(auth, email); showAuthErr("A password reset link was sent to " + email + ". Check your inbox and spam folder.", true); }
   catch (err) { showAuthErr(err); }
