@@ -386,6 +386,7 @@ input.sw:checked{background:#2fc4a0}input.sw:checked::after{transform:translateX
 .pw-wrap{position:relative}
 .pw-wrap input{padding-right:78px}
 button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:auto;margin:0;padding:8px 12px;background:transparent;color:var(--gold2);border:none;font-weight:700;font-size:.9rem}
+.google-hint{color:var(--muted);font-size:.8rem;text-align:center;margin:10px 0 0}
 </style>
 </head>
 <body>
@@ -422,6 +423,7 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
     <button type="button" class="btn-secondary" id="btn-forgot" style="margin-top:10px">Forgot password?</button>
     <div class="or">or</div>
     <button type="button" class="btn-google" id="btn-google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></button>
+    <p class="google-hint">Joined with Google? Tap “Continue with Google”. After that you can add a password in Menu → My Profile.</p>
     <button type="button" class="btn-secondary" id="btn-toggle-auth" style="margin-top:10px">Need an account? Register here</button>
   </div>
 
@@ -792,6 +794,18 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
         </form>
         <button class="btn-danger" id="btn-logout">Sign Out</button>
       </div>
+      <div class="card" id="pw-card">
+        <h2>Sign in with email too</h2>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:8px">Joined with Google? Set a password here, and you can also sign in with your email and this password.</p>
+        <form id="form-setpw" autocomplete="off">
+          <label for="setpw-new">New password</label>
+          <div class="pw-wrap"><input type="password" id="setpw-new" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" required minlength="6"><button type="button" class="pw-toggle" id="setpw-show" aria-label="Show password">Show</button></div>
+          <label for="setpw-confirm">Type it again</label>
+          <input type="password" id="setpw-confirm" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" required minlength="6">
+          <button type="submit">Save password</button>
+        </form>
+        <div id="setpw-msg" class="msg"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -859,7 +873,7 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, sendPasswordResetEmail, sendEmailVerification, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, sendPasswordResetEmail, sendEmailVerification, EmailAuthProvider, linkWithCredential, updatePassword, fetchSignInMethodsForEmail, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getDocFromCache, getDocsFromCache, doc, setDoc, getDoc as fsGetDoc, collection, addDoc, getDocs as fsGetDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot, where, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -976,7 +990,17 @@ $("form-auth").addEventListener("submit", async e => {
         if (bad && raw !== password) await signInWithEmailAndPassword(auth, email, password); else throw err;
       }
     }
-  } catch (err) { showAuthErr(err); }
+  } catch (err) {
+    showAuthErr(err);
+    if (err && (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password")) {
+      try {
+        const ways = await fetchSignInMethodsForEmail(auth, email);
+        if (ways.indexOf("google.com") >= 0 && ways.indexOf("password") < 0) {
+          $("auth-msg").innerText = "This email joined with Google, so it has no password yet. Tap “Continue with Google”. Then open Menu → My Profile → “Sign in with email too” to set a password. Or use the button below to set one by email.";
+        }
+      } catch (e2) { /* the general message stays */ }
+    }
+  }
 });
 
 const friendlyAuth = err => {
@@ -2637,6 +2661,27 @@ $("map-show").addEventListener("click", () => {
   box.addEventListener("click", e => go(e.target));
   box.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(e.target); } });
 })();
+
+// ---------- Set a password (for people who joined with Google) ----------
+$("setpw-show").addEventListener("click", () => {
+  const f = $("setpw-new"), show = f.type === "password";
+  f.type = show ? "text" : "password"; $("setpw-confirm").type = f.type; $("setpw-show").textContent = show ? "Hide" : "Show";
+});
+$("form-setpw").addEventListener("submit", async e => {
+  e.preventDefault();
+  const pw = $("setpw-new").value.trim(), pw2 = $("setpw-confirm").value.trim(), u = auth.currentUser;
+  if (!u || !u.email) return;
+  if (pw.length < 6) { say("setpw-msg", "Use at least 6 characters.", false); return; }
+  if (pw !== pw2) { say("setpw-msg", "The two passwords are not the same.", false); return; }
+  try {
+    if (u.providerData.some(x => x.providerId === "password")) await updatePassword(u, pw);
+    else await linkWithCredential(u, EmailAuthProvider.credential(u.email, pw));
+    $("form-setpw").reset(); say("setpw-msg", "Saved. You can now sign in with " + u.email + " and this password.");
+  } catch (err) {
+    const c = (err && err.code) || "";
+    say("setpw-msg", c === "auth/requires-recent-login" ? "For your safety: sign out, sign in with Google again, then set the password." : c === "auth/weak-password" ? "Please choose at least 6 characters." : c === "auth/network-request-failed" ? "No internet connection." : "Could not save the password. Try again.", false);
+  }
+});
 
 // ---------- Share ----------
 const SHARE_TEXT = "Join our family portal, Basoga's Legacy. Open the link, register with your email, and welcome home.";
