@@ -429,6 +429,7 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
 .tr-row a{color:var(--muted);font-size:.8rem;margin-left:6px}
 .tr-form{display:flex;gap:8px;margin-top:8px}
 .tr-form input{flex:1;min-width:0;margin:0}
+.chat-vid{display:block;max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;background:#000}
 </style>
 </head>
 <body>
@@ -683,13 +684,15 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
         <label for="gal-tag">Who is in it? (optional)</label>
         <select id="gal-tag"><option value="">— Nobody in particular —</option></select>
         <div class="btn-row">
-          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-file').click()"><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg> Photos from device</button>
+          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-file').click()"><svg class="ico" aria-hidden="true"><use href="#i-folder"/></svg> Photos and videos from device</button>
           <button type="button" class="btn-secondary" onclick="document.getElementById('gal-cam').click()"><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> Take photo</button>
+          <button type="button" class="btn-secondary" onclick="document.getElementById('gal-vcam').click()"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg> Record video</button>
           <button type="button" class="btn-secondary" id="btn-open-cm"><svg class="ico" aria-hidden="true"><use href="#i-gift"/></svg> Create a card</button>
         </div>
-        <input type="file" id="gal-file" accept="image/*" multiple class="hidden">
+        <input type="file" id="gal-file" accept="image/*,video/*" multiple class="hidden">
+        <input type="file" id="gal-vcam" accept="video/*" capture="environment" class="hidden">
         <input type="file" id="gal-cam" accept="image/*" capture="environment" class="hidden">
-        <p style="color:var(--muted);font-size:.8rem;margin-top:10px">Pick several at once. Tap any photo to view it.</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:10px">Pick several at once. Videos can be up to 80 MB, so short clips work best. Tap any item to view it.</p>
       </div>
 
       <div class="card hidden" id="card-maker">
@@ -767,7 +770,7 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
         <div id="chat-prev" class="hidden"></div>
         <form id="chat-form" class="chat-form" autocomplete="off">
           <button type="button" id="chat-attach" class="chat-ic" aria-label="Attach a photo"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg></button>
-          <input type="file" id="chat-file" accept="image/*" class="hidden">
+          <input type="file" id="chat-file" accept="image/*,video/*" class="hidden">
           <input type="text" id="chat-input" placeholder="Write a message" maxlength="1000" aria-label="Message">
           <button type="button" id="chat-mic" class="chat-mic" aria-label="Record a voice note"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg></button>
           <button type="submit" id="chat-send" class="hidden" aria-label="Send"><svg class="ico" aria-hidden="true"><use href="#i-send"/></svg></button>
@@ -1258,7 +1261,7 @@ $("btn-pend-resend").addEventListener("click", async () => {
 });
 
 // ---------- Check in / out ----------
-let unsubCi = null, ciDocs = [], unsubChat = null, chatDocs = [], chatPhoto = "", chatFirst = true;
+let unsubCi = null, ciDocs = [], unsubChat = null, chatDocs = [], chatPhoto = "", chatVideo = null, chatFirst = true;
 const AUD_OK = /^data:audio\/(webm|ogg|mp4|mpeg|aac|x-m4a|wav)(;codecs=[A-Za-z0-9.,=-]+)?;base64,[A-Za-z0-9+\/=]+$/;
 const fmtDur = t => Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0");
 const IMG_OK = /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/;
@@ -1331,10 +1334,11 @@ function chatRowHTML(m, me) {
   const ms = tmsOf(m), day = dayLabel(ms), mine = m.uid === me;
   let html = "";
   if (day !== chatLastDay) { html += `<div class="chat-day"><span>${esc(day)}</span></div>`; chatLastDay = day; }
+  const video = typeof m.video === "string" && VIDEO_OK.test(m.video) ? `<video class="chat-vid" controls playsinline preload="none"${typeof m.thumb === "string" && IMG_OK.test(m.thumb) ? ` poster="${m.thumb}"` : ""} src="${m.video}"></video>` : "";
   const photo = typeof m.photo === "string" && IMG_OK.test(m.photo) ? `<img loading="lazy" decoding="async" src="${m.photo}" alt="Shared photo">` : "";
   const voice = typeof m.audio === "string" && AUD_OK.test(m.audio) ? `<div class="vn-msg"><audio controls preload="none" src="${m.audio}"></audio><span>${fmtDur(m.dur || 0)}</span></div>` : "";
   const del = (mine || isAdmin()) ? ` · <a href="#" data-del="${esc(m.id)}">Delete</a>` : "";
-  html += `<div class="chat-row${mine ? " mine" : " other"}">${mine ? "" : `<div class="chat-av" data-av="${esc(m.uid || "")}" data-nm="${esc(m.name || "")}">${avatarHTML(m.uid, m.name)}</div>`}<div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
+  html += `<div class="chat-row${mine ? " mine" : " other"}">${mine ? "" : `<div class="chat-av" data-av="${esc(m.uid || "")}" data-nm="${esc(m.name || "")}">${avatarHTML(m.uid, m.name)}</div>`}<div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${video}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
   return html;
 }
 function renderChat() {
@@ -1355,12 +1359,13 @@ function renderChat() {
 }
 function showChatPrev() {
   const p = $("chat-prev");
-  p.innerHTML = chatPhoto ? `<img loading="lazy" decoding="async" src="${chatPhoto}" alt=""><button type="button" id="chat-prev-x" aria-label="Remove photo">×</button>` : "";
-  p.classList.toggle("hidden", !chatPhoto);
+  p.innerHTML = chatPhoto ? `<img loading="lazy" decoding="async" src="${chatPhoto}" alt=""><button type="button" id="chat-prev-x" aria-label="Remove photo">×</button>`
+    : chatVideo ? `<span class="att">Video · ${(chatVideo.size / 1048576).toFixed(1)} MB<button type="button" id="chat-prev-x" aria-label="Remove video">×</button></span>` : "";
+  p.classList.toggle("hidden", !chatPhoto && !chatVideo);
   syncSendMic();
 }
 function syncSendMic() {
-  const has = !!($("chat-input").value.trim() || chatPhoto);
+  const has = !!($("chat-input").value.trim() || chatPhoto || chatVideo);
   $("chat-send").classList.toggle("hidden", !has);
   $("chat-mic").classList.toggle("hidden", has);
 }
@@ -1368,28 +1373,41 @@ $("chat-input").addEventListener("input", syncSendMic);
 $("chat-attach").addEventListener("click", () => $("chat-file").click());
 $("chat-file").addEventListener("change", async e => {
   const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  if (f.type.startsWith("video/")) {
+    if (f.size > MAX_VIDEO) { say("chat-msg", videoErr({ code: "app/too-big" }), false); return; }
+    chatVideo = f; chatPhoto = ""; showChatPrev(); return;
+  }
+  chatVideo = null;
   try { const url = await compressImage(f, 800); if (url.length > 600000) throw new Error("big"); chatPhoto = url; showChatPrev(); }
   catch (err) { say("chat-msg", "That photo could not be added. Try a smaller one.", false); }
 });
-$("chat-prev").addEventListener("click", e => { if (e.target.closest("#chat-prev-x")) { chatPhoto = ""; showChatPrev(); } });
+$("chat-prev").addEventListener("click", e => { if (e.target.closest("#chat-prev-x")) { chatPhoto = ""; chatVideo = null; showChatPrev(); } });
 $("chat-form").addEventListener("submit", async e => {
   e.preventDefault();
   const text = $("chat-input").value.trim();
-  if (!text && !chatPhoto) return;
+  if (!text && !chatPhoto && !chatVideo) return;
   const btn = $("chat-send"); btn.disabled = true; $("chat-msg").style.display = "none";
+  let vid = null;
+  if (chatVideo) {
+    try { vid = await uploadVideo(chatVideo, pc => say("chat-msg", "Sending video… " + pc + "%")); }
+    catch (err) { say("chat-msg", videoErr(err), false); btn.disabled = false; return; }
+    $("chat-msg").style.display = "none";
+  }
   let bad = false;
-  await queued(addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text, photo: chatPhoto, at: serverTimestamp() }), err => {
+  await queued(addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text, photo: chatPhoto, video: vid ? vid.url : "", vpath: vid ? vid.path : "", thumb: vid ? (vid.thumb || "") : "", at: serverTimestamp() }), err => {
     bad = true;
     say("chat-msg", err.code === "permission-denied" ? "The database rules do not allow chat yet. Ask the administrator to publish the updated rules." : "Message not sent. Try again.", false);
   });
-  if (!bad) { $("chat-input").value = ""; chatPhoto = ""; showChatPrev(); chatFirst = true; }
+  if (!bad) { $("chat-input").value = ""; chatPhoto = ""; chatVideo = null; showChatPrev(); chatFirst = true; }
   btn.disabled = false;
 });
 $("chat-list").addEventListener("click", async e => {
   const a = e.target.closest("[data-del]"); if (!a) return;
   e.preventDefault();
   if (!confirm("Delete this message?")) return;
+  const gone = chatDocs.find(x => x.id === a.dataset.del);
   await queued(deleteDoc(doc(db, "messages", a.dataset.del)), () => say("chat-msg", "Could not delete that message.", false));
+  if (gone && gone.vpath) removeVideoFile(gone.vpath);
 });
 // ---------- Voice notes ----------
 const VN_MAX = 60;
@@ -2246,11 +2264,14 @@ async function uploadMedia(files) {
       if (f.type.startsWith("image/")) {
         const photo = await compressImage(f, 900);
         await addDoc(collection(db, "photos"), { ...baseMeta(), type: "image", photo });
+      } else if (f.type.startsWith("video/")) {
+        const v = await uploadVideo(f, pc => { m.innerText = label + ": video " + pc + "%"; });
+        await addDoc(collection(db, "photos"), { ...baseMeta(), type: "video", videoUrl: v.url, storagePath: v.path, photo: v.thumb || "", size: f.size });
       } else continue;
       ok++;
     } catch (err) {
       m.className = "msg msg-error";
-      m.innerText = "Upload failed: " + (err.message || err);
+      m.innerText = (err && err.code && String(err.code).match(/^(app|storage)\//)) ? videoErr(err) : "Upload failed: " + (err.message || err);
       if (ok) loadPhotos();
       return;
     }
@@ -2260,7 +2281,7 @@ async function uploadMedia(files) {
   $("gal-caption").value = "";
   loadPhotos();
 }
-["gal-file", "gal-cam"].forEach(id => $(id).addEventListener("change", e => {
+["gal-file", "gal-cam", "gal-vcam"].forEach(id => $(id).addEventListener("change", e => {
   const files = [...e.target.files];
   e.target.value = "";
   if (files.length) uploadMedia(files);
@@ -2293,6 +2314,7 @@ $("lb-del").addEventListener("click", async () => {
   try {
     await deleteDoc(doc(db, "photos", $("lb-del").dataset.id));
   } catch (err) { alert(err.message); return; }
+  if (p && p.storagePath) removeVideoFile(p.storagePath);
   closeLightbox();
   await loadPhotos();
   if (viewingId && !$("section-member").classList.contains("hidden")) showProfile(viewingId);
@@ -2777,7 +2799,7 @@ function startNotifier() {
       const m = { id: ch.doc.id, ...ch.doc.data({ serverTimestamps: "estimate" }) };
       if (m.uid === myUid()) return;
       if ((m.deliveredTo || []).indexOf(myUid()) < 0) updateDoc(ch.doc.ref, { deliveredTo: arrayUnion(myUid()) }).catch(() => {});
-      const ms = tmsOf(m), what = m.text ? String(m.text).slice(0, 120) : (m.audio ? "Sent a voice note" : "Sent a photo");
+      const ms = tmsOf(m), what = m.text ? String(m.text).slice(0, 120) : (m.audio ? "Sent a voice note" : (m.video ? "Sent a video" : "Sent a photo"));
       if (first) { if (ms > sessionStartActive) addNote({ id: "msg:" + m.id, title: m.name || "Family", body: what, tab: "chat", ts: ms }); return; }
       const inChat = curTab === "chat" && !document.hidden;
       if (!inChat) { setUnread(unread + 1); addNote({ id: "msg:" + m.id, title: m.name || "Family", body: what, tab: "chat", ts: ms }); }
@@ -2980,6 +3002,57 @@ async function checkRemembrance() {
     $("home-remember-list").innerHTML = rows.map(m => `<div class="ci-row"><b>${esc(m.name)}</b><span>passed on this day${m.diedYear ? " in " + esc(m.diedYear) : ""}</span></div>`).join("");
     rows.forEach(m => addNote({ id: "remember:" + m.id + ":" + d.getFullYear(), title: "In remembrance today", body: m.name + " passed on this day" + (m.diedYear ? " in " + m.diedYear : ""), tab: "story", ts: Date.now() }));
   } catch (e) { /* the page still works without it */ }
+}
+
+// ---------- Videos: kept in Firebase Storage, not in the database ----------
+const MAX_VIDEO = 80 * 1024 * 1024;
+const VIDEO_OK = /^https:\/\/(firebasestorage\.googleapis\.com|[a-z0-9-]+\.firebasestorage\.app)\//;
+let storageApi = null;
+async function storageLib() {
+  if (!storageApi) { const m = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"); storageApi = { m, st: m.getStorage(app) }; }
+  return storageApi;
+}
+function videoThumb(file) {
+  return new Promise(res => {
+    try {
+      const v = document.createElement("video"), url = URL.createObjectURL(file);
+      v.muted = true; v.playsInline = true; v.preload = "metadata";
+      const done = t => { clearTimeout(timer); URL.revokeObjectURL(url); res(t); };
+      const timer = setTimeout(() => done(""), 8000);
+      v.onerror = () => done("");
+      v.onloadeddata = () => { try { v.currentTime = Math.min(1, (v.duration || 2) / 2); } catch (e) { done(""); } };
+      v.onseeked = () => {
+        try {
+          const w = 480, h = Math.max(1, Math.round(w * (v.videoHeight || 270) / (v.videoWidth || 480)));
+          const c = document.createElement("canvas"); c.width = w; c.height = h; c.getContext("2d").drawImage(v, 0, 0, w, h);
+          done(c.toDataURL("image/jpeg", 0.7));
+        } catch (e) { done(""); }
+      };
+      v.src = url;
+    } catch (e) { res(""); }
+  });
+}
+async function uploadVideo(file, onProgress) {
+  if (navigator.onLine === false) throw Object.assign(new Error("offline"), { code: "app/offline" });
+  if (file.size > MAX_VIDEO) throw Object.assign(new Error("too big"), { code: "app/too-big" });
+  const thumbP = videoThumb(file);
+  const { m, st } = await storageLib();
+  const path = "videos/" + myUid() + "/" + Date.now() + "-" + String(file.name || "video").replace(/[^A-Za-z0-9._-]/g, "_").slice(-60);
+  const r = m.ref(st, path);
+  const task = m.uploadBytesResumable(r, file, { contentType: file.type || "video/mp4" });
+  await new Promise((res, rej) => task.on("state_changed", sn => { if (onProgress) onProgress(Math.round(100 * sn.bytesTransferred / sn.totalBytes)); }, rej, res));
+  return { url: await m.getDownloadURL(r), path, thumb: await thumbP };
+}
+function videoErr(err) {
+  const c = (err && err.code) || "";
+  if (c === "app/offline") return "Videos need the internet. Connect and try again.";
+  if (c === "app/too-big") return "That video is bigger than 80 MB. Choose a shorter one, or set the camera to a lower quality.";
+  if (c.indexOf("storage/") === 0 || c === "app/storage") return "Videos are not switched on yet. Ask the administrator to turn on Firebase Storage and publish its rules.";
+  return "The video could not be sent. Check your internet and try again.";
+}
+async function removeVideoFile(path) {
+  if (!path) return;
+  try { const { m, st } = await storageLib(); await m.deleteObject(m.ref(st, path)); } catch (e) { /* the entry is gone anyway */ }
 }
 
 // ---------- Share ----------

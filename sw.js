@@ -1,6 +1,6 @@
 // Basoga's Legacy: opens instantly from the phone's saved copy, refreshes quietly in the background,
 // and keeps working with no internet. Change the CACHE name when a new release must replace the old files.
-const CACHE = "basoga-v9";
+const CACHE = "basoga-v10";
 const SHELL = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png"];
 const FIREBASE = [
   "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
