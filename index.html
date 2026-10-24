@@ -387,11 +387,53 @@ input.sw:checked{background:#2fc4a0}input.sw:checked::after{transform:translateX
 .pw-wrap input{padding-right:78px}
 button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:auto;margin:0;padding:8px 12px;background:transparent;color:var(--gold2);border:none;font-weight:700;font-size:.9rem}
 .google-hint{color:var(--muted);font-size:.8rem;text-align:center;margin:10px 0 0}
+.sub-h{margin:14px 0 4px;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2)}
+button.pick-btn{width:auto;margin:0;padding:8px 12px;font-size:.85rem;flex:none}
+
+/* family story */
+.story-pane .card{margin-bottom:14px}
+.story-form{margin-top:10px}
+.story-form textarea{width:100%;resize:vertical;min-height:90px}
+.story-attach{display:flex;gap:8px;flex-wrap:wrap}
+.story-attach button{flex:1;min-width:130px}
+.attached{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.att{position:relative;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border-radius:12px;padding:6px 10px;font-size:.85rem}
+.att img{height:54px;border-radius:8px}
+.att button{width:26px;height:26px;margin:0;padding:0;border-radius:50%;background:var(--danger);color:#fff;line-height:1}
+.timeline{position:relative;padding-left:18px;border-left:2px solid rgba(246,211,107,.45);margin-left:8px}
+.tl-item{position:relative;margin:0 0 14px}
+.tl-item::before{content:"";position:absolute;left:-27px;top:16px;width:14px;height:14px;border-radius:50%;background:var(--gold2);border:3px solid #0b2f21}
+.tl-year{font-weight:800;color:var(--gold2);font-size:1.15rem;margin-bottom:4px}
+.tl-card h3,.ach-card h3,.mem-card h3{margin:0 0 6px;color:#fff;font-size:1.05rem}
+.s-text{white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.s-photo{display:block;width:100%;max-height:300px;object-fit:cover;border-radius:12px;margin:6px 0}
+.s-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;color:var(--muted)}
+.s-foot span{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.wait{background:rgba(246,211,107,.18);color:var(--gold2);padding:3px 10px;border-radius:99px;font-size:.75rem;font-weight:700}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px}
+.chip,.chips button{flex:none;width:auto;margin:0;padding:7px 14px;border-radius:99px;background:rgba(255,255,255,.08);color:var(--muted);border:none;font-size:.82rem;font-weight:700}
+.chips button.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1b1500}
+.chip{display:inline-block;background:rgba(47,196,160,.18);color:#8ff0d6;margin-bottom:6px;padding:4px 12px}
+.ach-who{color:var(--gold2);font-weight:700;margin-bottom:4px}
+button.cong{width:auto;margin:6px 8px 0 0;padding:8px 14px;font-size:.88rem;background:transparent;border:1px solid var(--gold2);color:var(--gold2)}
+button.cong.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1b1500}
+button.cong .ico{width:16px;height:16px;margin-right:4px}
+.mem-card .s-photo{max-height:360px;filter:grayscale(.15)}
+.mem-dates{color:var(--gold2);font-weight:700;margin-bottom:2px}
+.mem-totem{color:var(--muted);font-size:.85rem;margin-bottom:6px}
+.mem-card blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--gold2);font-style:italic;color:#fff}
+.mem-card a.map{color:var(--teal)}
+.tributes{margin-top:8px;border-top:1px solid rgba(255,255,255,.1);padding-top:8px}
+.tr-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
+.tr-row b{color:var(--gold2)}
+.tr-row a{color:var(--muted);font-size:.8rem;margin-left:6px}
+.tr-form{display:flex;gap:8px;margin-top:8px}
+.tr-form input{flex:1;min-width:0;margin:0}
 </style>
 </head>
 <body>
 <div id="splash"><img src="icon-192.png" alt="" width="96" height="96"><p>BASOGA'S LEGACY</p></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-checks" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-checks" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
 <header>
   <div class="slot"><button type="button" id="btn-menu" class="menu-btn hidden" aria-label="Open menu" aria-controls="drawer"><span></span><span></span><span></span></button></div>
   <div class="brand"><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></div>
@@ -490,6 +532,11 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
           <button type="button" class="btn-secondary" id="share-copy">Copy link</button>
         </div>
         <div id="share-msg" class="msg"></div>
+      </div>
+
+      <div class="card hidden" id="home-remember">
+        <h2><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg> In remembrance today</h2>
+        <div id="home-remember-list"></div>
       </div>
 
       <div class="dash">
@@ -739,6 +786,75 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
       <div class="card"><h2>Recent calls</h2><div id="call-log"></div></div>
     </div>
 
+    <!-- FAMILY STORY -->
+    <div id="section-story" class="tab-content hidden">
+      <div class="seg" id="story-seg"><button type="button" class="on" data-pane="history">History</button><button type="button" data-pane="ach">Achievements</button><button type="button" data-pane="mem">In Memory</button></div>
+
+      <div class="story-pane" id="pane-history">
+      <div class="card">
+        <h2>Our History</h2>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:6px">Where we came from and the moments that shaped us. Anyone can add. An entry shows to everyone after the administrator approves it.</p>
+        <button type="button" id="history-toggle">＋ Add to our history</button>
+        <form id="form-history" class="hidden story-form" autocomplete="off">
+          <label for="history-year">Year</label><input type="number" id="history-year" min="1000" max="2100" required>
+          <label for="history-title">Title</label><input type="text" id="history-title" maxlength="90" required placeholder="e.g. The family settled in Kaliro">
+          <label for="history-text">The story</label><textarea id="history-text" rows="5" maxlength="1500" required></textarea>
+          <div class="story-attach"><button type="button" class="btn-secondary" id="history-photo-btn">Add a photo</button><button type="button" class="btn-secondary" id="history-voice-btn">Record a voice story</button></div>
+          <input type="file" id="history-photo" accept="image/*" class="hidden">
+          <div id="history-attached" class="attached"></div>
+          <button type="submit">Save</button>
+        </form>
+        <div id="history-msg" class="msg"></div>
+      </div>
+      <div id="history-list"></div>
+      </div>
+
+      <div class="story-pane hidden" id="pane-ach">
+      <div class="card">
+        <h2>Achievements</h2>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:6px">Graduations, jobs, businesses, weddings, births and awards worth celebrating. Entries show after the administrator approves them.</p>
+        <button type="button" id="ach-toggle">＋ Add an achievement</button>
+        <form id="form-ach" class="hidden story-form" autocomplete="off">
+          <label for="ach-person">Who</label><input type="text" id="ach-person" list="ach-names" maxlength="80" required placeholder="Start typing a name"><datalist id="ach-names"></datalist>
+          <label for="ach-title">What was achieved</label><input type="text" id="ach-title" maxlength="100" required placeholder="e.g. Graduated with a degree in nursing">
+          <label for="ach-cat">Kind</label><select id="ach-cat"></select>
+          <label for="ach-year">Year</label><input type="number" id="ach-year" min="1900" max="2100" required>
+          <label for="ach-text">A few words (optional)</label><textarea id="ach-text" rows="3" maxlength="800"></textarea>
+          <div class="story-attach"><button type="button" class="btn-secondary" id="ach-photo-btn">Add a photo</button></div>
+          <input type="file" id="ach-photo" accept="image/*" class="hidden">
+          <div id="ach-attached" class="attached"></div>
+          <button type="submit">Save</button>
+        </form>
+        <div id="ach-msg" class="msg"></div>
+      </div>
+      <div id="ach-filter" class="chips"></div>
+      <div id="ach-list"></div>
+      </div>
+
+      <div class="story-pane hidden" id="pane-mem">
+      <div class="card">
+        <h2>In Loving Memory</h2>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:6px">Honouring those who have passed on. Entries show after the administrator approves them.</p>
+        <button type="button" id="mem-toggle">＋ Remember someone</button>
+        <form id="form-mem" class="hidden story-form" autocomplete="off">
+          <label for="mem-name">Full name</label><input type="text" id="mem-name" maxlength="90" required>
+          <label for="mem-born">Born (optional)</label><input type="date" id="mem-born">
+          <label for="mem-died">Passed on</label><input type="date" id="mem-died" required>
+          <label for="mem-totem">Clan and totem (optional)</label><input type="text" id="mem-totem" maxlength="80">
+          <label for="mem-saying">A favourite saying or verse (optional)</label><input type="text" id="mem-saying" maxlength="160">
+          <label for="mem-text">Their life story</label><textarea id="mem-text" rows="5" maxlength="1500"></textarea>
+          <label for="mem-burial">Resting place (optional)</label><input type="text" id="mem-burial" maxlength="120" placeholder="e.g. Kasokwe, Kaliro">
+          <div class="story-attach"><button type="button" class="btn-secondary" id="mem-photo-btn">Add a photo</button><button type="button" class="btn-secondary" id="mem-voice-btn">Record a voice story</button></div>
+          <input type="file" id="mem-photo" accept="image/*" class="hidden">
+          <div id="mem-attached" class="attached"></div>
+          <button type="submit">Save</button>
+        </form>
+        <div id="mem-msg" class="msg"></div>
+      </div>
+      <div id="mem-list"></div>
+      </div>
+    </div>
+
     <!-- ADMIN -->
     <div id="section-admin" class="tab-content hidden">
       <div class="card">
@@ -747,6 +863,15 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
         <p id="seed-msg" style="color:var(--gold2);font-size:.8rem;margin-bottom:10px"></p>
         <p style="color:var(--muted);font-size:.85rem;margin-bottom:15px">Approve, block or remove registered family accounts. Only administrators can delete members and accounts.</p>
         <div id="admin-user-list"></div>
+      </div>
+      <div class="card">
+        <h2>Administrators</h2>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:8px">Administrators can approve people, delete posts and manage accounts. Choose carefully.</p>
+        <div class="sub-h">Current administrators</div>
+        <div id="admin-current"></div>
+        <div class="sub-h">Make someone an administrator</div>
+        <input type="search" id="admin-pick-q" placeholder="Search members by name" autocomplete="off">
+        <div id="admin-pick"></div>
       </div>
       <div class="card">
         <h2>Joining the app</h2>
@@ -814,6 +939,8 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
 <aside id="drawer" aria-label="Menu">
   <div class="dr-head"><img id="dr-avatar" alt=""><div><b id="dr-name">Family</b><small id="dr-role"></small></div></div>
   <div class="dr-list">
+    <div class="dr-sec">Family</div>
+    <button type="button" data-tab="story"><span><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg> </span>Family Story</button>
     <div class="dr-sec">Tools</div>
     <button type="button" data-tab="checkin"><span><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> </span>Check in / out<small id="tile-ci" class="dr-note"></small></button>
     <div class="dr-sec">Account</div>
@@ -874,7 +1001,7 @@ button.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, sendPasswordResetEmail, sendEmailVerification, EmailAuthProvider, linkWithCredential, updatePassword, fetchSignInMethodsForEmail, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getDocFromCache, getDocsFromCache, doc, setDoc, getDoc as fsGetDoc, collection, addDoc, getDocs as fsGetDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot, where, arrayUnion, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getDocFromCache, getDocsFromCache, doc, setDoc, getDoc as fsGetDoc, collection, addDoc, getDocs as fsGetDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit, onSnapshot, where, arrayUnion, arrayRemove, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJoxAeEX_XXSeMq8MPSa5UorjUKxAvncE",
@@ -1268,17 +1395,18 @@ $("chat-list").addEventListener("click", async e => {
 const VN_MAX = 60;
 let vn = null;
 const vnMime = () => (window.MediaRecorder ? ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"].find(t => MediaRecorder.isTypeSupported(t)) : "") || "";
-async function vnOpen() {
+async function vnOpen(target) {
   if (vn) return;
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { say("chat-msg", "Voice notes are not supported on this browser.", false); return; }
+  const vnNote = m => (target ? alert(m) : say("chat-msg", m, false));
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { vnNote("Voice notes are not supported on this browser."); return; }
   let stream;
   try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
-  catch (err) { say("chat-msg", err && err.name === "NotAllowedError" ? "The microphone is blocked. Allow the microphone for this site in your browser settings, then try again." : "No microphone was found.", false); return; }
+  catch (err) { vnNote(err && err.name === "NotAllowedError" ? "The microphone is blocked. Allow the microphone for this site in your browser settings, then try again." : "No microphone was found."); return; }
   const mime = vnMime();
   let rec;
   try { rec = new MediaRecorder(stream, mime ? { mimeType: mime, audioBitsPerSecond: 24000 } : { audioBitsPerSecond: 24000 }); }
-  catch (err) { stream.getTracks().forEach(t => t.stop()); say("chat-msg", "Voice notes are not supported on this browser.", false); return; }
-  vn = { stream, rec, chunks: [], t0: Date.now(), mime: rec.mimeType || mime, send: false };
+  catch (err) { stream.getTracks().forEach(t => t.stop()); vnNote("Voice notes are not supported on this browser."); return; }
+  vn = { stream, rec, chunks: [], t0: Date.now(), mime: rec.mimeType || mime, send: false, target: typeof target === "function" ? target : null };
   rec.ondataavailable = e => { if (e.data && e.data.size) vn.chunks.push(e.data); };
   rec.onstop = vnFinish;
   rec.start(500);
@@ -1329,19 +1457,23 @@ async function vnFinish() {
   const url = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(blob); }).catch(() => "");
   if (!AUD_OK.test(url)) { say("chat-msg", "This browser made a voice note the site cannot send. Try Chrome.", false); return; }
   if (url.length > 850000) { say("chat-msg", "That voice note is too long. Keep it under a minute.", false); return; }
+  if (v.target) {
+    if (url.length > 600000) { alert("That voice story is too long. Please keep it under a minute."); return; }
+    v.target(url, dur); return;
+  }
   $("chat-msg").style.display = "none";
   await queued(addDoc(collection(db, "messages"), { uid: myUid(), name: (currentUserDoc && currentUserDoc.name) || "Family", text: "", photo: "", audio: url, dur, at: serverTimestamp() }), err => {
     say("chat-msg", err.code === "permission-denied" ? "The database rules do not allow chat yet. Ask the administrator to publish the updated rules." : "Voice note not sent. Try again.", false);
   });
   chatFirst = true;
 }
-$("chat-mic").addEventListener("click", vnOpen);
+$("chat-mic").addEventListener("click", () => vnOpen());
 $("vn-send").addEventListener("click", () => vnStop(true));
 $("vn-cancel").addEventListener("click", () => vnStop(false));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && vn) vnStop(false); });
 window.addEventListener("popstate", () => { if (vn) vnStop(false); });
 
-function stopLive() { if (unsubNote) unsubNote(); unsubNote = null; setUnread(0); stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
+function stopLive() { stopStory(); if (unsubNote) unsubNote(); unsubNote = null; setUnread(0); stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
 function startChat() {
   if (unsubChat) return;
   chatFirst = true;
@@ -1354,7 +1486,7 @@ function startLive() {
   stopLive();
   startPresence();
   try { sessionStartActive = Number(localStorage.getItem("active:" + myUid()) || 0); } catch (e) {}
-  touchActive(); renderNotes(); loadMissedCalls();
+  touchActive(); renderNotes(); loadMissedCalls(); checkRemembrance();
   startNotifier(); showNotifCard();
   unsubCi = onSnapshot(query(collection(db, "checkins"), orderBy("at", "desc"), limit(80)),
     snap => { ciDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderCheckins(); },
@@ -1374,7 +1506,7 @@ $("ci-btn").addEventListener("click", async () => {
 });
 
 // ---------- Tabs ----------
-const NAV_FOR = { "member": "tree", "add-member": "tree", "add-grandchild": "grandchildren", "calls": "chat" };
+const NAV_FOR = { "member": "tree", "add-member": "tree", "add-grandchild": "grandchildren", "calls": "chat", "story": "story" };
 function closeDrawer() { $("drawer").classList.remove("open"); $("scrim").classList.remove("open"); }
 function closeFab() { $("fab-menu").classList.remove("open"); $("fab").classList.remove("on"); }
 function renderTab(tab) {
@@ -1395,6 +1527,7 @@ window.showTab = function (tab) {
   renderTab(tab);
   markNav(tab);
   if (tab === "chat") { startChat(); setUnread(0); markReceipts(); }
+  if (tab === "story") startStory();
   if (tab === "calls") openCallsTab();
   if (tab === "chat") setTimeout(() => { const b = $("chat-list"); b.scrollTop = b.scrollHeight; }, 0);
   if (!navPopping) {
@@ -1844,12 +1977,24 @@ function seedDirectory(users) {
   Promise.all(ok.map(u => setDoc(doc(db, "directory", u.uid), { uid: u.uid, name: u.name || "Family" }, { merge: true })))
     .then(() => { try { localStorage.setItem("dirSig", sig); } catch (e) {} }).catch(() => {});
 }
+let adminUsers = [];
+function renderAdminRoles() {
+  const me = myUid();
+  const row = (u, btn) => `<div class="ct-row"><div class="ct-av" data-av="${esc(u.uid)}" data-nm="${esc(u.name || "")}">${avatarHTML(u.uid, u.name)}</div><div class="ct-info"><b>${esc(u.name || "Unnamed")}${u.uid === me ? " (You)" : ""}</b><span style="overflow-wrap:anywhere">${esc(u.email || "")}</span></div>${btn}</div>`;
+  const admins = adminUsers.filter(u => u.status === "approved" && u.role === "admin");
+  $("admin-current").innerHTML = admins.length ? admins.map(u => row(u, u.uid === me ? "" : `<button type="button" class="btn-secondary pick-btn" data-uact="member" data-uid="${esc(u.uid)}">Remove admin</button>`)).join("") : `<p class="chat-empty">No administrators yet.</p>`;
+  const q = $("admin-pick-q").value.trim().toLowerCase();
+  const cand = adminUsers.filter(u => u.status === "approved" && u.role !== "admin" && (!q || (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q)));
+  $("admin-pick").innerHTML = cand.length ? cand.map(u => row(u, `<button type="button" class="pick-btn" data-uact="admin" data-uid="${esc(u.uid)}">Make admin</button>`)).join("") : `<p class="chat-empty">${q ? "No member matches that name." : "No other approved members yet."}</p>`;
+}
+$("admin-pick-q").addEventListener("input", renderAdminRoles);
 async function loadPendingUsers() {
   if (!isAdmin()) return;
   const list = $("admin-user-list");
   const snap = await getDocs(collection(db, "users"));
   const users = [];
   snap.forEach(d => users.push(d.data()));
+  adminUsers = users.slice(); renderAdminRoles();
   const order = { pending: 0, approved: 1, blocked: 2 };
   users.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3) || (a.name || "").localeCompare(b.name || ""));
   pendingCount = users.filter(u => u.status === "pending").length;
@@ -1873,7 +2018,7 @@ async function loadPendingUsers() {
   }).join("") : `<p style="color:var(--muted)">No registered accounts yet.</p>`;
   updateHome();
 }
-$("admin-user-list").addEventListener("click", async e => {
+const onUserAction = async e => {
   const b = e.target.closest("[data-uact]");
   if (!b || !isAdmin()) return;
   const uid = b.dataset.uid, act = b.dataset.uact;
@@ -1881,12 +2026,13 @@ $("admin-user-list").addEventListener("click", async e => {
   try {
     if (act === "approve") await updateDoc(doc(db, "users", uid), { status: "approved" });
     else if (act === "block") { if (!confirm("Block this person? They will lose access until you approve them again.")) return; await updateDoc(doc(db, "users", uid), { status: "blocked" }); }
-    else if (act === "admin") { if (!confirm("Make this person an administrator? Admins can delete members and manage accounts.")) return; await updateDoc(doc(db, "users", uid), { role: "admin" }); }
-    else if (act === "member") await updateDoc(doc(db, "users", uid), { role: "member" });
+    else if (act === "admin") { if (!confirm("Make this person an administrator? They will be able to approve people, delete posts and manage accounts.")) return; await updateDoc(doc(db, "users", uid), { role: "admin" }); }
+    else if (act === "member") { if (!confirm("Remove this person's administrator rights? They stay a member.")) return; await updateDoc(doc(db, "users", uid), { role: "member" }); }
     else if (act === "remove") { if (!confirm("Remove this registered account permanently? Use Block instead if you may want them back.")) return; await deleteDoc(doc(db, "users", uid)); }
     loadPendingUsers();
   } catch (err) { alert("Could not do that: " + err.message); }
-});
+};
+["admin-user-list", "admin-current", "admin-pick"].forEach(id => $(id).addEventListener("click", onUserAction));
 
 // ---------- Family email list (auto-approve) ----------
 async function loadJoinSwitch() {
@@ -2682,6 +2828,159 @@ $("form-setpw").addEventListener("submit", async e => {
     say("setpw-msg", c === "auth/requires-recent-login" ? "For your safety: sign out, sign in with Google again, then set the password." : c === "auth/weak-password" ? "Please choose at least 6 characters." : c === "auth/network-request-failed" ? "No internet connection." : "Could not save the password. Try again.", false);
   }
 });
+
+// ---------- Family Story: history, achievements, in loving memory ----------
+const STORY = { history: { col: "history", docs: [] }, ach: { col: "achievements", docs: [] }, mem: { col: "memorials", docs: [] } };
+const storyUnsubs = [];
+const attach = { history: { photo: "", audio: null }, ach: { photo: "", audio: null }, mem: { photo: "", audio: null } };
+const ACH_CATS = ["Education", "Career", "Business", "Marriage", "Birth", "Award", "Faith", "Other"];
+let achFilter = "all", storyStarted = false;
+const fmtDay = d => { try { return new Date(d + "T00:00:00").toLocaleDateString([], { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return d; } };
+const storyVisible = d => d.status === "approved" || isAdmin() || d.by === myUid();
+const mediaHTML = d =>
+  (typeof d.photo === "string" && IMG_OK.test(d.photo) ? `<img class="s-photo" loading="lazy" decoding="async" src="${d.photo}" alt="">` : "") +
+  (typeof d.audio === "string" && AUD_OK.test(d.audio) ? `<div class="vn-msg"><audio controls preload="none" src="${d.audio}"></audio><span>${fmtDur(d.dur || 0)}</span></div>` : "");
+function storyFoot(kind, d) {
+  const bits = [];
+  if (d.status === "pending") bits.push(`<span class="wait">Waiting for approval</span>`);
+  if (d.status === "pending" && isAdmin()) bits.push(`<button type="button" class="pick-btn" data-sact="approve" data-kind="${kind}" data-id="${esc(d.id)}">Approve</button>`);
+  if (isAdmin() || d.by === myUid()) bits.push(`<button type="button" class="btn-secondary pick-btn" data-sact="delete" data-kind="${kind}" data-id="${esc(d.id)}">Delete</button>`);
+  return `<div class="s-foot"><small>Added by ${esc(d.byName || "the family")}</small><span>${bits.join(" ")}</span></div>`;
+}
+function renderHistory() {
+  const rows = STORY.history.docs.filter(storyVisible).sort((a, b) => (a.year || 0) - (b.year || 0) || msOf(a.createdAt) - msOf(b.createdAt));
+  $("history-list").innerHTML = rows.length
+    ? `<div class="timeline">` + rows.map(d => `<div class="tl-item"><div class="tl-year">${esc(d.year)}</div><div class="card tl-card"><h3>${esc(d.title)}</h3>${mediaHTML(d)}<p class="s-text">${esc(d.story)}</p>${storyFoot("history", d)}</div></div>`).join("") + `</div>`
+    : `<p class="chat-empty">Nothing here yet. Add the first part of our history.</p>`;
+}
+function renderAch() {
+  $("ach-filter").innerHTML = ["all", ...ACH_CATS].map(c => `<button type="button" data-cat="${esc(c)}" class="${achFilter === c ? "on" : ""}">${c === "all" ? "All" : esc(c)}</button>`).join("");
+  const rows = STORY.ach.docs.filter(storyVisible).filter(d => achFilter === "all" || d.category === achFilter)
+    .sort((a, b) => (b.year || 0) - (a.year || 0) || msOf(b.createdAt) - msOf(a.createdAt));
+  const me = myUid();
+  $("ach-list").innerHTML = rows.length ? rows.map(d => {
+    const n = (d.congrats || []).length, on = (d.congrats || []).indexOf(me) >= 0;
+    return `<div class="card ach-card"><span class="chip">${esc(d.category || "Other")}</span><h3>${esc(d.title)}</h3><div class="ach-who">${esc(d.person)} · ${esc(d.year)}</div>${mediaHTML(d)}${d.story ? `<p class="s-text">${esc(d.story)}</p>` : ""}<button type="button" class="cong${on ? " on" : ""}" data-sact="cong" data-kind="ach" data-id="${esc(d.id)}">Congratulations${n ? " · " + n : ""}</button>${storyFoot("ach", d)}</div>`;
+  }).join("") : `<p class="chat-empty">${achFilter === "all" ? "No achievements yet. Add the first one." : "Nothing in this group yet."}</p>`;
+}
+function renderMem() {
+  const rows = STORY.mem.docs.filter(storyVisible).sort((a, b) => String(b.died || "").localeCompare(String(a.died || "")));
+  const me = myUid();
+  $("mem-list").innerHTML = rows.length ? rows.map(d => {
+    const n = (d.candles || []).length, on = (d.candles || []).indexOf(me) >= 0;
+    const age = d.born && d.died ? Math.floor((new Date(d.died) - new Date(d.born)) / 31557600000) : null;
+    const dates = (d.born ? fmtDay(d.born) + " – " : "") + (d.died ? fmtDay(d.died) : "") + (age !== null && age >= 0 ? " · " + age + " years" : "");
+    const tribId = esc(d.id);
+    return `<div class="card mem-card">${mediaHTML({ photo: d.photo })}<h3>${esc(d.name)}</h3><div class="mem-dates">${esc(dates)}</div>${d.totem ? `<div class="mem-totem">${esc(d.totem)}</div>` : ""}${d.saying ? `<blockquote>“${esc(d.saying)}”</blockquote>` : ""}${d.story ? `<p class="s-text">${esc(d.story)}</p>` : ""}${mediaHTML({ audio: d.audio, dur: d.dur })}${d.burial ? `<p>Resting place: ${esc(d.burial)} · <a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.burial)}">Open map</a></p>` : ""}<div><button type="button" class="cong${on ? " on" : ""}" data-sact="candle" data-kind="mem" data-id="${tribId}">${IC("flame")}Light a candle${n ? " · " + n : ""}</button><button type="button" class="cong" data-sact="tributes" data-kind="mem" data-id="${tribId}">Tributes</button></div><div class="tributes hidden" id="tr-${tribId}"></div>${storyFoot("mem", d)}</div>`;
+  }).join("") : `<p class="chat-empty">No one added yet.</p>`;
+}
+const STORY_DRAW = { history: renderHistory, ach: renderAch, mem: renderMem };
+function renderAttached(kind) {
+  const a = attach[kind];
+  $(kind + "-attached").innerHTML =
+    (a.photo ? `<span class="att"><img src="${a.photo}" alt="">Photo<button type="button" data-attx="photo" data-kind="${kind}" aria-label="Remove photo">×</button></span>` : "") +
+    (a.audio ? `<span class="att">Voice story ${fmtDur(a.audio.dur)}<button type="button" data-attx="audio" data-kind="${kind}" aria-label="Remove voice story">×</button></span>` : "");
+}
+function storyNotes() {
+  if (!isAdmin()) return;
+  Object.keys(STORY).forEach(k => STORY[k].docs.filter(d => d.status === "pending").forEach(d =>
+    addNote({ id: "story:" + k + ":" + d.id, title: "Family Story: waiting for approval", body: (d.byName || "Someone") + ": " + (d.title || d.name || d.person || "new entry"), tab: "story", ts: msOf(d.createdAt) || Date.now() })));
+}
+function startStory() {
+  if (storyStarted) return;
+  storyStarted = true;
+  Object.keys(STORY).forEach(k => {
+    storyUnsubs.push(onSnapshot(collection(db, STORY[k].col), snap => {
+      STORY[k].docs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }));
+      STORY_DRAW[k](); storyNotes();
+      if (k === "ach") $("ach-names").innerHTML = [...new Set(members.map(m => m.name).filter(Boolean))].map(n => `<option value="${esc(n)}">`).join("");
+    }, err => liveErr($(k + "-list"), err)));
+  });
+}
+function stopStory() { storyUnsubs.splice(0).forEach(u => u()); storyStarted = false; Object.keys(STORY).forEach(k => { STORY[k].docs = []; }); }
+async function saveStory(kind, data) {
+  const a = attach[kind], msg = kind + "-msg";
+  const full = { ...data, photo: a.photo || "", audio: a.audio ? a.audio.url : "", dur: a.audio ? a.audio.dur : 0, by: myUid(), byName: myName(), status: isAdmin() ? "approved" : "pending", createdAt: serverTimestamp() };
+  if (JSON.stringify(full).length > 900000) { say(msg, "That is too big. Remove the voice story or use a smaller photo.", false); return; }
+  let bad = false;
+  await queued(addDoc(collection(db, STORY[kind].col), full), err => {
+    bad = true;
+    say(msg, err.code === "permission-denied" ? "The database rules do not allow this yet. Ask the administrator to publish the updated rules." : "Could not save. Try again.", false);
+  });
+  if (bad) return;
+  $("form-" + kind).reset(); $("form-" + kind).classList.add("hidden");
+  attach[kind] = { photo: "", audio: null }; renderAttached(kind);
+  say(msg, isAdmin() ? "Saved." : "Thank you. It will show to everyone after the administrator approves it.");
+}
+["history", "ach", "mem"].forEach(kind => {
+  $(kind + "-toggle").addEventListener("click", () => $("form-" + kind).classList.toggle("hidden"));
+  $(kind + "-photo-btn").addEventListener("click", () => $(kind + "-photo").click());
+  $(kind + "-photo").addEventListener("change", async e => {
+    const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+    try { attach[kind].photo = await compressImage(f, 600); renderAttached(kind); } catch (err) { say(kind + "-msg", "That photo could not be added.", false); }
+  });
+  const vb = $(kind + "-voice-btn");
+  if (vb) vb.addEventListener("click", () => vnOpen((url, dur) => { attach[kind].audio = { url, dur }; renderAttached(kind); }));
+  $(kind + "-attached").addEventListener("click", e => {
+    const b = e.target.closest("[data-attx]"); if (!b) return;
+    attach[kind][b.dataset.attx] = b.dataset.attx === "photo" ? "" : null; renderAttached(kind);
+  });
+});
+$("ach-cat").innerHTML = ACH_CATS.map(c => `<option>${c}</option>`).join("");
+$("form-history").addEventListener("submit", e => { e.preventDefault(); saveStory("history", { year: Number($("history-year").value), title: $("history-title").value.trim(), story: $("history-text").value.trim() }); });
+$("form-ach").addEventListener("submit", e => { e.preventDefault(); saveStory("ach", { person: $("ach-person").value.trim(), title: $("ach-title").value.trim(), category: $("ach-cat").value, year: Number($("ach-year").value), story: $("ach-text").value.trim() }); });
+$("form-mem").addEventListener("submit", e => {
+  e.preventDefault();
+  const died = $("mem-died").value;
+  saveStory("mem", { name: $("mem-name").value.trim(), born: $("mem-born").value, died, rm: died.slice(5), diedYear: died.slice(0, 4), totem: $("mem-totem").value.trim(), saying: $("mem-saying").value.trim(), story: $("mem-text").value.trim(), burial: $("mem-burial").value.trim(), candles: [] });
+});
+$("story-seg").addEventListener("click", e => {
+  const b = e.target.closest("[data-pane]"); if (!b) return;
+  $("story-seg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".story-pane").forEach(pn => pn.classList.toggle("hidden", pn.id !== "pane-" + b.dataset.pane));
+});
+$("ach-filter").addEventListener("click", e => { const b = e.target.closest("[data-cat]"); if (!b) return; achFilter = b.dataset.cat; renderAch(); });
+async function loadTributes(id) {
+  const box = $("tr-" + id); if (!box) return;
+  try {
+    const sn = await getDocs(query(collection(db, "tributes"), where("memorialId", "==", id)));
+    const rows = []; sn.forEach(d => rows.push({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }));
+    rows.sort((a, b) => msOf(a.at) - msOf(b.at));
+    box.innerHTML = (rows.map(t => `<div class="tr-row"><b>${esc(t.name || "Family")}</b> ${esc(t.text)}${(isAdmin() || t.uid === myUid()) ? ` <a href="#" data-sact="tribute-del" data-id="${esc(id)}" data-tid="${esc(t.id)}">Delete</a>` : ""}</div>`).join("") || `<p class="chat-empty">Be the first to leave a tribute.</p>`)
+      + `<div class="tr-form"><input type="text" id="trin-${esc(id)}" maxlength="300" placeholder="Write a tribute"><button type="button" class="pick-btn" data-sact="tribute-send" data-id="${esc(id)}">Send</button></div>`;
+  } catch (e) { liveErr(box, e); }
+}
+$("section-story").addEventListener("click", async e => {
+  const b = e.target.closest("[data-sact]"); if (!b) return;
+  if (b.tagName === "A") e.preventDefault();
+  const act = b.dataset.sact, kind = b.dataset.kind, id = b.dataset.id, col = STORY[kind] && STORY[kind].col, ref = col ? doc(db, col, id) : null;
+  if (act === "approve" && isAdmin()) await queued(updateDoc(ref, { status: "approved" }), () => alert("Could not approve. Publish the updated database rules."));
+  else if (act === "delete") { if (confirm("Delete this for everyone?")) await queued(deleteDoc(ref), () => alert("Could not delete it.")); }
+  else if (act === "cong" || act === "candle") {
+    const field = act === "cong" ? "congrats" : "candles", d = STORY[kind].docs.find(x => x.id === id);
+    const has = !!d && (d[field] || []).indexOf(myUid()) >= 0;
+    await queued(updateDoc(ref, { [field]: has ? arrayRemove(myUid()) : arrayUnion(myUid()) }));
+  }
+  else if (act === "tributes") { const box = $("tr-" + id); if (box.classList.toggle("hidden") === false) loadTributes(id); }
+  else if (act === "tribute-send") {
+    const inp = $("trin-" + id), text = inp ? inp.value.trim() : ""; if (!text) return; inp.value = "";
+    await queued(addDoc(collection(db, "tributes"), { memorialId: id, uid: myUid(), name: myName(), text, at: serverTimestamp() }), () => alert("Could not send the tribute."));
+    setTimeout(() => loadTributes(id), 400);
+  }
+  else if (act === "tribute-del") { await queued(deleteDoc(doc(db, "tributes", b.dataset.tid))); setTimeout(() => loadTributes(id), 400); }
+});
+// On the day someone passed on, the family is reminded.
+async function checkRemembrance() {
+  const d = new Date(), md = String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  try {
+    const sn = await getDocs(query(collection(db, "memorials"), where("rm", "==", md)));
+    const rows = []; sn.forEach(x => { const m = x.data(); if (m.status === "approved") rows.push({ id: x.id, ...m }); });
+    if (!rows.length) return;
+    $("home-remember").classList.remove("hidden");
+    $("home-remember-list").innerHTML = rows.map(m => `<div class="ci-row"><b>${esc(m.name)}</b><span>passed on this day${m.diedYear ? " in " + esc(m.diedYear) : ""}</span></div>`).join("");
+    rows.forEach(m => addNote({ id: "remember:" + m.id + ":" + d.getFullYear(), title: "In remembrance today", body: m.name + " passed on this day" + (m.diedYear ? " in " + m.diedYear : ""), tab: "story", ts: Date.now() }));
+  } catch (e) { /* the page still works without it */ }
+}
 
 // ---------- Share ----------
 const SHARE_TEXT = "Join our family portal, Basoga's Legacy. Open the link, register with your email, and welcome home.";
