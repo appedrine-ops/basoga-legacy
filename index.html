@@ -430,11 +430,19 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
 .tr-form{display:flex;gap:8px;margin-top:8px}
 .tr-form input{flex:1;min-width:0;margin:0}
 .chat-vid{display:block;max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;background:#000}
+/* verified badges */
+.bd{display:inline-flex;vertical-align:-3px;margin-left:4px;cursor:pointer}
+.bd svg{width:17px;height:17px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bd-verified svg{fill:#1d9bf0;stroke:#fff}
+.bd-elder svg{fill:#1d9bf0;stroke:#fff}
+select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88rem;flex:none}
+#toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:88%;background:#0b2f21;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:10px 16px;font-size:.9rem;z-index:3000;box-shadow:0 8px 28px rgba(0,0,0,.5);text-align:center}
 </style>
 </head>
 <body>
+<div id="toast" class="hidden" role="status"></div>
 <div id="splash"><img src="icon-192.png" alt="" width="96" height="96"><p>BASOGA'S LEGACY</p></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-checks" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol><symbol id="i-baby" viewBox="0 0 24 24"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></symbol><symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></symbol><symbol id="i-party" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></symbol><symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="i-tree" viewBox="0 0 24 24"><path d="M8 19a4 4 0 0 1-2.24-7.32A3.5 3.5 0 0 1 9 6.03V6a3 3 0 1 1 6 0v.04a3.5 3.5 0 0 1 3.24 5.65A4 4 0 0 1 16 19Z"/><path d="M12 19v3"/></symbol><symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol><symbol id="i-pencil" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol><symbol id="i-cake" viewBox="0 0 24 24"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol><symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol><symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol><symbol id="i-videooff" viewBox="0 0 24 24"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.248-3.062A.5.5 0 0 1 22 7.87v8.196"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><path d="m2 2 20 20"/></symbol><symbol id="i-micoff" viewBox="0 0 24 24"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/><line x1="12" x2="12" y1="19" y2="22"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol><symbol id="i-checks" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol><symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol><symbol id="i-badge" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol></svg>
 <header>
   <div class="slot"><button type="button" id="btn-menu" class="menu-btn hidden" aria-label="Open menu" aria-controls="drawer"><span></span><span></span><span></span></button></div>
   <div class="brand"><h1>BASOGA'S LEGACY</h1><p>Honoring Tradition • Uniting Generations</p></div>
@@ -877,6 +885,12 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
         <div id="admin-pick"></div>
       </div>
       <div class="card">
+        <h2>Verified badges</h2>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:8px">Give a tick beside a person's name, like on Instagram or X. Everyone with a tick gets the same <b style="color:#4cb4ff">blue tick</b>. Choose <b>Verified</b> when you have confirmed they are who they say they are, or <b>Elder</b> for an honoured elder of the family. Tapping the tick tells people which one it is.</p>
+        <input type="search" id="verify-q" placeholder="Search members by name" autocomplete="off">
+        <div id="verify-list"></div>
+      </div>
+      <div class="card">
         <h2>Joining the app</h2>
         <label class="sw-row" for="open-join"><span><b>Let people join without waiting</b><small id="open-join-note">Anyone who opens your link and signs in joins at once. You can still block or remove anyone.</small></span><input type="checkbox" id="open-join" class="sw"></label>
         <div id="join-msg" class="msg"></div>
@@ -940,7 +954,7 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
 
 <div id="scrim"></div>
 <aside id="drawer" aria-label="Menu">
-  <div class="dr-head"><img id="dr-avatar" alt=""><div><b id="dr-name">Family</b><small id="dr-role"></small></div></div>
+  <div class="dr-head"><img id="dr-avatar" alt=""><div><b id="dr-name">Family</b><span id="dr-bd" data-bdw=""></span><small id="dr-role"></small></div></div>
   <div class="dr-list">
     <div class="dr-sec">Family</div>
     <button type="button" data-tab="story"><span><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg> </span>Family Story</button>
@@ -1338,7 +1352,7 @@ function chatRowHTML(m, me) {
   const photo = typeof m.photo === "string" && IMG_OK.test(m.photo) ? `<img loading="lazy" decoding="async" src="${m.photo}" alt="Shared photo">` : "";
   const voice = typeof m.audio === "string" && AUD_OK.test(m.audio) ? `<div class="vn-msg"><audio controls preload="none" src="${m.audio}"></audio><span>${fmtDur(m.dur || 0)}</span></div>` : "";
   const del = (mine || isAdmin()) ? ` · <a href="#" data-del="${esc(m.id)}">Delete</a>` : "";
-  html += `<div class="chat-row${mine ? " mine" : " other"}">${mine ? "" : `<div class="chat-av" data-av="${esc(m.uid || "")}" data-nm="${esc(m.name || "")}">${avatarHTML(m.uid, m.name)}</div>`}<div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}</b>`}${photo}${video}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
+  html += `<div class="chat-row${mine ? " mine" : " other"}">${mine ? "" : `<div class="chat-av" data-av="${esc(m.uid || "")}" data-nm="${esc(m.name || "")}">${avatarHTML(m.uid, m.name)}</div>`}<div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}${bdw(m.uid)}</b>`}${photo}${video}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
   return html;
 }
 function renderChat() {
@@ -1998,7 +2012,7 @@ function seedDirectory(users) {
 let adminUsers = [];
 function renderAdminRoles() {
   const me = myUid();
-  const row = (u, btn) => `<div class="ct-row"><div class="ct-av" data-av="${esc(u.uid)}" data-nm="${esc(u.name || "")}">${avatarHTML(u.uid, u.name)}</div><div class="ct-info"><b>${esc(u.name || "Unnamed")}${u.uid === me ? " (You)" : ""}</b><span style="overflow-wrap:anywhere">${esc(u.email || "")}</span></div>${btn}</div>`;
+  const row = (u, btn) => `<div class="ct-row"><div class="ct-av" data-av="${esc(u.uid)}" data-nm="${esc(u.name || "")}">${avatarHTML(u.uid, u.name)}</div><div class="ct-info"><b>${esc(u.name || "Unnamed")}${bdw(u.uid)}${u.uid === me ? " (You)" : ""}</b><span style="overflow-wrap:anywhere">${esc(u.email || "")}</span></div>${btn}</div>`;
   const admins = adminUsers.filter(u => u.status === "approved" && u.role === "admin");
   $("admin-current").innerHTML = admins.length ? admins.map(u => row(u, u.uid === me ? "" : `<button type="button" class="btn-secondary pick-btn" data-uact="member" data-uid="${esc(u.uid)}">Remove admin</button>`)).join("") : `<p class="chat-empty">No administrators yet.</p>`;
   const q = $("admin-pick-q").value.trim().toLowerCase();
@@ -2012,7 +2026,7 @@ async function loadPendingUsers() {
   const snap = await getDocs(collection(db, "users"));
   const users = [];
   snap.forEach(d => users.push(d.data()));
-  adminUsers = users.slice(); renderAdminRoles();
+  adminUsers = users.slice(); renderAdminRoles(); renderVerify();
   const order = { pending: 0, approved: 1, blocked: 2 };
   users.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3) || (a.name || "").localeCompare(b.name || ""));
   pendingCount = users.filter(u => u.status === "pending").length;
@@ -2437,6 +2451,7 @@ const avatarHTML = (uid, name) => {
 };
 function refreshAvatars() {
   document.querySelectorAll("[data-av]").forEach(el => { el.innerHTML = avatarHTML(el.dataset.av, el.dataset.nm); });
+  document.querySelectorAll("[data-bdw]").forEach(el => { el.innerHTML = badgeHTML(el.dataset.bdw); });
 }
 function makeThumb(src, size = 96) {
   return new Promise(res => {
@@ -2488,7 +2503,7 @@ function stopRing() { if (ringTimer) clearInterval(ringTimer); ringTimer = null;
 function callUI(name, type, state, mode, uid) {
   const o = $("call-overlay");
   o.dataset.type = type; o.dataset.mode = mode;
-  $("call-name").textContent = name || "Family"; $("call-avatar").innerHTML = avatarHTML(uid, name); $("call-state").textContent = state;
+  $("call-name").innerHTML = esc(name || "Family") + bdw(uid); $("call-avatar").innerHTML = avatarHTML(uid, name); $("call-state").textContent = state;
   $("call-mute").classList.remove("off"); $("call-cam").classList.remove("off");
   $("call-mute").firstElementChild.firstElementChild.setAttribute("href", "#i-mic");
   $("call-cam").firstElementChild.firstElementChild.setAttribute("href", "#i-video");
@@ -2648,7 +2663,7 @@ async function beat() {
 }
 function startPresence() {
   beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
-  startDirectory(); syncDirectoryProfile(false);
+  $("dr-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
   startCallListener();
 }
 document.addEventListener("visibilitychange", () => { if (document.hidden) touchActive(); else { beat(); markReceipts(); } });
@@ -2659,8 +2674,8 @@ function renderContacts() {
   const others = dirDocs.filter(r => r.uid && r.uid !== me).map(r => ({ ...r, ms: msOf(r.lastSeen) })).map(r => ({ ...r, online: !!(r.ms && now - r.ms < 150000) }))
     .sort((a, b) => (b.online - a.online) || (a.name || "").localeCompare(b.name || ""));
   const total = others.length + 1, online = others.filter(r => r.online).length + 1;
-  const meRow = `<div class="ct-row"><div class="ct-av on" data-av="${esc(me)}" data-nm="${esc(myName())}">${avatarHTML(me, myName())}</div><div class="ct-info"><b>${esc(myName())} (You)</b><span>Online now</span></div></div>`;
-  const rows = others.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}" data-av="${esc(r.uid)}" data-nm="${esc(r.name || "")}">${avatarHTML(r.uid, r.name)}</div><div class="ct-info"><b>${esc(r.name || "Family")}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("");
+  const meRow = `<div class="ct-row"><div class="ct-av on" data-av="${esc(me)}" data-nm="${esc(myName())}">${avatarHTML(me, myName())}</div><div class="ct-info"><b>${esc(myName())} (You)${bdw(me)}</b><span>Online now</span></div></div>`;
+  const rows = others.map(r => `<div class="ct-row"><div class="ct-av${r.online ? " on" : ""}" data-av="${esc(r.uid)}" data-nm="${esc(r.name || "")}">${avatarHTML(r.uid, r.name)}</div><div class="ct-info"><b>${esc(r.name || "Family")}${bdw(r.uid)}</b><span>${r.online ? "Online now" : (r.ms ? "Last seen " + esc(whenShort(r.ms)) : "Not seen yet")}</span></div><button type="button" class="ct-btn" data-call="audio" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Voice call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></button><button type="button" class="ct-btn" data-call="video" data-uid="${esc(r.uid)}" data-name="${esc(r.name || "Family")}" aria-label="Video call ${esc(r.name || "")}"><svg class="ico" aria-hidden="true"><use href="#i-video"/></svg></button></div>`).join("");
   $("call-contacts").innerHTML = `<p class="ct-count">${total} ${total === 1 ? "person" : "people"} on the platform · ${online} online</p>` + meRow + (rows || `<p class="chat-empty">Nobody else has joined yet. Share the link to invite the family.</p>`);
 }
 async function loadCallLog() {
@@ -2867,7 +2882,7 @@ function storyFoot(kind, d) {
   if (d.status === "pending") bits.push(`<span class="wait">Waiting for approval</span>`);
   if (d.status === "pending" && isAdmin()) bits.push(`<button type="button" class="pick-btn" data-sact="approve" data-kind="${kind}" data-id="${esc(d.id)}">Approve</button>`);
   if (isAdmin() || d.by === myUid()) bits.push(`<button type="button" class="btn-secondary pick-btn" data-sact="delete" data-kind="${kind}" data-id="${esc(d.id)}">Delete</button>`);
-  return `<div class="s-foot"><small>Added by ${esc(d.byName || "the family")}</small><span>${bits.join(" ")}</span></div>`;
+  return `<div class="s-foot"><small>Added by ${esc(d.byName || "the family")}${bdw(d.by)}</small><span>${bits.join(" ")}</span></div>`;
 }
 function renderHistory() {
   const rows = STORY.history.docs.filter(storyVisible).sort((a, b) => (a.year || 0) - (b.year || 0) || msOf(a.createdAt) - msOf(b.createdAt));
@@ -3054,6 +3069,37 @@ async function removeVideoFile(path) {
   if (!path) return;
   try { const { m, st } = await storageLib(); await m.deleteObject(m.ref(st, path)); } catch (e) { /* the entry is gone anyway */ }
 }
+
+// ---------- Verified badges (given by the administrator) ----------
+const BADGES = { verified: ["Verified", "Confirmed by the family administrator."], elder: ["Elder", "An honoured elder of the family."] };
+function badgeHTML(uid) {
+  const d = dirMap.get(uid), v = d && d.verified;
+  return BADGES[v] ? `<span class="bd bd-${v}" data-badge="${v}" role="img" aria-label="${BADGES[v][0]}"><svg aria-hidden="true"><use href="#i-badge"/></svg></span>` : "";
+}
+const bdw = uid => `<span data-bdw="${esc(uid || "")}">${badgeHTML(uid)}</span>`;
+let toastTimer = null;
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add("hidden"), 2600); }
+document.addEventListener("click", e => { const b = e.target.closest("[data-badge]"); if (b) toast(BADGES[b.dataset.badge][0] + ": " + BADGES[b.dataset.badge][1]); });
+let verifyUsers = [];
+function renderVerify() {
+  if (!isAdmin()) return;
+  const q = $("verify-q").value.trim().toLowerCase();
+  const rows = adminUsers.filter(u => u.status === "approved" && (!q || (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q)))
+    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  $("verify-list").innerHTML = rows.length ? rows.map(u => `<div class="ct-row"><div class="ct-av" data-av="${esc(u.uid)}" data-nm="${esc(u.name || "")}">${avatarHTML(u.uid, u.name)}</div><div class="ct-info"><b>${esc(u.name || "Unnamed")}${bdw(u.uid)}</b><span style="overflow-wrap:anywhere">${esc(u.email || "")}</span></div><select class="vsel" data-vset="${esc(u.uid)}" aria-label="Badge for ${esc(u.name || "member")}"><option value="">No tick</option><option value="verified"${u.verified === "verified" ? " selected" : ""}>Verified</option><option value="elder"${u.verified === "elder" ? " selected" : ""}>Elder</option></select></div>`).join("")
+    : `<p class="chat-empty">${q ? "No member matches that name." : "No approved members yet."}</p>`;
+}
+$("verify-q").addEventListener("input", renderVerify);
+$("verify-list").addEventListener("change", async e => {
+  const sel = e.target.closest("[data-vset]"); if (!sel || !isAdmin()) return;
+  const uid = sel.dataset.vset, val = sel.value, u = adminUsers.find(x => x.uid === uid);
+  await queued(Promise.all([
+    updateDoc(doc(db, "users", uid), { verified: val }),
+    setDoc(doc(db, "directory", uid), { uid, name: (u && u.name) || "Family", verified: val }, { merge: true })
+  ]), () => { alert("Could not save. Publish the updated database rules first."); renderVerify(); });
+  if (u) u.verified = val;
+  toast(val ? (BADGES[val][0] + " badge given.") : "Badge removed.");
+});
 
 // ---------- Share ----------
 const SHARE_TEXT = "Join our family portal, Basoga's Legacy. Open the link, register with your email, and welcome home.";
