@@ -433,6 +433,8 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
 /* verified badges */
 .bd{display:inline-flex;vertical-align:-3px;margin-left:4px;cursor:pointer}
 .bd svg{width:17px;height:17px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hero2 h2 .bd svg,.pv-hero h2 .bd svg,.card h2 .bd svg{width:24px;height:24px}
+.member-card .name .bd svg{width:14px;height:14px}
 .bd-verified svg{fill:#1d9bf0;stroke:#fff}
 .bd-elder svg{fill:#1d9bf0;stroke:#fff}
 select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88rem;flex:none}
@@ -500,7 +502,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
         <img id="home-avatar" class="photo-preview" alt="">
         <div class="hi">
           <small id="home-greet">Welcome</small>
-          <h2><span id="home-name"></span></h2>
+          <h2><span id="home-name"></span><span id="home-bd" data-bdw=""></span></h2>
           <p>Honoring Tradition • Uniting Generations</p>
         </div>
       </div>
@@ -671,6 +673,10 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
           </select>
           <label for="member-relationship">Relationship Title</label>
           <input type="text" id="member-relationship" placeholder="e.g. Father, Mother, 1st Child, Grandson">
+          <div id="member-verify-wrap" class="hidden">
+            <label for="member-verified">Blue tick (administrator only)</label>
+            <select id="member-verified"><option value="">No tick</option><option value="verified">Verified</option><option value="elder">Elder</option></select>
+          </div>
           <label for="member-dob">Date of Birth</label>
           <input type="date" id="member-dob">
           <label for="member-bio">Biography / History</label>
@@ -913,7 +919,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
     <!-- MY PROFILE -->
     <div id="section-profile" class="tab-content hidden">
       <div class="card">
-        <h2>My Profile</h2>
+        <h2>My Profile<span id="pf-bd" data-bdw=""></span></h2>
         <p id="user-info-display" style="color:var(--muted);font-size:.85rem"></p>
         <div id="pf-msg" class="msg"></div>
         <form id="form-profile">
@@ -1694,6 +1700,7 @@ function resetForm() {
   $("member-form-title").innerText = "Add Family Member";
   $("btn-save-member").innerText = "Save Family Member";
   $("btn-delete-member").classList.add("hidden");
+  $("member-verify-wrap").classList.toggle("hidden", !isAdmin()); $("member-verified").value = "";
   fillParentSelect(null, "");
 }
 
@@ -1709,6 +1716,7 @@ function editMember(id) {
   $("member-relationship").value = m.relationship || "";
   $("member-dob").value = m.dob || "";
   $("member-bio").value = m.bio || "";
+  $("member-verified").value = m.verified || "";
   $("member-photo-preview").src = m.photo || AVATAR;
   $("member-form-title").innerText = "Edit Profile / Change Photo";
   $("btn-save-member").innerText = "Save Changes";
@@ -1752,6 +1760,7 @@ $("form-member").addEventListener("submit", async e => {
     dob: $("member-dob").value,
     bio: $("member-bio").value.trim()
   };
+  if (isAdmin()) data.verified = $("member-verified").value;
   try {
     let savedId = id;
     if (id) {
@@ -1805,7 +1814,7 @@ function cardHTML(m, row) {
     : esc(m.relationship || "");
   return `<div class="member-card${row ? " row" : ""}" data-id="${esc(m.id)}" style="--c:${colorOf(m)}">
     <img loading="lazy" decoding="async" src="${esc(m.photo || AVATAR)}" alt="">
-    <div><div class="name">${esc(m.name)}</div>
+    <div><div class="name">${esc(m.name)}<span data-bdm="${esc(m.id)}">${memberBadge(m.id)}</span></div>
     <div class="rel">${sub}</div>
     ${!row && par ? `<div class="rel">child of ${esc(par.name)}</div>` : ""}
     ${!row && kids ? `<div class="rel">${kids} child${kids > 1 ? "ren" : ""}</div>` : ""}
@@ -1945,7 +1954,7 @@ function showProfile(id) {
   $("mv-body").innerHTML = `
     <div class="pv-hero">
       <img class="big" src="${esc(m.photo || AVATAR)}" alt="">
-      <h2>${esc(m.name)}</h2>
+      <h2>${esc(m.name)}<span data-bdm="${esc(id)}">${memberBadge(id)}</span></h2>
       <span class="pill" style="--c:${c}">${esc(m.relationship || REL_TITLE[genOf(m)] || "Family")}</span>
       <span class="pill" style="--c:${c};opacity:.8">${esc(genTitles[genOf(m)] || "")}</span>
     </div>
@@ -1957,6 +1966,7 @@ function showProfile(id) {
       <button type="button" data-act="edit">${IC("pencil")} Edit details</button>
       <button type="button" data-act="addchild">＋ ${genOf(m) === "2" ? "Add grandchild" : "Add child"}</button>
     </div>
+    ${isAdmin() ? `<div class="pv-row" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">Blue tick: <select class="vsel" id="mv-verify" aria-label="Blue tick for ${esc(m.name)}"><option value="">No tick</option><option value="verified"${m.verified === "verified" ? " selected" : ""}>Verified</option><option value="elder"${m.verified === "elder" ? " selected" : ""}>Elder</option></select></div>` : ""}
     ${m.dob ? `<div class="pv-row">${IC("cake")} Born: <b>${ageText(m.dob)}</b></div>` : ""}
     ${par ? `<div class="pv-row">Child of: <b>${esc(par.name)}</b></div>` : ""}
     ${m.otherParent ? `<div class="pv-row">Other parent: <b>${esc(m.otherParent)}</b></div>` : ""}
@@ -1982,6 +1992,15 @@ $("mv-body").addEventListener("click", e => {
   else if (a === "addchild") newMember(viewingId);
   else if (a === "back") showTab("tree");
   else if (a === "delete") deleteMember(viewingId);
+});
+$("mv-body").addEventListener("change", async e => {
+  const sel = e.target.closest("#mv-verify"); if (!sel || !isAdmin() || !viewingId) return;
+  const id = viewingId, val = sel.value;
+  try {
+    await updateDoc(doc(db, "members", id), { verified: val, updatedBy: currentUser.uid, updatedAt: serverTimestamp() });
+    await loadFamilyMembers();
+    toast(val ? BADGES[val][0] + " tick given." : "Tick removed.");
+  } catch (err) { alert("Could not save the tick: " + err.message); }
 });
 ["mv-photo-file", "mv-photo-cam"].forEach(id => $(id).addEventListener("change", async e => {
   const f = e.target.files[0];
@@ -2452,6 +2471,7 @@ const avatarHTML = (uid, name) => {
 function refreshAvatars() {
   document.querySelectorAll("[data-av]").forEach(el => { el.innerHTML = avatarHTML(el.dataset.av, el.dataset.nm); });
   document.querySelectorAll("[data-bdw]").forEach(el => { el.innerHTML = badgeHTML(el.dataset.bdw); });
+  document.querySelectorAll("[data-bdm]").forEach(el => { el.innerHTML = memberBadge(el.dataset.bdm); });
 }
 function makeThumb(src, size = 96) {
   return new Promise(res => {
@@ -2469,11 +2489,11 @@ function makeThumb(src, size = 96) {
 // Writes the person's name and a tiny round picture so other family members can see them in chat and calls.
 async function syncDirectoryProfile(force) {
   if (!currentUserDoc || currentUserDoc.status !== "approved") return;
-  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length;
+  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length + "|" + (currentUserDoc.memberId || "");
   try { if (!force && localStorage.getItem("dirProfile:" + myUid()) === sig) return; } catch (e) {}
   try {
     const thumb = photo ? await makeThumb(photo, 96) : "";
-    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb }, { merge: true });
+    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb, memberId: currentUserDoc.memberId || "" }, { merge: true });
     try { localStorage.setItem("dirProfile:" + myUid(), sig); } catch (e) {}
   } catch (e) { /* tried again next time */ }
 }
@@ -2663,7 +2683,7 @@ async function beat() {
 }
 function startPresence() {
   beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
-  $("dr-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
+  $("dr-bd").dataset.bdw = myUid(); $("home-bd").dataset.bdw = myUid(); $("pf-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
   startCallListener();
 }
 document.addEventListener("visibilitychange", () => { if (document.hidden) touchActive(); else { beat(); markReceipts(); } });
@@ -3072,10 +3092,11 @@ async function removeVideoFile(path) {
 
 // ---------- Verified badges (given by the administrator) ----------
 const BADGES = { verified: ["Verified", "Confirmed by the family administrator."], elder: ["Elder", "An honoured elder of the family."] };
-function badgeHTML(uid) {
-  const d = dirMap.get(uid), v = d && d.verified;
-  return BADGES[v] ? `<span class="bd bd-${v}" data-badge="${v}" role="img" aria-label="${BADGES[v][0]}"><svg aria-hidden="true"><use href="#i-badge"/></svg></span>` : "";
-}
+const badgeSpan = v => BADGES[v] ? `<span class="bd bd-${v}" data-badge="${v}" role="img" aria-label="${BADGES[v][0]}"><svg aria-hidden="true"><use href="#i-badge"/></svg></span>` : "";
+function badgeHTML(uid) { const d = dirMap.get(uid); return badgeSpan(d && d.verified); }
+// A tree member shows the tick the administrator gave on their profile, or the tick of the account linked to them.
+function memberBadge(id) { const m = memberById(id); return (m && BADGES[m.verified]) ? badgeSpan(m.verified) : badgeHTML(uidForMember(id)); }
+const uidForMember = id => { const d = id && dirDocs.find(x => x.memberId === id); return d ? d.uid : ""; };
 const bdw = uid => `<span data-bdw="${esc(uid || "")}">${badgeHTML(uid)}</span>`;
 let toastTimer = null;
 function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add("hidden"), 2600); }
