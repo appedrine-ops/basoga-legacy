@@ -433,12 +433,23 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
 /* verified badges */
 .bd{display:inline-flex;vertical-align:-3px;margin-left:4px;cursor:pointer}
 .bd svg{width:17px;height:17px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.hero2 h2 .bd svg,.pv-hero h2 .bd svg,.card h2 .bd svg{width:24px;height:24px}
-.member-card .name .bd svg{width:14px;height:14px}
 .bd-verified svg{fill:#1d9bf0;stroke:#fff}
 .bd-elder svg{fill:#1d9bf0;stroke:#fff}
 select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88rem;flex:none}
 #toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:88%;background:#0b2f21;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:10px 16px;font-size:.9rem;z-index:3000;box-shadow:0 8px 28px rgba(0,0,0,.5);text-align:center}
+.vrow{cursor:pointer}.vrow:active{background:rgba(255,255,255,.06)}
+.vpick{margin:10px 0;padding:12px;border:1px solid rgba(246,211,107,.4);border-radius:14px;background:rgba(246,211,107,.06)}
+.vpick .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.vpick .btn-row button{flex:1;min-width:130px;margin-top:6px}
+#report-overlay,#qr-overlay{position:fixed;inset:0;z-index:2400;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);padding:16px}
+#report-overlay.hidden,#qr-overlay.hidden{display:none}
+.rp-box{width:100%;max-width:420px;max-height:92vh;overflow:auto;background:#0b2f21;border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:18px}
+.rp-box h2{margin-top:0}
+.rp-box .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.rp-box .btn-row button{flex:1;min-width:100px}
+.rep-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}.rep-item:last-child{border:0}
+.rep-item .btn-row{display:flex;gap:8px;margin-top:6px}
+.fb-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}.fb-item:last-child{border:0}
+.fb-item input{margin:6px 0 0}
+.fb-reply{margin-top:6px;padding:8px 10px;border-left:3px solid var(--gold2);background:rgba(246,211,107,.07);border-radius:0 10px 10px 0}
 </style>
 </head>
 <body>
@@ -502,7 +513,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
         <img id="home-avatar" class="photo-preview" alt="">
         <div class="hi">
           <small id="home-greet">Welcome</small>
-          <h2><span id="home-name"></span><span id="home-bd" data-bdw=""></span></h2>
+          <h2><span id="home-name"></span></h2>
           <p>Honoring Tradition • Uniting Generations</p>
         </div>
       </div>
@@ -541,6 +552,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
           <button type="button" id="share-native">Share link</button>
           <button type="button" class="btn-secondary" id="share-wa">WhatsApp</button>
           <button type="button" class="btn-secondary" id="share-copy">Copy link</button>
+          <button type="button" class="btn-secondary" id="share-qr">QR code</button>
         </div>
         <div id="share-msg" class="msg"></div>
       </div>
@@ -673,10 +685,6 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
           </select>
           <label for="member-relationship">Relationship Title</label>
           <input type="text" id="member-relationship" placeholder="e.g. Father, Mother, 1st Child, Grandson">
-          <div id="member-verify-wrap" class="hidden">
-            <label for="member-verified">Blue tick (administrator only)</label>
-            <select id="member-verified"><option value="">No tick</option><option value="verified">Verified</option><option value="elder">Elder</option></select>
-          </div>
           <label for="member-dob">Date of Birth</label>
           <input type="date" id="member-dob">
           <label for="member-bio">Biography / History</label>
@@ -872,6 +880,22 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
       </div>
     </div>
 
+    <!-- CONTACT THE ADMIN -->
+    <div id="section-contact" class="tab-content hidden">
+      <div class="card">
+        <h2>Contact the admin</h2>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:8px">Ask a question, report a problem or share an idea. The administrator will read it and reply here.</p>
+        <div id="contact-direct"></div>
+        <form id="form-contact" autocomplete="off">
+          <label for="contact-text">Your message</label>
+          <textarea id="contact-text" rows="4" maxlength="800" required></textarea>
+          <button type="submit">Send</button>
+        </form>
+        <div id="contact-msg" class="msg"></div>
+      </div>
+      <div class="card"><h2>Your messages</h2><div id="contact-mine"></div></div>
+    </div>
+
     <!-- ADMIN -->
     <div id="section-admin" class="tab-content hidden">
       <div class="card">
@@ -892,9 +916,25 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
       </div>
       <div class="card">
         <h2>Verified badges</h2>
-        <p style="color:var(--muted);font-size:.85rem;margin-bottom:8px">Give a tick beside a person's name, like on Instagram or X. Everyone with a tick gets the same <b style="color:#4cb4ff">blue tick</b>. Choose <b>Verified</b> when you have confirmed they are who they say they are, or <b>Elder</b> for an honoured elder of the family. Tapping the tick tells people which one it is.</p>
-        <input type="search" id="verify-q" placeholder="Search members by name" autocomplete="off">
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:8px">Type a family member's name, tap the person, then choose what to give them. Everyone with a tick gets the same <b style="color:#4cb4ff">blue tick</b>.</p>
+        <input type="search" id="verify-q" placeholder="Type a name, for example Rose" autocomplete="off">
+        <div id="verify-results"></div>
+        <div id="verify-pick" class="hidden"></div>
+        <div class="sub-h">People with a tick</div>
         <div id="verify-list"></div>
+      </div>
+      <div class="card">
+        <h2>Reports</h2>
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:6px">Posts that family members have reported. Delete the post, or dismiss the report if it is fine.</p>
+        <div id="reports-list"></div>
+      </div>
+      <div class="card">
+        <h2>Messages to the admin</h2>
+        <label for="admin-phone">Number members can call or WhatsApp (optional)</label>
+        <input type="tel" id="admin-phone" placeholder="+256772123456" autocomplete="off">
+        <button type="button" class="btn-secondary" id="admin-phone-save">Save number</button>
+        <div id="admin-phone-msg" class="msg"></div>
+        <div id="feedback-list" style="margin-top:10px"></div>
       </div>
       <div class="card">
         <h2>Joining the app</h2>
@@ -919,7 +959,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
     <!-- MY PROFILE -->
     <div id="section-profile" class="tab-content hidden">
       <div class="card">
-        <h2>My Profile<span id="pf-bd" data-bdw=""></span></h2>
+        <h2>My Profile</h2>
         <p id="user-info-display" style="color:var(--muted);font-size:.85rem"></p>
         <div id="pf-msg" class="msg"></div>
         <form id="form-profile">
@@ -966,6 +1006,8 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
     <button type="button" data-tab="story"><span><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg> </span>Family Story</button>
     <div class="dr-sec">Tools</div>
     <button type="button" data-tab="checkin"><span><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg> </span>Check in / out<small id="tile-ci" class="dr-note"></small></button>
+    <div class="dr-sec">Help</div>
+    <button type="button" data-tab="contact"><span><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg> </span>Contact the admin</button>
     <div class="dr-sec">Account</div>
     <button type="button" data-tab="profile"><span><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg> </span>My Profile</button>
     <button type="button" data-tab="admin" id="dr-admin" class="hidden"><span><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg> </span>Admin</button>
@@ -986,6 +1028,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
   <p id="lb-cap"></p>
   <div class="btn-row" style="width:100%;max-width:400px">
     <button class="btn-secondary" id="lb-close">Close</button>
+    <button class="btn-secondary hidden" id="lb-report">Report</button>
     <button class="btn-danger hidden" id="lb-del">Delete</button>
   </div>
 </div>
@@ -1004,6 +1047,26 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
       <button type="button" id="vn-cancel" class="vn-btn vn-cancel" aria-label="Cancel"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button>
       <button type="button" id="vn-send" class="vn-btn vn-ok" aria-label="Send voice note"><svg class="ico" aria-hidden="true"><use href="#i-send"/></svg></button>
     </div>
+  </div>
+</div>
+<div id="report-overlay" class="hidden" role="dialog" aria-modal="true" aria-label="Report">
+  <div class="rp-box">
+    <h2>Report this</h2>
+    <p id="report-what" style="color:var(--muted);margin-bottom:8px"></p>
+    <label for="report-reason">What is wrong?</label>
+    <select id="report-reason"><option>Rude or offensive</option><option>Wrong information</option><option>Spam or advert</option><option>Not for the family</option><option>Something else</option></select>
+    <label for="report-note">More details (optional)</label>
+    <textarea id="report-note" rows="3" maxlength="300"></textarea>
+    <div class="btn-row"><button type="button" id="report-send">Send report</button><button type="button" class="btn-secondary" id="report-cancel">Cancel</button></div>
+  </div>
+</div>
+<div id="qr-overlay" class="hidden" role="dialog" aria-modal="true" aria-label="Join by QR code">
+  <div class="rp-box" style="text-align:center">
+    <h2>Scan to join</h2>
+    <canvas id="qr-canvas" width="320" height="320" style="max-width:100%;border-radius:12px"></canvas>
+    <p id="qr-url" style="overflow-wrap:anywhere;color:var(--muted);font-size:.85rem"></p>
+    <p style="color:var(--muted);font-size:.85rem">Point a phone camera at this code, open the link and register.</p>
+    <div class="btn-row"><button type="button" id="qr-share">Share picture</button><button type="button" class="btn-secondary" id="qr-save">Save picture</button><button type="button" class="btn-secondary" id="qr-close">Close</button></div>
   </div>
 </div>
 <div id="call-overlay" class="hidden" role="dialog" aria-modal="true" aria-label="Call" data-mode="out" data-type="audio">
@@ -1357,7 +1420,7 @@ function chatRowHTML(m, me) {
   const video = typeof m.video === "string" && VIDEO_OK.test(m.video) ? `<video class="chat-vid" controls playsinline preload="none"${typeof m.thumb === "string" && IMG_OK.test(m.thumb) ? ` poster="${m.thumb}"` : ""} src="${m.video}"></video>` : "";
   const photo = typeof m.photo === "string" && IMG_OK.test(m.photo) ? `<img loading="lazy" decoding="async" src="${m.photo}" alt="Shared photo">` : "";
   const voice = typeof m.audio === "string" && AUD_OK.test(m.audio) ? `<div class="vn-msg"><audio controls preload="none" src="${m.audio}"></audio><span>${fmtDur(m.dur || 0)}</span></div>` : "";
-  const del = (mine || isAdmin()) ? ` · <a href="#" data-del="${esc(m.id)}">Delete</a>` : "";
+  const del = ((mine || isAdmin()) ? ` · <a href="#" data-del="${esc(m.id)}">Delete</a>` : "") + (!mine ? ` · <a href="#" data-report="messages:${esc(m.id)}">Report</a>` : "");
   html += `<div class="chat-row${mine ? " mine" : " other"}">${mine ? "" : `<div class="chat-av" data-av="${esc(m.uid || "")}" data-nm="${esc(m.name || "")}">${avatarHTML(m.uid, m.name)}</div>`}<div class="chat-bub">${mine ? "" : `<b>${esc(m.name || "Family")}${bdw(m.uid)}</b>`}${photo}${video}${voice}${m.text ? `<p>${esc(m.text)}</p>` : ""}<small>${clockOf(ms)}${mine ? `<span class="tk" data-tk="${esc(m.id)}" data-st="${tickState(m)}">${tickHTML(m)}</span>` : ""}${del}</small></div></div>`;
   return html;
 }
@@ -1511,7 +1574,7 @@ $("vn-cancel").addEventListener("click", () => vnStop(false));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && vn) vnStop(false); });
 window.addEventListener("popstate", () => { if (vn) vnStop(false); });
 
-function stopLive() { stopStory(); if (unsubNote) unsubNote(); unsubNote = null; setUnread(0); stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
+function stopLive() { if (unsubReports) unsubReports.forEach(u => u()); unsubReports = null; if (unsubMyFeedback) unsubMyFeedback(); unsubMyFeedback = null; stopStory(); if (unsubNote) unsubNote(); unsubNote = null; setUnread(0); stopCalls(); if (vn) vnStop(false); if (unsubCi) unsubCi(); if (unsubChat) unsubChat(); unsubCi = unsubChat = null; ciDocs = []; chatDocs = []; chatRendered = []; chatLastDay = ""; }
 function startChat() {
   if (unsubChat) return;
   chatFirst = true;
@@ -1524,7 +1587,7 @@ function startLive() {
   stopLive();
   startPresence();
   try { sessionStartActive = Number(localStorage.getItem("active:" + myUid()) || 0); } catch (e) {}
-  touchActive(); renderNotes(); loadMissedCalls(); checkRemembrance();
+  touchActive(); renderNotes(); loadMissedCalls(); checkRemembrance(); startAdminWatch(); startMyFeedback();
   startNotifier(); showNotifCard();
   unsubCi = onSnapshot(query(collection(db, "checkins"), orderBy("at", "desc"), limit(80)),
     snap => { ciDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderCheckins(); },
@@ -1566,6 +1629,7 @@ window.showTab = function (tab) {
   markNav(tab);
   if (tab === "chat") { startChat(); setUnread(0); markReceipts(); }
   if (tab === "story") startStory();
+  if (tab === "contact") loadContactDirect();
   if (tab === "calls") openCallsTab();
   if (tab === "chat") setTimeout(() => { const b = $("chat-list"); b.scrollTop = b.scrollHeight; }, 0);
   if (!navPopping) {
@@ -1700,7 +1764,6 @@ function resetForm() {
   $("member-form-title").innerText = "Add Family Member";
   $("btn-save-member").innerText = "Save Family Member";
   $("btn-delete-member").classList.add("hidden");
-  $("member-verify-wrap").classList.toggle("hidden", !isAdmin()); $("member-verified").value = "";
   fillParentSelect(null, "");
 }
 
@@ -1716,7 +1779,6 @@ function editMember(id) {
   $("member-relationship").value = m.relationship || "";
   $("member-dob").value = m.dob || "";
   $("member-bio").value = m.bio || "";
-  $("member-verified").value = m.verified || "";
   $("member-photo-preview").src = m.photo || AVATAR;
   $("member-form-title").innerText = "Edit Profile / Change Photo";
   $("btn-save-member").innerText = "Save Changes";
@@ -1760,7 +1822,6 @@ $("form-member").addEventListener("submit", async e => {
     dob: $("member-dob").value,
     bio: $("member-bio").value.trim()
   };
-  if (isAdmin()) data.verified = $("member-verified").value;
   try {
     let savedId = id;
     if (id) {
@@ -1814,7 +1875,7 @@ function cardHTML(m, row) {
     : esc(m.relationship || "");
   return `<div class="member-card${row ? " row" : ""}" data-id="${esc(m.id)}" style="--c:${colorOf(m)}">
     <img loading="lazy" decoding="async" src="${esc(m.photo || AVATAR)}" alt="">
-    <div><div class="name">${esc(m.name)}<span data-bdm="${esc(m.id)}">${memberBadge(m.id)}</span></div>
+    <div><div class="name">${esc(m.name)}${badgeSpan(m.verified)}</div>
     <div class="rel">${sub}</div>
     ${!row && par ? `<div class="rel">child of ${esc(par.name)}</div>` : ""}
     ${!row && kids ? `<div class="rel">${kids} child${kids > 1 ? "ren" : ""}</div>` : ""}
@@ -1954,7 +2015,7 @@ function showProfile(id) {
   $("mv-body").innerHTML = `
     <div class="pv-hero">
       <img class="big" src="${esc(m.photo || AVATAR)}" alt="">
-      <h2>${esc(m.name)}<span data-bdm="${esc(id)}">${memberBadge(id)}</span></h2>
+      <h2>${esc(m.name)}${badgeSpan(m.verified)}</h2>
       <span class="pill" style="--c:${c}">${esc(m.relationship || REL_TITLE[genOf(m)] || "Family")}</span>
       <span class="pill" style="--c:${c};opacity:.8">${esc(genTitles[genOf(m)] || "")}</span>
     </div>
@@ -1966,7 +2027,6 @@ function showProfile(id) {
       <button type="button" data-act="edit">${IC("pencil")} Edit details</button>
       <button type="button" data-act="addchild">＋ ${genOf(m) === "2" ? "Add grandchild" : "Add child"}</button>
     </div>
-    ${isAdmin() ? `<div class="pv-row" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">Blue tick: <select class="vsel" id="mv-verify" aria-label="Blue tick for ${esc(m.name)}"><option value="">No tick</option><option value="verified"${m.verified === "verified" ? " selected" : ""}>Verified</option><option value="elder"${m.verified === "elder" ? " selected" : ""}>Elder</option></select></div>` : ""}
     ${m.dob ? `<div class="pv-row">${IC("cake")} Born: <b>${ageText(m.dob)}</b></div>` : ""}
     ${par ? `<div class="pv-row">Child of: <b>${esc(par.name)}</b></div>` : ""}
     ${m.otherParent ? `<div class="pv-row">Other parent: <b>${esc(m.otherParent)}</b></div>` : ""}
@@ -1992,15 +2052,6 @@ $("mv-body").addEventListener("click", e => {
   else if (a === "addchild") newMember(viewingId);
   else if (a === "back") showTab("tree");
   else if (a === "delete") deleteMember(viewingId);
-});
-$("mv-body").addEventListener("change", async e => {
-  const sel = e.target.closest("#mv-verify"); if (!sel || !isAdmin() || !viewingId) return;
-  const id = viewingId, val = sel.value;
-  try {
-    await updateDoc(doc(db, "members", id), { verified: val, updatedBy: currentUser.uid, updatedAt: serverTimestamp() });
-    await loadFamilyMembers();
-    toast(val ? BADGES[val][0] + " tick given." : "Tick removed.");
-  } catch (err) { alert("Could not save the tick: " + err.message); }
 });
 ["mv-photo-file", "mv-photo-cam"].forEach(id => $(id).addEventListener("change", async e => {
   const f = e.target.files[0];
@@ -2100,7 +2151,7 @@ $("open-join").addEventListener("change", async () => {
 });
 async function loadInvites() {
   if (!isAdmin()) return;
-  loadJoinSwitch();
+  loadJoinSwitch(); loadContactDirect();
   const box = $("invite-list");
   try {
     const snap = await getDocs(collection(db, "invites"));
@@ -2337,6 +2388,7 @@ document.addEventListener("click", e => {
   const who = p.memberId && memberById(p.memberId) ? memberById(p.memberId).name : "";
   $("lb-cap").innerText = [p.caption, who && "with " + who, p.byName && "— " + p.byName].filter(Boolean).join(" ");
   $("lb-del").classList.toggle("hidden", !(isAdmin() || p.by === currentUser.uid));
+  $("lb-report").classList.toggle("hidden", p.by === currentUser.uid);
   $("lb-del").dataset.id = p.id;
   $("lightbox").classList.remove("hidden");
 });
@@ -2471,7 +2523,6 @@ const avatarHTML = (uid, name) => {
 function refreshAvatars() {
   document.querySelectorAll("[data-av]").forEach(el => { el.innerHTML = avatarHTML(el.dataset.av, el.dataset.nm); });
   document.querySelectorAll("[data-bdw]").forEach(el => { el.innerHTML = badgeHTML(el.dataset.bdw); });
-  document.querySelectorAll("[data-bdm]").forEach(el => { el.innerHTML = memberBadge(el.dataset.bdm); });
 }
 function makeThumb(src, size = 96) {
   return new Promise(res => {
@@ -2489,11 +2540,11 @@ function makeThumb(src, size = 96) {
 // Writes the person's name and a tiny round picture so other family members can see them in chat and calls.
 async function syncDirectoryProfile(force) {
   if (!currentUserDoc || currentUserDoc.status !== "approved") return;
-  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length + "|" + (currentUserDoc.memberId || "");
+  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length;
   try { if (!force && localStorage.getItem("dirProfile:" + myUid()) === sig) return; } catch (e) {}
   try {
     const thumb = photo ? await makeThumb(photo, 96) : "";
-    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb, memberId: currentUserDoc.memberId || "" }, { merge: true });
+    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb }, { merge: true });
     try { localStorage.setItem("dirProfile:" + myUid(), sig); } catch (e) {}
   } catch (e) { /* tried again next time */ }
 }
@@ -2683,7 +2734,7 @@ async function beat() {
 }
 function startPresence() {
   beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
-  $("dr-bd").dataset.bdw = myUid(); $("home-bd").dataset.bdw = myUid(); $("pf-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
+  $("dr-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
   startCallListener();
 }
 document.addEventListener("visibilitychange", () => { if (document.hidden) touchActive(); else { beat(); markReceipts(); } });
@@ -2901,6 +2952,7 @@ function storyFoot(kind, d) {
   const bits = [];
   if (d.status === "pending") bits.push(`<span class="wait">Waiting for approval</span>`);
   if (d.status === "pending" && isAdmin()) bits.push(`<button type="button" class="pick-btn" data-sact="approve" data-kind="${kind}" data-id="${esc(d.id)}">Approve</button>`);
+  if (d.by !== myUid()) bits.push(`<button type="button" class="btn-secondary pick-btn" data-report="${STORY[kind].col}:${esc(d.id)}">Report</button>`);
   if (isAdmin() || d.by === myUid()) bits.push(`<button type="button" class="btn-secondary pick-btn" data-sact="delete" data-kind="${kind}" data-id="${esc(d.id)}">Delete</button>`);
   return `<div class="s-foot"><small>Added by ${esc(d.byName || "the family")}${bdw(d.by)}</small><span>${bits.join(" ")}</span></div>`;
 }
@@ -3094,32 +3146,263 @@ async function removeVideoFile(path) {
 const BADGES = { verified: ["Verified", "Confirmed by the family administrator."], elder: ["Elder", "An honoured elder of the family."] };
 const badgeSpan = v => BADGES[v] ? `<span class="bd bd-${v}" data-badge="${v}" role="img" aria-label="${BADGES[v][0]}"><svg aria-hidden="true"><use href="#i-badge"/></svg></span>` : "";
 function badgeHTML(uid) { const d = dirMap.get(uid); return badgeSpan(d && d.verified); }
-// A tree member shows the tick the administrator gave on their profile, or the tick of the account linked to them.
-function memberBadge(id) { const m = memberById(id); return (m && BADGES[m.verified]) ? badgeSpan(m.verified) : badgeHTML(uidForMember(id)); }
-const uidForMember = id => { const d = id && dirDocs.find(x => x.memberId === id); return d ? d.uid : ""; };
 const bdw = uid => `<span data-bdw="${esc(uid || "")}">${badgeHTML(uid)}</span>`;
 let toastTimer = null;
 function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add("hidden"), 2600); }
 document.addEventListener("click", e => { const b = e.target.closest("[data-badge]"); if (b) toast(BADGES[b.dataset.badge][0] + ": " + BADGES[b.dataset.badge][1]); });
-let verifyUsers = [];
+const normName = n => String(n || "").trim().toLowerCase().replace(/\s+/g, " ");
+let verifyPick = null;
+function verifyItems() {
+  const out = [];
+  adminUsers.filter(u => u.status === "approved").forEach(u => out.push({ kind: "user", id: u.uid, name: u.name || u.email || "Unnamed", sub: u.email || "", verified: u.verified || "" }));
+  members.forEach(x => out.push({ kind: "member", id: x.id, name: x.name || "Unnamed", sub: x.relationship || "", verified: x.verified || "" }));
+  return out;
+}
+const vTag = it => it.kind === "user" ? "Has an account" : "On the family tree";
+function vRow(it, attrs) {
+  const av = it.kind === "user" ? avatarHTML(it.id, it.name) : `<span>${esc(initialOf(it.name))}</span>`;
+  return `<div class="ct-row vrow" ${attrs}><div class="ct-av">${av}</div><div class="ct-info"><b>${esc(it.name)}${badgeSpan(it.verified)}</b><span>${vTag(it)}${it.sub ? " · " + esc(it.sub) : ""}</span></div></div>`;
+}
 function renderVerify() {
   if (!isAdmin()) return;
-  const q = $("verify-q").value.trim().toLowerCase();
-  const rows = adminUsers.filter(u => u.status === "approved" && (!q || (u.name || "").toLowerCase().includes(q) || (u.email || "").toLowerCase().includes(q)))
-    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-  $("verify-list").innerHTML = rows.length ? rows.map(u => `<div class="ct-row"><div class="ct-av" data-av="${esc(u.uid)}" data-nm="${esc(u.name || "")}">${avatarHTML(u.uid, u.name)}</div><div class="ct-info"><b>${esc(u.name || "Unnamed")}${bdw(u.uid)}</b><span style="overflow-wrap:anywhere">${esc(u.email || "")}</span></div><select class="vsel" data-vset="${esc(u.uid)}" aria-label="Badge for ${esc(u.name || "member")}"><option value="">No tick</option><option value="verified"${u.verified === "verified" ? " selected" : ""}>Verified</option><option value="elder"${u.verified === "elder" ? " selected" : ""}>Elder</option></select></div>`).join("")
-    : `<p class="chat-empty">${q ? "No member matches that name." : "No approved members yet."}</p>`;
+  const all = verifyItems(), q = normName($("verify-q").value);
+  const found = q ? all.filter(it => normName(it.name).includes(q) || normName(it.sub).includes(q)).slice(0, 8) : [];
+  $("verify-results").innerHTML = !q ? "" : (found.length ? found.map(it => vRow(it, `data-vpick="${it.kind}:${esc(it.id)}"`)).join("") : `<p class="chat-empty">No one with that name. Check the spelling.</p>`);
+  const pick = verifyPick && all.find(it => it.kind === verifyPick.kind && it.id === verifyPick.id);
+  const box = $("verify-pick");
+  if (pick) {
+    box.classList.remove("hidden");
+    box.innerHTML = `<div class="vpick"><div><b>${esc(pick.name)}</b>${badgeSpan(pick.verified)}<br><small style="color:var(--muted)">${vTag(pick)} · ${pick.verified ? BADGES[pick.verified][0] : "no tick yet"}</small></div>
+      <div class="btn-row"><button type="button" data-vgive="verified">Verify (blue tick)</button><button type="button" class="btn-secondary" data-vgive="elder">Elder (blue tick)</button></div>
+      ${pick.verified ? `<button type="button" class="btn-danger" data-vgive="">Remove the tick</button>` : ""}</div>`;
+  } else { box.classList.add("hidden"); box.innerHTML = ""; }
+  const ticked = all.filter(it => it.verified).sort((a, b) => a.name.localeCompare(b.name));
+  $("verify-list").innerHTML = ticked.length ? ticked.map(it => vRow(it, `data-vpick="${it.kind}:${esc(it.id)}"`)).join("") : `<p class="chat-empty">No one has a tick yet.</p>`;
 }
-$("verify-q").addEventListener("input", renderVerify);
-$("verify-list").addEventListener("change", async e => {
-  const sel = e.target.closest("[data-vset]"); if (!sel || !isAdmin()) return;
-  const uid = sel.dataset.vset, val = sel.value, u = adminUsers.find(x => x.uid === uid);
-  await queued(Promise.all([
-    updateDoc(doc(db, "users", uid), { verified: val }),
-    setDoc(doc(db, "directory", uid), { uid, name: (u && u.name) || "Family", verified: val }, { merge: true })
-  ]), () => { alert("Could not save. Publish the updated database rules first."); renderVerify(); });
-  if (u) u.verified = val;
-  toast(val ? (BADGES[val][0] + " badge given.") : "Badge removed.");
+async function setTick(it, val) {
+  if (it.kind === "user") {
+    await Promise.all([updateDoc(doc(db, "users", it.id), { verified: val }), setDoc(doc(db, "directory", it.id), { uid: it.id, name: it.name, verified: val }, { merge: true })]);
+    const u = adminUsers.find(x => x.uid === it.id); if (u) u.verified = val;
+  } else {
+    await updateDoc(doc(db, "members", it.id), { verified: val });
+    const x = members.find(y => y.id === it.id); if (x) x.verified = val;
+  }
+}
+async function applyTick(it, val) {
+  // a person with an account who is also on the tree under the same name gets the tick in both places
+  const mates = verifyItems().filter(x => x.kind !== it.kind && normName(x.name) === normName(it.name));
+  const targets = [it].concat(mates.length === 1 ? mates : []);
+  await queued(Promise.all(targets.map(t => setTick(t, val))), () => { alert("Could not save. Publish the updated database rules first."); });
+  renderVerify(); try { render(); } catch (e) {}
+  toast((val ? BADGES[val][0] + " tick given to " : "Tick removed from ") + it.name + (targets.length > 1 ? " (account and tree)." : "."));
+}
+$("verify-q").addEventListener("input", () => { verifyPick = null; renderVerify(); });
+$("section-admin").addEventListener("click", e => {
+  const r = e.target.closest("[data-vpick]");
+  if (r) { const i = r.dataset.vpick.indexOf(":"); verifyPick = { kind: r.dataset.vpick.slice(0, i), id: r.dataset.vpick.slice(i + 1) }; renderVerify(); $("verify-pick").scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }
+  const g = e.target.closest("[data-vgive]");
+  if (g && isAdmin() && verifyPick) {
+    const it = verifyItems().find(x => x.kind === verifyPick.kind && x.id === verifyPick.id);
+    if (it) applyTick(it, g.dataset.vgive);
+  }
+});
+
+// ---------- QR code: a small encoder of our own (works offline) ----------
+const QR = (() => {
+  const EXP = new Array(512), LOG = new Array(256);
+  let v = 1; for (let i = 0; i < 255; i++) { EXP[i] = v; LOG[v] = i; v <<= 1; if (v & 0x100) v ^= 0x11d; }
+  for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+  const mul = (a, b) => (a && b) ? EXP[LOG[a] + LOG[b]] : 0;
+  const rsGen = n => { let g = [1]; for (let i = 0; i < n; i++) { const ng = g.concat([0]); for (let j = 0; j < g.length; j++) ng[j + 1] ^= mul(g[j], EXP[i]); g = ng; } return g; };
+  const rsRem = (data, n) => { const g = rsGen(n), r = new Array(n).fill(0); for (const b of data) { const f = b ^ r.shift(); r.push(0); for (let i = 0; i < n; i++) r[i] ^= mul(g[i + 1], f); } return r; };
+  const ECC = [0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26], BLK = [0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5]; // level M, versions 1 to 10
+  const rawModules = ver => { let r = (16 * ver + 128) * ver + 64; if (ver >= 2) { const a = Math.floor(ver / 7) + 2; r -= (25 * a - 10) * a - 55; if (ver >= 7) r -= 36; } return r; };
+  const dataWords = ver => Math.floor(rawModules(ver) / 8) - ECC[ver] * BLK[ver];
+  const alignPos = ver => { if (ver === 1) return []; const n = Math.floor(ver / 7) + 2, size = ver * 4 + 17, step = Math.ceil((ver * 4 + 4) / (n * 2 - 2)) * 2, r = [6]; for (let p = size - 7; r.length < n; p -= step) r.splice(1, 0, p); return r; };
+  function make(text) {
+    const bytes = Array.from(new TextEncoder().encode(text));
+    let ver = 1;
+    for (; ver <= 10; ver++) if (4 + (ver < 10 ? 8 : 16) + 8 * bytes.length <= dataWords(ver) * 8) break;
+    if (ver > 10) throw new Error("text too long for the QR code");
+    const bits = [], put = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >>> i) & 1); };
+    put(4, 4); put(bytes.length, ver < 10 ? 8 : 16); bytes.forEach(b => put(b, 8));
+    const cap = dataWords(ver) * 8;
+    put(0, Math.min(4, cap - bits.length)); while (bits.length % 8) bits.push(0);
+    for (let pad = 0xEC; bits.length < cap; pad ^= 0xEC ^ 0x11) put(pad, 8);
+    const data = []; for (let i = 0; i < bits.length; i += 8) { let b = 0; for (let j = 0; j < 8; j++) b = (b << 1) | bits[i + j]; data.push(b); }
+    // error correction, blocks and interleaving
+    const nb = BLK[ver], eccLen = ECC[ver], raw = Math.floor(rawModules(ver) / 8), nShort = nb - raw % nb, shortLen = Math.floor(raw / nb);
+    const blocks = []; for (let i = 0, k = 0; i < nb; i++) { const d = data.slice(k, k + shortLen - eccLen + (i < nShort ? 0 : 1)); k += d.length; const e = rsRem(d, eccLen); if (i < nShort) d.push(0); blocks.push(d.concat(e)); }
+    const all = []; for (let i = 0; i < blocks[0].length; i++) blocks.forEach((b, j) => { if (i !== shortLen - eccLen || j >= nShort) all.push(b[i]); });
+    // the picture
+    const size = ver * 4 + 17, mod = [], fn = [];
+    for (let y = 0; y < size; y++) { mod.push(new Array(size).fill(false)); fn.push(new Array(size).fill(false)); }
+    const setF = (x, y, d) => { mod[y][x] = d; fn[y][x] = true; };
+    for (let i = 0; i < size; i++) { setF(6, i, i % 2 === 0); setF(i, 6, i % 2 === 0); }
+    const finder = (cx, cy) => { for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const d = Math.max(Math.abs(dx), Math.abs(dy)), x = cx + dx, y = cy + dy; if (x >= 0 && x < size && y >= 0 && y < size) setF(x, y, d !== 2 && d !== 4); } };
+    finder(3, 3); finder(size - 4, 3); finder(3, size - 4);
+    const ap = alignPos(ver);
+    ap.forEach((ax, i) => ap.forEach((ay, j) => { if ((i === 0 && j === 0) || (i === 0 && j === ap.length - 1) || (i === ap.length - 1 && j === 0)) return; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) setF(ax + dx, ay + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1); }));
+    const bit = (x, i) => ((x >>> i) & 1) !== 0;
+    const formatBits = mask => {
+      const d = (0 << 3) | mask; let r = d; for (let i = 0; i < 10; i++) r = (r << 1) ^ ((r >>> 9) * 0x537);
+      const b = ((d << 10) | r) ^ 0x5412;
+      for (let i = 0; i <= 5; i++) setF(8, i, bit(b, i)); setF(8, 7, bit(b, 6)); setF(8, 8, bit(b, 7)); setF(7, 8, bit(b, 8));
+      for (let i = 9; i < 15; i++) setF(14 - i, 8, bit(b, i));
+      for (let i = 0; i < 8; i++) setF(size - 1 - i, 8, bit(b, i));
+      for (let i = 8; i < 15; i++) setF(8, size - 15 + i, bit(b, i));
+      setF(8, size - 8, true);
+    };
+    formatBits(0);
+    if (ver >= 7) { let r = ver; for (let i = 0; i < 12; i++) r = (r << 1) ^ ((r >>> 11) * 0x1F25); const b = (ver << 12) | r; for (let i = 0; i < 18; i++) { const a = size - 11 + i % 3, c = Math.floor(i / 3); setF(a, c, bit(b, i)); setF(c, a, bit(b, i)); } }
+    let k = 0;
+    for (let right = size - 1; right >= 1; right -= 2) { if (right === 6) right = 5; for (let vert = 0; vert < size; vert++) for (let j = 0; j < 2; j++) { const x = right - j, up = ((right + 1) & 2) === 0, y = up ? size - 1 - vert : vert; if (!fn[y][x] && k < all.length * 8) { mod[y][x] = bit(all[k >>> 3], 7 - (k & 7)); k++; } } }
+    const applyMask = m => { for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) { if (fn[y][x]) continue; let inv; switch (m) { case 0: inv = (x + y) % 2 === 0; break; case 1: inv = y % 2 === 0; break; case 2: inv = x % 3 === 0; break; case 3: inv = (x + y) % 3 === 0; break; case 4: inv = (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0; break; case 5: inv = x * y % 2 + x * y % 3 === 0; break; case 6: inv = (x * y % 2 + x * y % 3) % 2 === 0; break; default: inv = ((x + y) % 2 + x * y % 3) % 2 === 0; } if (inv) mod[y][x] = !mod[y][x]; } };
+    const penalty = () => {
+      let score = 0;
+      for (let t = 0; t < 2; t++) for (let a = 0; a < size; a++) { let run = 1; for (let b = 1; b < size; b++) { const cur = t ? mod[b][a] : mod[a][b], prev = t ? mod[b - 1][a] : mod[a][b - 1]; if (cur === prev) { run++; if (run === 5) score += 3; else if (run > 5) score++; } else run = 1; } }
+      for (let y = 0; y < size - 1; y++) for (let x = 0; x < size - 1; x++) { const c = mod[y][x]; if (c === mod[y][x + 1] && c === mod[y + 1][x] && c === mod[y + 1][x + 1]) score += 3; }
+      const A = "10111010000", B = "00001011101";
+      for (let t = 0; t < 2; t++) for (let a = 0; a < size; a++) { let line = ""; for (let b = 0; b < size; b++) line += (t ? mod[b][a] : mod[a][b]) ? "1" : "0"; for (let b = 0; b + 11 <= size; b++) { const w = line.substr(b, 11); if (w === A || w === B) score += 40; } }
+      let dark = 0; mod.forEach(r => r.forEach(c => { if (c) dark++; }));
+      score += (Math.ceil(Math.abs(dark * 20 - size * size * 10) / (size * size)) - 1) * 10;
+      return score;
+    };
+    let best = 0, bestScore = Infinity;
+    for (let m = 0; m < 8; m++) { applyMask(m); formatBits(m); const sc = penalty(); if (sc < bestScore) { best = m; bestScore = sc; } applyMask(m); }
+    applyMask(best); formatBits(best);
+    return { size, get: (x, y) => mod[y][x] };
+  }
+  function draw(canvas, text, px, margin) {
+    const q = make(text), n = q.size + margin * 2, unit = Math.floor(px / n), side = unit * n;
+    canvas.width = side; canvas.height = side;
+    const g = canvas.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, side, side); g.fillStyle = "#000";
+    for (let y = 0; y < q.size; y++) for (let x = 0; x < q.size; x++) if (q.get(x, y)) g.fillRect((x + margin) * unit, (y + margin) * unit, unit, unit);
+    return canvas;
+  }
+  return { make, draw };
+})();
+window.__QR = QR;
+function qrPoster() {
+  const c = document.createElement("canvas"), url = shareUrl(), g0 = c.getContext("2d");
+  const qrc = QR.draw(document.createElement("canvas"), url, 720, 4);
+  c.width = 900; c.height = 1180;
+  const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = "#0b3d28"; g.fillRect(0, 0, c.width, 150);
+  g.fillStyle = "#f6d36b"; g.font = "bold 54px sans-serif"; g.textAlign = "center"; g.fillText("BASOGA'S LEGACY", 450, 92);
+  g.fillStyle = "#0b3d28"; g.font = "bold 44px sans-serif"; g.fillText("Scan to join the family", 450, 235);
+  g.drawImage(qrc, 90, 280, 720, 720);
+  g.fillStyle = "#333"; g.font = "30px sans-serif"; g.fillText(url.length > 46 ? url.slice(0, 46) + "…" : url, 450, 1060);
+  g.fillStyle = "#666"; g.font = "26px sans-serif"; g.fillText("Open the link, register, and welcome home.", 450, 1110);
+  return c;
+}
+function openQr() { QR.draw($("qr-canvas"), shareUrl(), 320, 4); $("qr-url").textContent = shareUrl(); $("qr-overlay").classList.remove("hidden"); }
+$("share-qr").addEventListener("click", openQr);
+$("qr-close").addEventListener("click", () => $("qr-overlay").classList.add("hidden"));
+$("qr-save").addEventListener("click", () => { const a = document.createElement("a"); a.href = qrPoster().toDataURL("image/png"); a.download = "basogas-legacy-join-qr.png"; document.body.appendChild(a); a.click(); a.remove(); });
+$("qr-share").addEventListener("click", () => {
+  qrPoster().toBlob(async blob => {
+    const file = new File([blob], "basogas-legacy-join-qr.png", { type: "image/png" });
+    try { if (navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file], title: "Join Basoga's Legacy", text: SHARE_TEXT + "\n" + shareUrl() }); else $("qr-save").click(); } catch (e) { /* closed by the person */ }
+  }, "image/png");
+});
+
+// ---------- Report a post ----------
+let reportTarget = null, reportDocs = [], unsubReports = null;
+function reportInfo(col, id) {
+  if (col === "messages") { const m = chatDocs.find(x => x.id === id); return m && { uid: m.uid, name: m.name, snip: m.text || (m.audio ? "A voice note" : m.video ? "A video" : m.photo ? "A photo" : "A message") }; }
+  const kind = Object.keys(STORY).find(k => STORY[k].col === col);
+  if (kind) { const d = STORY[kind].docs.find(x => x.id === id); return d && { uid: d.by, name: d.byName, snip: d.title || d.name || d.person || "An entry" }; }
+  if (col === "photos") { const ph = photos.find(x => x.id === id); return ph && { uid: ph.by, name: ph.byName, snip: ph.caption || (ph.type === "video" ? "A video" : "A photo") }; }
+  return null;
+}
+function openReport(ref) {
+  const i = ref.indexOf(":"), col = ref.slice(0, i), id = ref.slice(i + 1), info = reportInfo(col, id);
+  if (!info) return;
+  reportTarget = { col, id, info };
+  $("report-what").textContent = (info.name ? info.name + ": " : "") + String(info.snip).slice(0, 100);
+  $("report-note").value = ""; $("report-overlay").classList.remove("hidden");
+}
+document.addEventListener("click", e => { const r = e.target.closest("[data-report]"); if (r) { e.preventDefault(); openReport(r.dataset.report); } });
+$("report-cancel").addEventListener("click", () => $("report-overlay").classList.add("hidden"));
+$("report-send").addEventListener("click", async () => {
+  if (!reportTarget) return;
+  const t = reportTarget; reportTarget = null; $("report-overlay").classList.add("hidden");
+  await queued(addDoc(collection(db, "reports"), { col: t.col, tid: t.id, snippet: String(t.info.snip).slice(0, 140), reportedUid: t.info.uid || "", reportedName: t.info.name || "", reason: $("report-reason").value, note: $("report-note").value.trim(), by: myUid(), byName: myName(), status: "open", createdAt: serverTimestamp() }),
+    () => alert("Could not send the report. Publish the updated database rules first."));
+  toast("Thank you. The administrator will look at it.");
+});
+$("lb-report").addEventListener("click", () => { const id = $("lb-del").dataset.id; $("lightbox").classList.add("hidden"); openReport("photos:" + id); });
+function renderReports() {
+  if (!isAdmin()) return;
+  const open = reportDocs.filter(r => r.status === "open").sort((a, b) => msOf(b.createdAt) - msOf(a.createdAt));
+  $("reports-list").innerHTML = open.length ? open.map(r => `<div class="rep-item"><b>${esc(r.reason)}</b> · ${esc(r.byName || "Someone")} reported ${esc(r.reportedName || "a post")}<div class="s-text">${esc(r.snippet)}</div>${r.note ? `<small style="color:var(--muted)">“${esc(r.note)}”</small>` : ""}<div class="btn-row"><button type="button" class="btn-danger pick-btn" data-rdel="${esc(r.id)}">Delete the post</button><button type="button" class="btn-secondary pick-btn" data-rok="${esc(r.id)}">Dismiss</button></div></div>`).join("")
+    : `<p class="chat-empty">No reports. All is calm.</p>`;
+  open.forEach(r => addNote({ id: "report:" + r.id, title: "Report to review", body: r.reason + ": " + r.snippet, tab: "admin", ts: msOf(r.createdAt) || Date.now() }));
+}
+$("reports-list").addEventListener("click", async e => {
+  const del = e.target.closest("[data-rdel]"), ok = e.target.closest("[data-rok]");
+  if (!isAdmin() || !(del || ok)) return;
+  const id = (del || ok).dataset.rdel || (del || ok).dataset.rok, r = reportDocs.find(x => x.id === id); if (!r) return;
+  if (del) {
+    if (!confirm("Delete this post for everyone?")) return;
+    await queued(deleteDoc(doc(db, r.col, r.tid)), () => {});
+  }
+  await queued(updateDoc(doc(db, "reports", id), { status: del ? "deleted" : "dismissed" }), () => alert("Could not save."));
+});
+function startAdminWatch() {
+  if (!isAdmin() || unsubReports) return;
+  unsubReports = [
+    onSnapshot(collection(db, "reports"), snap => { reportDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderReports(); }, () => {}),
+    onSnapshot(collection(db, "feedback"), snap => { feedbackDocs = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) })); renderFeedbackAdmin(); }, () => {})
+  ];
+}
+
+// ---------- Contact the admin ----------
+let feedbackDocs = [], unsubMyFeedback = null, noticeReplies = new Set();
+function renderFeedbackAdmin() {
+  if (!isAdmin()) return;
+  const rows = feedbackDocs.slice().sort((a, b) => msOf(b.createdAt) - msOf(a.createdAt));
+  $("feedback-list").innerHTML = rows.length ? rows.map(f => `<div class="fb-item"><b>${esc(f.byName || "Someone")}</b> <small style="color:var(--muted)">${esc(whenShort(msOf(f.createdAt) || Date.now()))}</small><div class="s-text">${esc(f.text)}</div>${f.reply ? `<div class="fb-reply">${esc(f.reply)}</div>` : `<input type="text" id="fbr-${esc(f.id)}" maxlength="500" placeholder="Write a reply"><div class="btn-row" style="display:flex;gap:8px;margin-top:6px"><button type="button" class="pick-btn" data-fbreply="${esc(f.id)}">Reply</button><button type="button" class="btn-secondary pick-btn" data-fbdel="${esc(f.id)}">Delete</button></div>`}</div>`).join("") : `<p class="chat-empty">No messages yet.</p>`;
+  rows.filter(f => !f.reply).forEach(f => addNote({ id: "fb:" + f.id, title: "Message to the admin", body: (f.byName || "Someone") + ": " + String(f.text).slice(0, 100), tab: "admin", ts: msOf(f.createdAt) || Date.now() }));
+}
+$("feedback-list").addEventListener("click", async e => {
+  const r = e.target.closest("[data-fbreply]"), d = e.target.closest("[data-fbdel]");
+  if (!isAdmin() || !(r || d)) return;
+  if (d) { if (confirm("Delete this message?")) await queued(deleteDoc(doc(db, "feedback", d.dataset.fbdel))); return; }
+  const id = r.dataset.fbreply, txt = ($("fbr-" + id) || {}).value || "";
+  if (!txt.trim()) return;
+  await queued(updateDoc(doc(db, "feedback", id), { reply: txt.trim(), repliedAt: serverTimestamp(), status: "answered" }), () => alert("Could not send the reply."));
+});
+$("admin-phone-save").addEventListener("click", async () => {
+  if (!isAdmin()) return;
+  const num = $("admin-phone").value.replace(/[^\d+]/g, "");
+  await queued(setDoc(doc(db, "settings", "app"), { adminPhone: num, adminName: myName() }, { merge: true }), () => say("admin-phone-msg", "Could not save. Publish the updated database rules first.", false));
+  say("admin-phone-msg", num ? "Saved. Members will see it on the Contact page." : "Removed.");
+});
+function renderMyFeedback(rows) {
+  const mine = rows.slice().sort((a, b) => msOf(b.createdAt) - msOf(a.createdAt));
+  $("contact-mine").innerHTML = mine.length ? mine.map(f => `<div class="fb-item"><small style="color:var(--muted)">${esc(whenShort(msOf(f.createdAt) || Date.now()))}</small><div class="s-text">${esc(f.text)}</div>${f.reply ? `<div class="fb-reply"><b>Admin:</b> ${esc(f.reply)}</div>` : `<small style="color:var(--muted)">Waiting for a reply</small>`}</div>`).join("") : `<p class="chat-empty">You have not written yet.</p>`;
+  mine.filter(f => f.reply).forEach(f => addNote({ id: "reply:" + f.id, title: "The admin replied", body: String(f.reply).slice(0, 100), tab: "contact", ts: msOf(f.repliedAt) || Date.now() }));
+}
+function startMyFeedback() {
+  if (unsubMyFeedback || isAdmin()) return;
+  unsubMyFeedback = onSnapshot(query(collection(db, "feedback"), where("by", "==", myUid())), snap => renderMyFeedback(snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }))), () => {});
+}
+async function loadContactDirect() {
+  try {
+    const d = await fsGetDoc(doc(db, "settings", "app")), x = d.exists() ? d.data() : {};
+    const n = (x.adminPhone || "").replace(/[^\d+]/g, "");
+    $("contact-direct").innerHTML = n ? `<p style="margin-bottom:8px">Prefer to talk? ${esc(x.adminName || "The admin")}:</p><div class="btn-row" style="display:flex;gap:8px"><a class="map-link" style="flex:1;margin:0" href="https://wa.me/${esc(n.replace(/^\+/, ""))}" target="_blank" rel="noopener">WhatsApp</a><a class="map-link" style="flex:1;margin:0" href="tel:${esc(n)}">Call</a></div><p style="color:var(--muted);font-size:.8rem;margin:10px 0">Or write below:</p>` : "";
+    if (isAdmin() && x.adminPhone) $("admin-phone").value = x.adminPhone;
+  } catch (e) { $("contact-direct").innerHTML = ""; }
+}
+$("form-contact").addEventListener("submit", async e => {
+  e.preventDefault();
+  const text = $("contact-text").value.trim(); if (!text) return;
+  let bad = false;
+  await queued(addDoc(collection(db, "feedback"), { by: myUid(), byName: myName(), text, status: "open", createdAt: serverTimestamp() }), err => { bad = true; say("contact-msg", err.code === "permission-denied" ? "The database rules do not allow this yet. Ask the administrator to publish the updated rules." : "Could not send. Try again.", false); });
+  if (!bad) { $("contact-text").value = ""; say("contact-msg", "Sent. The administrator will reply here."); }
 });
 
 // ---------- Share ----------
