@@ -432,7 +432,7 @@ button.cong .ico{width:16px;height:16px;margin-right:4px}
 .chat-vid{display:block;max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;background:#000}
 /* verified badges */
 .bd{display:inline-flex;vertical-align:-3px;margin-left:4px;cursor:pointer}
-.bd svg{width:17px;height:17px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bd svg{width:1.05em;height:1.05em;min-width:15px;min-height:15px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .bd-verified svg{fill:#1d9bf0;stroke:#fff}
 .bd-elder svg{fill:#1d9bf0;stroke:#fff}
 select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88rem;flex:none}
@@ -513,7 +513,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
         <img id="home-avatar" class="photo-preview" alt="">
         <div class="hi">
           <small id="home-greet">Welcome</small>
-          <h2><span id="home-name"></span></h2>
+          <h2><span id="home-name"></span><span id="home-bd" data-bdw=""></span></h2>
           <p>Honoring Tradition • Uniting Generations</p>
         </div>
       </div>
@@ -960,6 +960,7 @@ select.vsel{width:auto;min-width:120px;margin:0;padding:8px 10px;font-size:.88re
     <div id="section-profile" class="tab-content hidden">
       <div class="card">
         <h2>My Profile</h2>
+        <div style="font-weight:700;margin:2px 0 10px"><span id="pf-title-name"></span><span id="pf-bd" data-bdw=""></span></div>
         <p id="user-info-display" style="color:var(--muted);font-size:.85rem"></p>
         <div id="pf-msg" class="msg"></div>
         <form id="form-profile">
@@ -1875,7 +1876,7 @@ function cardHTML(m, row) {
     : esc(m.relationship || "");
   return `<div class="member-card${row ? " row" : ""}" data-id="${esc(m.id)}" style="--c:${colorOf(m)}">
     <img loading="lazy" decoding="async" src="${esc(m.photo || AVATAR)}" alt="">
-    <div><div class="name">${esc(m.name)}${badgeSpan(m.verified)}</div>
+    <div><div class="name">${esc(m.name)}${badgeSpan(tickFor(m))}</div>
     <div class="rel">${sub}</div>
     ${!row && par ? `<div class="rel">child of ${esc(par.name)}</div>` : ""}
     ${!row && kids ? `<div class="rel">${kids} child${kids > 1 ? "ren" : ""}</div>` : ""}
@@ -2015,10 +2016,11 @@ function showProfile(id) {
   $("mv-body").innerHTML = `
     <div class="pv-hero">
       <img class="big" src="${esc(m.photo || AVATAR)}" alt="">
-      <h2>${esc(m.name)}${badgeSpan(m.verified)}</h2>
+      <h2>${esc(m.name)}${badgeSpan(tickFor(m))}</h2>
       <span class="pill" style="--c:${c}">${esc(m.relationship || REL_TITLE[genOf(m)] || "Family")}</span>
       <span class="pill" style="--c:${c};opacity:.8">${esc(genTitles[genOf(m)] || "")}</span>
     </div>
+    ${isAdmin() ? `<div class="vpick"><b>Verification</b> <small style="color:var(--muted)">${tickFor(m) ? BADGES[tickFor(m)][0] + " tick given" : "no tick yet"}</small><div class="btn-row"><button type="button" data-vprof="verified">Verify (blue tick)</button><button type="button" class="btn-secondary" data-vprof="elder">Elder</button>${tickFor(m) ? `<button type="button" class="btn-danger" data-vprof="">Remove tick</button>` : ""}</div></div>` : ""}
     <div class="btn-row">
       <button type="button" class="btn-secondary" data-act="photo-file">${IC("folder")} Change photo</button>
       <button type="button" class="btn-secondary" data-act="photo-cam">${IC("camera")} Take photo</button>
@@ -2475,7 +2477,8 @@ function fillProfile() {
   $("pf-name").value = u.name || ""; $("pf-phone").value = u.phone || ""; $("pf-bio").value = u.bio || "";
   $("pf-preview").src = u.photo || AVATAR; pfPhoto = null;
   $("pf-member").value = u.memberId || "";
-  $("home-name").innerText = u.name || "Family"; $("home-avatar").src = u.photo || AVATAR;
+  $("home-name").innerText = u.name || "Family"; $("home-avatar").src = u.photo || AVATAR; $("pf-title-name").textContent = u.name || "";
+  $("home-bd").dataset.bdw = myUid(); $("pf-bd").dataset.bdw = myUid(); refreshAvatars();
   $("dr-name").innerText = u.name || "Family"; $("dr-avatar").src = u.photo || AVATAR; $("dr-role").innerText = (u.role || "member").toUpperCase();
   $("user-info-display").innerText = `${u.email} • ${(u.role || "member").toUpperCase()}`;
 }
@@ -2540,11 +2543,11 @@ function makeThumb(src, size = 96) {
 // Writes the person's name and a tiny round picture so other family members can see them in chat and calls.
 async function syncDirectoryProfile(force) {
   if (!currentUserDoc || currentUserDoc.status !== "approved") return;
-  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length;
+  const photo = currentUserDoc.photo || "", sig = (currentUserDoc.name || "") + "|" + photo.length + "|" + (currentUserDoc.memberId || "");
   try { if (!force && localStorage.getItem("dirProfile:" + myUid()) === sig) return; } catch (e) {}
   try {
     const thumb = photo ? await makeThumb(photo, 96) : "";
-    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb }, { merge: true });
+    await setDoc(doc(db, "directory", myUid()), { uid: myUid(), name: myName(), thumb, memberId: currentUserDoc.memberId || "" }, { merge: true });
     try { localStorage.setItem("dirProfile:" + myUid(), sig); } catch (e) {}
   } catch (e) { /* tried again next time */ }
 }
@@ -2734,7 +2737,7 @@ async function beat() {
 }
 function startPresence() {
   beat(); clearInterval(beatTimer); beatTimer = setInterval(beat, 60000);
-  $("dr-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
+  $("dr-bd").dataset.bdw = myUid(); $("home-bd").dataset.bdw = myUid(); $("pf-bd").dataset.bdw = myUid(); startDirectory(); syncDirectoryProfile(false);
   startCallListener();
 }
 document.addEventListener("visibilitychange", () => { if (document.hidden) touchActive(); else { beat(); markReceipts(); } });
@@ -2771,6 +2774,8 @@ function startDirectory() {
     dirDocs = snap.docs.map(d => d.data({ serverTimestamps: "estimate" }));
     dirMap = new Map(dirDocs.map(d => [d.uid, d]));
     renderContacts(); refreshAvatars();
+    const sig = dirDocs.map(d => d.uid + ":" + (d.verified || "")).sort().join("|");
+    if (sig !== verSig) { verSig = sig; try { render(); } catch (e) {} }
   }, err => liveErr($("call-contacts"), err));
 }
 function openCallsTab() {
@@ -3150,11 +3155,25 @@ const bdw = uid => `<span data-bdw="${esc(uid || "")}">${badgeHTML(uid)}</span>`
 let toastTimer = null;
 function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add("hidden"), 2600); }
 document.addEventListener("click", e => { const b = e.target.closest("[data-badge]"); if (b) toast(BADGES[b.dataset.badge][0] + ": " + BADGES[b.dataset.badge][1]); });
+function tickFor(m) {
+  if (m.verified) return m.verified;
+  const linked = dirDocs.filter(d => d.memberId && d.memberId === m.id);
+  if (linked.length) return linked[0].verified || "";
+  const same = dirDocs.filter(d => normName(d.name) === normName(m.name));
+  return same.length === 1 ? (same[0].verified || "") : "";
+}
+let verSig = "";
+$("mv-body").addEventListener("click", async e => {
+  const b = e.target.closest("[data-vprof]"); if (!b || !isAdmin()) return;
+  const m = memberById(viewingId); if (!m) return;
+  await applyTick({ kind: "member", id: m.id, name: m.name, verified: m.verified || "" }, b.dataset.vprof);
+  showProfile(m.id);
+});
 const normName = n => String(n || "").trim().toLowerCase().replace(/\s+/g, " ");
 let verifyPick = null;
 function verifyItems() {
   const out = [];
-  adminUsers.filter(u => u.status === "approved").forEach(u => out.push({ kind: "user", id: u.uid, name: u.name || u.email || "Unnamed", sub: u.email || "", verified: u.verified || "" }));
+  adminUsers.filter(u => u.status === "approved").forEach(u => out.push({ kind: "user", id: u.uid, name: u.name || u.email || "Unnamed", sub: u.email || "", verified: u.verified || "", link: u.memberId || "" }));
   members.forEach(x => out.push({ kind: "member", id: x.id, name: x.name || "Unnamed", sub: x.relationship || "", verified: x.verified || "" }));
   return out;
 }
@@ -3190,11 +3209,13 @@ async function setTick(it, val) {
 }
 async function applyTick(it, val) {
   // a person with an account who is also on the tree under the same name gets the tick in both places
-  const mates = verifyItems().filter(x => x.kind !== it.kind && normName(x.name) === normName(it.name));
-  const targets = [it].concat(mates.length === 1 ? mates : []);
+  const all = verifyItems(), other = all.filter(x => x.kind !== it.kind);
+  let mates = other.filter(x => it.kind === "user" ? (it.link && x.id === it.link) : (x.link === it.id));
+  if (!mates.length) { const byName = other.filter(x => normName(x.name) === normName(it.name)); if (byName.length === 1) mates = byName; }
+  const targets = [it].concat(mates);
   await queued(Promise.all(targets.map(t => setTick(t, val))), () => { alert("Could not save. Publish the updated database rules first."); });
   renderVerify(); try { render(); } catch (e) {}
-  toast((val ? BADGES[val][0] + " tick given to " : "Tick removed from ") + it.name + (targets.length > 1 ? " (account and tree)." : "."));
+  toast((val ? BADGES[val][0] + " tick given to " : "Tick removed from ") + it.name + (targets.length > 1 ? " (account and family tree)." : "."));
 }
 $("verify-q").addEventListener("input", () => { verifyPick = null; renderVerify(); });
 $("section-admin").addEventListener("click", e => {
